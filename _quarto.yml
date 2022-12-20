@@ -1,0 +1,29 @@
+project:
+  type: book
+
+book:
+  title: "offhab-report"
+  author: "Jane Doe"
+  date: "12/2/2022"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - summary.qmd
+    - references.qmd
+  appendices:
+    - technical.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+  docx:
+    toc: true
+    # number-sections: true
+    # highlight-style: github
+
+editor: visual
+

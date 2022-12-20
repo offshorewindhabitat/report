@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>offhab-report - Appendix A — Technical</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Appendix A — Technical</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">offhab-report</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./technical.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Technical</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#relational-database-structure" id="toc-relational-database-structure" class="nav-link active" data-scroll-target="#relational-database-structure"><span class="toc-section-number">A.1</span>  Relational Database Structure</a>
+  <ul class="collapse">
+  <li><a href="#typography" id="toc-typography" class="nav-link" data-scroll-target="#typography"><span class="toc-section-number">A.1.1</span>  Typography</a></li>
+  <li><a href="#database-naming-conventions" id="toc-database-naming-conventions" class="nav-link" data-scroll-target="#database-naming-conventions"><span class="toc-section-number">A.1.2</span>  Database Naming Conventions</a></li>
+  <li><a href="#models-based-on-polygons" id="toc-models-based-on-polygons" class="nav-link" data-scroll-target="#models-based-on-polygons"><span class="toc-section-number">A.1.3</span>  Models Based on Polygons</a></li>
+  <li><a href="#models-based-on-rasters" id="toc-models-based-on-rasters" class="nav-link" data-scroll-target="#models-based-on-rasters"><span class="toc-section-number">A.1.4</span>  Models Based on Rasters</a></li>
+  <li><a href="#future-development" id="toc-future-development" class="nav-link" data-scroll-target="#future-development"><span class="toc-section-number">A.1.5</span>  Future Development</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Appendix A — Technical</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="relational-database-structure" class="level2" data-number="A.1">
+<h2 data-number="A.1" class="anchored" data-anchor-id="relational-database-structure"><span class="header-section-number">A.1</span> Relational Database Structure</h2>
+<section id="typography" class="level3" data-number="A.1.1">
+<h3 data-number="A.1.1" class="anchored" data-anchor-id="typography"><span class="header-section-number">A.1.1</span> Typography</h3>
+<ul>
+<li><code>*</code>: wildcard indicating any value, such as <code>*.csv</code> for any file name ending in <code>.csv</code></li>
+<li><code>{*}</code>: surrounding curly braces (<code>{}</code>) indicates variable substitution, e.g.&nbsp;<code>ds_{mdl_key}</code> would evaluate to the value <code>ds_am</code> for <code>mdl_key = "am"</code>, as in the dataset (<code>ds</code>) for AquaMaps (<code>am</code>)</li>
+<li><code>[*]</code>: surrounding brackets (<code>[]</code>) indicates an optional value, such as <code>[ply_grp]</code> is an optional column in the <code>ds_gm</code> table</li>
+<li><code>&lt;*&gt;</code>: surrounds the columns used to identify columns that uniquely identify (and index) each row</li>
+<li><code>...</code>: additional columns, unique to the table</li>
+</ul>
+<p>The format below is of the following format where the top line of a bulleted list item describes the table and the columns in that table are directly below, nested in hierarchical order:</p>
+<ul>
+<li><code>{table name}</code> (<code>{description}</code>)<br>
+&lt;<code>{column 1}</code>, <code>{column 2}</code>&gt;, <code>{column 3}</code>, <code>...</code></li>
+</ul>
+</section>
+<section id="database-naming-conventions" class="level3" data-number="A.1.2">
+<h3 data-number="A.1.2" class="anchored" data-anchor-id="database-naming-conventions"><span class="header-section-number">A.1.2</span> Database Naming Conventions</h3>
+<ul>
+<li>Use all <strong>lower-case</strong> column names with underscores (i.e.&nbsp;from using <code>janitor::clean_names()</code>) to prevent need to quote SQL statements.</li>
+<li>For short unique <strong>identifiers</strong> use suffix <code>*_id</code> for integer and <code>*_key</code> for short text.</li>
+</ul>
+</section>
+<section id="models-based-on-polygons" class="level3" data-number="A.1.3">
+<h3 data-number="A.1.3" class="anchored" data-anchor-id="models-based-on-polygons"><span class="header-section-number">A.1.3</span> Models Based on Polygons</h3>
+<p>Models based on polygons have an attribute table that may contain multiple values of interest. The normalized form of the database should not require repeating the geometry for each polygon to reproduce the original dataset that may be shared across values for an individual model as well as across multiple models. If models in the dataset use more than one collection of polygons, then the polygon group <code>ply_grp</code> field is optionally used to differentiate which set of polygons to use.</p>
+<p>All features are projected to the geographic (<code>EPSG:4326</code>) coordinate reference system for <a href="https://rstudio.github.io/leaflet/shapes.html"><code>leaflet</code> R package visualization of polygons</a> with “slippy” basemaps (e.g.&nbsp;“Esri.OceanBasemap” at <a href="https://leaflet-extras.github.io/leaflet-providers/preview">Leaflet Providers</a>).</p>
+<ul>
+<li><p><code>datasets</code><br>
+&lt;<code>ds_key</code>&gt;, <code>...</code></p></li>
+<li><p><code>cells_ds_ply</code> (cells to dataset polygons)<br>
+&lt;<code>ds_key</code>, <code>ply_id</code>, <code>cell_id</code>&gt;</p></li>
+<li><p><code>ds_{ds_key}</code> (dataset model attributes)<br>
+&lt;<code>ds_key</code>, <code>mdl_id</code>&gt;, <code>aphia_id</code>, <code>fld_ply_val</code>, <code>val_type</code>, <code>...</code></p></li>
+<li><p><code>ds_{ds_key}_plys</code> (dataset polygon attributes, including values)<br>
+&lt;<code>ds_key</code>, <code>ply_id</code>&gt;, <code>val</code> = <code>{fc_flds}</code>, <code>...</code></p></li>
+</ul>
+</section>
+<section id="models-based-on-rasters" class="level3" data-number="A.1.4">
+<h3 data-number="A.1.4" class="anchored" data-anchor-id="models-based-on-rasters"><span class="header-section-number">A.1.4</span> Models Based on Rasters</h3>
+<p>All rasters are projected to web Mercator (<code>EPSG:3857</code>) coordinate reference system for <a href="https://rstudio.github.io/leaflet/raster.html"><code>leaflet</code> R package visualization of rasters</a> with “slippy” basemaps (e.g.&nbsp;“Esri.OceanBasemap” at <a href="https://leaflet-extras.github.io/leaflet-providers/preview">Leaflet Providers</a>). Since the variable is usually continuous, new values may be interpolated to the web Mercator raster with <code>method = "bilinear"</code> option (versus <code>method = "nearest"</code>). Because of this, the value is directly stored in the <code>_cells_rast</code> table for all raster models (versus a lookup of OffHab cell_ids to the original raster’s pixel).</p>
+<ul>
+<li><p><code>datasets</code> &lt;<code>ds_key</code>&gt;, …</p></li>
+<li><p><code>ds_cells_rast</code> (cells to dataset pixel values)<br>
+&lt;<code>ds_key</code>, <code>mdl_id</code>, <code>cell_id</code>&gt;, <code>val</code></p></li>
+<li><p><code>mdls_{ds_key}</code> (dataset model attributes)<br>
+&lt;<code>ds_key</code>, <code>mdl_id</code>&gt;, <code>aphia_id</code>, <code>val_type</code>, <code>...</code></p></li>
+</ul>
+</section>
+<section id="future-development" class="level3" data-number="A.1.5">
+<h3 data-number="A.1.5" class="anchored" data-anchor-id="future-development"><span class="header-section-number">A.1.5</span> Future Development</h3>
+<ol type="1">
+<li>Add columns to handle relationships between models, such as uncertainty (e.g.&nbsp;<code>sd</code>/<code>cv</code>/ <code>ci95pct</code> / <code>ci5pct</code>; not using yet) associated with which density:
+<ul>
+<li><code>{mdl_key}_mdls.</code>: <code>mdl_related</code> | <code>mdl_relationship</code></li>
+</ul></li>
+<li>Add value transformation column (<code>val_transform</code>) to <code>{mdl_key}_mdls</code> to standardize values from original to <code>val_type</code> (not using yet since all relative so far):
+<ul>
+<li><code>oa_mdls.val_transform</code>: <span class="math inline">\(val^3\)</span></li>
+<li><code>du_mdls.val_transform</code> <span class="math inline">\(val/100\)</span></li>
+</ul></li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./references.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">References</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
