@@ -8,6 +8,7 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
+    - prelim.qmd
     - summary.qmd
     - references.qmd
   appendices:
@@ -25,5 +26,5 @@ format:
     # number-sections: true
     # highlight-style: github
 
-editor: visual
+#editor: visual
 

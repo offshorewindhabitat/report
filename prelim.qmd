@@ -1,0 +1,123 @@
+---
+title: "Preliminary Results"
+execute:
+  echo: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup}
+librarian::shelf(
+  devtools, d3r, dplyr, DT, fs, glue, htmltools, leaflet, 
+  purrr, readr, sf, stringr, 
+  sunburstR, terra, tibble, tidyr, quiet = T)
+load_all("~/Github/ecoquants/offhabr")
+# devtools::install_local("~/Github/ecoquants/offhabr", force=T)
+```
+
+## Zones across U.S. (lower 48) Federal Waters
+
+```{r}
+con <- oh_con()
+d_z <- tbl(con, "lyr_zone_stats") |> 
+  filter(
+    ds_key != "oa") |> 
+  group_by(zone_id) |> 
+  summarize(
+    n_spp   = n(),
+    res_avg = mean(mean, na.rm=T)) |> 
+  collect()
+  
+f_z <- oh_zones_s1k |> 
+  filter(zone_version == 1) |> 
+  left_join(
+    d_z, by = "zone_id")
+```
+
+::: {.panel-tabset}
+
+## Species Presence
+
+```{r}
+oh_map() |> 
+  oh_add_ply(
+    ply     = f_z,
+    fld_val = n_spp,
+    fld_id  = zone_name,
+    str_val = "# of species",
+    str_id  = "Zone")
+```
+
+## Species Abundance
+
+```{r}
+oh_map() |> 
+  oh_add_ply(
+    ply     = f_z,
+    fld_val = res_avg,
+    fld_id  = zone_name,
+    str_val = "% Habitat",
+    str_id  = "Zone")
+```
+
+<!-- 
+## Extinction Risk
+Average extinction risk.
+-->
+
+:::
+
+## Species Composition by Zone
+
+```{r}
+devtools::load_all("~/Github/ecoquants/offhabr")
+
+d_z_spp <- tbl(con, "lyr_zone_stats") |> 
+  filter(
+    ds_key != "oa") |> 
+  group_by(zone_id, aphia_id) |> 
+  summarize(
+    n_ds = n(), .groups = "drop") |> 
+  left_join(
+    tbl(con, "taxa_wm"), by = "aphia_id") |> 
+  collect()
+
+# f_z |> 
+#   filter(zone_name == "Southern California") # zone_id == 9)
+# d_taxa %>% colnames() %>% paste(collapse=", ")
+# kingdom, phylum, class, order, family, genus, scientificname
+#   family <chr>, genus
+
+d_z_spp |> 
+  # filter(zone_id == 9) %>%
+  select(
+    kingdom, class, order, family, genus, scientificname) |> 
+  mutate(
+    size = 1) |> 
+  d3_nest(value_cols = "size") |> 
+  sund2b(
+    valueField = "size",
+    width      = "100%",
+    rootLabel  = "ALL",
+    showLabels = T,
+    tooltip    = sund2bTooltip(
+      html = htmlwidgets::JS("
+        function(nodedata, size, percent) {
+          return nodedata.colname + ': <span style=\"font-weight: bold;\">' + nodedata.name + '</span>' + ' ' + size
+        }")),
+    breadcrumbs = sund2bBreadcrumb(
+      html = htmlwidgets::JS("
+        function(nodedata, size, percent) {
+          return nodedata.colname + ': <span style=\"font-weight: bold;\">' + nodedata.name + '</span>' + ' ' + size
+        }
+      ")))
+# f_html <- "spp_sunburst_zone-soc.html"
+# f_png <- f_html |> path_ext_set("png")
+# htmlwidgets::saveWidget(w, f_html)
+# webshot::webshot(
+#   f_html, f_png, delay = 10, 
+#   selector = '#htmlwidget-714cdec46cf4ccc2d56e > div > div > svg > g')
+#   # selector = 'g.d2b-chart-container')
+```
+

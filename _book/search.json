@@ -40,5 +40,47 @@
     "title": "Appendix A — Technical",
     "section": "A.1 Relational Database Structure",
     "text": "A.1 Relational Database Structure\n\nA.1.1 Typography\n\n*: wildcard indicating any value, such as *.csv for any file name ending in .csv\n{*}: surrounding curly braces ({}) indicates variable substitution, e.g. ds_{mdl_key} would evaluate to the value ds_am for mdl_key = \"am\", as in the dataset (ds) for AquaMaps (am)\n[*]: surrounding brackets ([]) indicates an optional value, such as [ply_grp] is an optional column in the ds_gm table\n<*>: surrounds the columns used to identify columns that uniquely identify (and index) each row\n...: additional columns, unique to the table\n\nThe format below is of the following format where the top line of a bulleted list item describes the table and the columns in that table are directly below, nested in hierarchical order:\n\n{table name} ({description})\n<{column 1}, {column 2}>, {column 3}, ...\n\n\n\nA.1.2 Database Naming Conventions\n\nUse all lower-case column names with underscores (i.e. from using janitor::clean_names()) to prevent need to quote SQL statements.\nFor short unique identifiers use suffix *_id for integer and *_key for short text.\n\n\n\nA.1.3 Models Based on Polygons\nModels based on polygons have an attribute table that may contain multiple values of interest. The normalized form of the database should not require repeating the geometry for each polygon to reproduce the original dataset that may be shared across values for an individual model as well as across multiple models. If models in the dataset use more than one collection of polygons, then the polygon group ply_grp field is optionally used to differentiate which set of polygons to use.\nAll features are projected to the geographic (EPSG:4326) coordinate reference system for leaflet R package visualization of polygons with “slippy” basemaps (e.g. “Esri.OceanBasemap” at Leaflet Providers).\n\ndatasets\n<ds_key>, ...\ncells_ds_ply (cells to dataset polygons)\n<ds_key, ply_id, cell_id>\nds_{ds_key} (dataset model attributes)\n<ds_key, mdl_id>, aphia_id, fld_ply_val, val_type, ...\nds_{ds_key}_plys (dataset polygon attributes, including values)\n<ds_key, ply_id>, val = {fc_flds}, ...\n\n\n\nA.1.4 Models Based on Rasters\nAll rasters are projected to web Mercator (EPSG:3857) coordinate reference system for leaflet R package visualization of rasters with “slippy” basemaps (e.g. “Esri.OceanBasemap” at Leaflet Providers). Since the variable is usually continuous, new values may be interpolated to the web Mercator raster with method = \"bilinear\" option (versus method = \"nearest\"). Because of this, the value is directly stored in the _cells_rast table for all raster models (versus a lookup of OffHab cell_ids to the original raster’s pixel).\n\ndatasets <ds_key>, …\nds_cells_rast (cells to dataset pixel values)\n<ds_key, mdl_id, cell_id>, val\nmdls_{ds_key} (dataset model attributes)\n<ds_key, mdl_id>, aphia_id, val_type, ...\n\n\n\nA.1.5 Future Development\n\nAdd columns to handle relationships between models, such as uncertainty (e.g. sd/cv/ ci95pct / ci5pct; not using yet) associated with which density:\n\n{mdl_key}_mdls.: mdl_related | mdl_relationship\n\nAdd value transformation column (val_transform) to {mdl_key}_mdls to standardize values from original to val_type (not using yet since all relative so far):\n\noa_mdls.val_transform: \\(val^3\\)\ndu_mdls.val_transform \\(val/100\\)"
+  },
+  {
+    "objectID": "prelim.html#summarize-zones-map-table-taxa-sunburst",
+    "href": "prelim.html#summarize-zones-map-table-taxa-sunburst",
+    "title": "2  Preliminary Results",
+    "section": "2.1 Summarize Zones: map, table, taxa sunburst",
+    "text": "2.1 Summarize Zones: map, table, taxa sunburst\n\n\n\n\nSpecies DiversityAverage Habitat"
+  },
+  {
+    "objectID": "prelim.html#species-diversity",
+    "href": "prelim.html#species-diversity",
+    "title": "2  Preliminary Results",
+    "section": "2.2 Species Diversity",
+    "text": "2.2 Species Diversity"
+  },
+  {
+    "objectID": "prelim.html#average-habitat",
+    "href": "prelim.html#average-habitat",
+    "title": "2  Preliminary Results",
+    "section": "2.3 Average Habitat",
+    "text": "2.3 Average Habitat"
+  },
+  {
+    "objectID": "prelim.html#zones-across-u.s.-lower-48-federal-waters",
+    "href": "prelim.html#zones-across-u.s.-lower-48-federal-waters",
+    "title": "2  Preliminary Results",
+    "section": "2.1 Zones across U.S. (lower 48) Federal Waters",
+    "text": "2.1 Zones across U.S. (lower 48) Federal Waters\n\n\n\n\nSpecies PresenceSpecies Abundance"
+  },
+  {
+    "objectID": "prelim.html#species-composition-by-zone",
+    "href": "prelim.html#species-composition-by-zone",
+    "title": "2  Preliminary Results",
+    "section": "2.2 Species Composition by Zone",
+    "text": "2.2 Species Composition by Zone"
+  },
+  {
+    "objectID": "prelim.html#section",
+    "href": "prelim.html#section",
+    "title": "2  Preliminary Results",
+    "section": "2.3 ",
+    "text": "2.3"
   }
 ]
