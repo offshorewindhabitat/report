@@ -19,7 +19,8 @@ book:
         state: Ca
         postal-code: 93101
 
-  date: "`r format(Sys.time(), '%Y-%m-%d %H:%M')`"
+  date: now
+  date-format: "YYYY-MM-DD HH:mm"
   chapters:
     - index.qmd
     - intro.qmd
