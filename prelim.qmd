@@ -9,17 +9,18 @@ editor_options:
 
 ```{r setup}
 librarian::shelf(
-  devtools, d3r, dplyr, DT, fs, glue, htmltools, leaflet, 
-  purrr, readr, sf, stringr, 
-  sunburstR, terra, tibble, tidyr, quiet = T)
+  devtools, dplyr, fs, glue, htmltools, leaflet, 
+  yogevherz/plotme, purrr, readr, sf, stringr, 
+  tibble, tidyr, 
+  quiet = T)
 load_all("~/Github/ecoquants/offhabr")
-# devtools::install_local("~/Github/ecoquants/offhabr", force=T)
 ```
 
 ## Zones across U.S. (lower 48) Federal Waters
 
 ```{r}
 con <- oh_con()
+
 d_z <- tbl(con, "lyr_zone_stats") |> 
   filter(
     ds_key != "oa") |> 
@@ -68,11 +69,9 @@ Average extinction risk.
 
 :::
 
-## Species Composition by Zone
+## Species Composition for Study Area
 
 ```{r}
-devtools::load_all("~/Github/ecoquants/offhabr")
-
 d_z_spp <- tbl(con, "lyr_zone_stats") |> 
   filter(
     ds_key != "oa") |> 
@@ -80,44 +79,29 @@ d_z_spp <- tbl(con, "lyr_zone_stats") |>
   summarize(
     n_ds = n(), .groups = "drop") |> 
   left_join(
-    tbl(con, "taxa_wm"), by = "aphia_id") |> 
+    tbl(con, "taxa_wm") |> 
+      select(
+        aphia_id, kingdom, class, order, family, genus, scientificname), 
+    by = "aphia_id") |> 
   collect()
 
-# f_z |> 
-#   filter(zone_name == "Southern California") # zone_id == 9)
-# d_taxa %>% colnames() %>% paste(collapse=", ")
-# kingdom, phylum, class, order, family, genus, scientificname
-#   family <chr>, genus
-
-d_z_spp |> 
-  # filter(zone_id == 9) %>%
-  select(
+d_taxa <- d_z_spp |> 
+  # filter(zone_id == 9) |> zone_name == "Southern California"
+  distinct(
     kingdom, class, order, family, genus, scientificname) |> 
   mutate(
-    size = 1) |> 
-  d3_nest(value_cols = "size") |> 
-  sund2b(
-    valueField = "size",
-    width      = "100%",
-    rootLabel  = "ALL",
-    showLabels = T,
-    tooltip    = sund2bTooltip(
-      html = htmlwidgets::JS("
-        function(nodedata, size, percent) {
-          return nodedata.colname + ': <span style=\"font-weight: bold;\">' + nodedata.name + '</span>' + ' ' + size
-        }")),
-    breadcrumbs = sund2bBreadcrumb(
-      html = htmlwidgets::JS("
-        function(nodedata, size, percent) {
-          return nodedata.colname + ': <span style=\"font-weight: bold;\">' + nodedata.name + '</span>' + ' ' + size
-        }
-      ")))
-# f_html <- "spp_sunburst_zone-soc.html"
-# f_png <- f_html |> path_ext_set("png")
-# htmlwidgets::saveWidget(w, f_html)
-# webshot::webshot(
-#   f_html, f_png, delay = 10, 
-#   selector = '#htmlwidget-714cdec46cf4ccc2d56e > div > div > svg > g')
-#   # selector = 'g.d2b-chart-container')
+    n = 1) |> 
+  group_by(
+    kingdom, class, order, family) |> 
+  summarize(
+    n = sum(n),
+    .groups = "drop")
+  
+d_taxa |>
+  count_to_treemap()
 ```
+
+## Block relative to Zones
+
+...
 

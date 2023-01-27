@@ -1,0 +1,13 @@
+usethis
+devtools
+dplyr
+here
+librarian
+leaflet
+readr
+RColorBrewer
+scales
+purrr
+sf
+offhabr
+gt

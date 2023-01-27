@@ -1,6 +1,11 @@
 project:
   type: book
 
+execute:
+  echo: false
+  warning: false
+  cache: true
+
 book:
   title: "offhab-report"
   author: "Jane Doe"
@@ -14,7 +19,7 @@ book:
   appendices:
     - technical.qmd
 
-bibliography: references.bib
+bibliography: zotero_offhab.bib
 
 format:
   html:

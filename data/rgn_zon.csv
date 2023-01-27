@@ -1,0 +1,12 @@
+region,zone_name,rgn_color_rank
+Atlantic,North Atlantic,1
+Atlantic,Mid Atlantic,2
+Atlantic,South Atlantic,3
+Atlantic,Straits of Florida,4
+Gulf of Mexico,Eastern Gulf of Mexico,1
+Gulf of Mexico,Central Gulf of Mexico,2
+Gulf of Mexico,Western Gulf of Mexico,3
+Pacific,Southern California,1
+Pacific,Central California,2
+Pacific,Northern California,3
+Pacific,Washington/Oregon,4
