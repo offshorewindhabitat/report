@@ -2,9 +2,9 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "offhab-report",
+    "title": "Offshore Wind Habitat Analysis Report",
     "section": "",
-    "text": "Preface\nThis is a Quarto book.\nTo learn more about Quarto books visit https://quarto.org/docs/books.\n\n\n[1] 2"
+    "text": "Preface\nThis report was generated as a Quarto book."
   },
   {
     "objectID": "intro.html",
@@ -60,7 +60,7 @@
     "href": "summary.html",
     "title": "3  Summary",
     "section": "",
-    "text": "In summary, this book has no content whatsoever.\n\n\n[1] 2"
+    "text": "…"
   },
   {
     "objectID": "technical.html#relational-database-structure",

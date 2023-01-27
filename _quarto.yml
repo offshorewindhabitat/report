@@ -4,12 +4,22 @@ project:
 execute:
   echo: false
   warning: false
-  cache: true
+  cache: false
 
 book:
-  title: "offhab-report"
-  author: "Jane Doe"
-  date: "12/2/2022"
+  title: "Offshore Wind Habitat Analysis Report"
+  author:
+  - name: "Benjamin D. Best"
+    orcid: 0000-0002-2686-0784
+    email: ben@ecoquants.com
+    affiliations:
+      - name: EcoQuants LLC
+        address: 211 W. Gutierrez St., Unit 12
+        city: Santa Barbara
+        state: Ca
+        postal-code: 93101
+
+  date: "`r format(Sys.time(), '%Y-%m-%d %H:%M')`"
   chapters:
     - index.qmd
     - intro.qmd
@@ -24,12 +34,15 @@ bibliography: zotero_offhab.bib
 format:
   html:
     theme: cosmo
+    number-sections: true
   pdf:
     documentclass: scrreprt
+    number-sections: true
   docx:
     toc: true
-    # number-sections: true
-    # highlight-style: github
+    number-sections: true
 
-#editor: visual
+editor: source
+editor_options:
+  chunk_output_type: console
 

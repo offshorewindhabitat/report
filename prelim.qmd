@@ -1,11 +1,4 @@
----
-title: "Preliminary Results"
-execute:
-  echo: false
-  warning: false
-editor_options: 
-  chunk_output_type: console
----
+# Preliminary Results
 
 ```{r setup}
 librarian::shelf(
