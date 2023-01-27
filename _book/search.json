@@ -11,7 +11,7 @@
     "href": "intro.html",
     "title": "1  Introduction",
     "section": "",
-    "text": "2 Methods"
+    "text": "Development of offshore wind energy will be essential for providing renewable energy to mitigate climate change impacts, yet needs to be sited responsibly to avoid sensitive habitats. Acoustic impacts from construction and operation may negatively impact some species (Mooney, Andersson, and Stanley 2022). Hard substrate provided by the platforms may actually benefit other species (Wilson and Elliott 2009). Wind energy areas are under active development by the Bureau of Ocean Energy Management (BOEM) throughout the United States. This study will assess habitats for sensitivity throughout strategic parts of the US.\nA couple fundamental questions driving this analysis are:\n\nHow different are existing lease areas from the rest of the region? (intra-region)\nAreas not already slated for the offshore wind leasing impact species and habitats less, so could be candidates for alternative future planning. Areas with designated military use and outside BOEM’s authority (e.g., National Marine Sanctuaries) need to be further excluded from consideration.\nHow different are existing lease areas from each other within a given region? (inter-lease)\nWithin the leasing process the most oversight can be exercised within existing lease areas, especially ones in the earlier stages of Proposed Sale Notices and Call Areas. Identifying less impacted lease areas may lend greater stakeholder support for development.\n\n\n\n\n\nMooney, T Aran, Mathias H Andersson, and Jenni Stanley. 2022. “ACOUSTIC IMPACTS OF OFFSHORE WIND ENERGY ON FISHERY RESOURCES.” Oceanography, 15.\n\n\nWilson, Jennifer C., and Michael Elliott. 2009. “The Habitat-Creation Potential of Offshore Wind Farms.” Wind Energy 12 (2): 203–12. https://doi.org/10.1002/we.324."
   },
   {
     "objectID": "intro.html#spatial-hierarchy-regions-zones-blocks",
@@ -37,28 +37,28 @@
   {
     "objectID": "prelim.html#zones-across-u.s.-lower-48-federal-waters",
     "href": "prelim.html#zones-across-u.s.-lower-48-federal-waters",
-    "title": "2  Preliminary Results",
-    "section": "2.1 Zones across U.S. (lower 48) Federal Waters",
-    "text": "2.1 Zones across U.S. (lower 48) Federal Waters\n\n\n\n\nSpecies PresenceSpecies Abundance"
+    "title": "3  Preliminary Results",
+    "section": "3.1 Zones across U.S. (lower 48) Federal Waters",
+    "text": "3.1 Zones across U.S. (lower 48) Federal Waters\n\n\n\n\nSpecies PresenceSpecies Abundance"
   },
   {
     "objectID": "prelim.html#species-composition-for-study-area",
     "href": "prelim.html#species-composition-for-study-area",
-    "title": "2  Preliminary Results",
-    "section": "2.2 Species Composition for Study Area",
-    "text": "2.2 Species Composition for Study Area"
+    "title": "3  Preliminary Results",
+    "section": "3.2 Species Composition for Study Area",
+    "text": "3.2 Species Composition for Study Area"
   },
   {
     "objectID": "prelim.html#block-relative-to-zones",
     "href": "prelim.html#block-relative-to-zones",
-    "title": "2  Preliminary Results",
-    "section": "2.3 Block relative to Zones",
-    "text": "2.3 Block relative to Zones\n…"
+    "title": "3  Preliminary Results",
+    "section": "3.3 Block relative to Zones",
+    "text": "3.3 Block relative to Zones\n…"
   },
   {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "3  Summary",
+    "title": "4  Summary",
     "section": "",
     "text": "…"
   },
@@ -68,5 +68,33 @@
     "title": "Appendix A — Technical",
     "section": "A.1 Relational Database Structure",
     "text": "A.1 Relational Database Structure\n\nA.1.1 Typography\n\n*: wildcard indicating any value, such as *.csv for any file name ending in .csv\n{*}: surrounding curly braces ({}) indicates variable substitution, e.g. ds_{mdl_key} would evaluate to the value ds_am for mdl_key = \"am\", as in the dataset (ds) for AquaMaps (am)\n[*]: surrounding brackets ([]) indicates an optional value, such as [ply_grp] is an optional column in the ds_gm table\n<*>: surrounds the columns used to identify columns that uniquely identify (and index) each row\n...: additional columns, unique to the table\n\nThe format below is of the following format where the top line of a bulleted list item describes the table and the columns in that table are directly below, nested in hierarchical order:\n\n{table name} ({description})\n<{column 1}, {column 2}>, {column 3}, ...\n\n\n\nA.1.2 Database Naming Conventions\n\nUse all lower-case column names with underscores (i.e. from using janitor::clean_names()) to prevent need to quote SQL statements.\nFor short unique identifiers use suffix *_id for integer and *_key for short text.\n\n\n\nA.1.3 Models Based on Polygons\nModels based on polygons have an attribute table that may contain multiple values of interest. The normalized form of the database should not require repeating the geometry for each polygon to reproduce the original dataset that may be shared across values for an individual model as well as across multiple models. If models in the dataset use more than one collection of polygons, then the polygon group ply_grp field is optionally used to differentiate which set of polygons to use.\nAll features are projected to the geographic (EPSG:4326) coordinate reference system for leaflet R package visualization of polygons with “slippy” basemaps (e.g. “Esri.OceanBasemap” at Leaflet Providers).\n\ndatasets\n<ds_key>, ...\ncells_ds_ply (cells to dataset polygons)\n<ds_key, ply_id, cell_id>\nds_{ds_key} (dataset model attributes)\n<ds_key, mdl_id>, aphia_id, fld_ply_val, val_type, ...\nds_{ds_key}_plys (dataset polygon attributes, including values)\n<ds_key, ply_id>, val = {fc_flds}, ...\n\n\n\nA.1.4 Models Based on Rasters\nAll rasters are projected to web Mercator (EPSG:3857) coordinate reference system for leaflet R package visualization of rasters with “slippy” basemaps (e.g. “Esri.OceanBasemap” at Leaflet Providers). Since the variable is usually continuous, new values may be interpolated to the web Mercator raster with method = \"bilinear\" option (versus method = \"nearest\"). Because of this, the value is directly stored in the _cells_rast table for all raster models (versus a lookup of OffHab cell_ids to the original raster’s pixel).\n\ndatasets <ds_key>, …\nds_cells_rast (cells to dataset pixel values)\n<ds_key, mdl_id, cell_id>, val\nmdls_{ds_key} (dataset model attributes)\n<ds_key, mdl_id>, aphia_id, val_type, ...\n\n\n\nA.1.5 Future Development\n\nAdd columns to handle relationships between models, such as uncertainty (e.g. sd/cv/ ci95pct / ci5pct; not using yet) associated with which density:\n\n{mdl_key}_mdls.: mdl_related | mdl_relationship\n\nAdd value transformation column (val_transform) to {mdl_key}_mdls to standardize values from original to val_type (not using yet since all relative so far):\n\noa_mdls.val_transform: \\(val^3\\)\ndu_mdls.val_transform \\(val/100\\)"
+  },
+  {
+    "objectID": "methods.html#spatial-hierarchy-regions-zones-blocks",
+    "href": "methods.html#spatial-hierarchy-regions-zones-blocks",
+    "title": "2  Methods",
+    "section": "2.1 Spatial Hierarchy: Regions > Zones > Blocks",
+    "text": "2.1 Spatial Hierarchy: Regions > Zones > Blocks\nDetermination of regions for which to assess offshore habitat was based on BOEM activity and representativeness of habitats across the continental United States (Figure 2.1). The first (and presently only commercially in production) US wind farm at Block Island, NJ is in the North Atlantic where $4.4 billion was paid in offshore wind bids earlier this year (DOE news). The Atlantic seaboard slopes gradually making it appropriate for fixed platforms, whereas the Pacific coast drops off quickly into deeper depths making floating platforms more suitable. These technological differences therefore affect the bottom habitats differently. Whereas fixed platforms involve pile driving and addition of additional hard surfaces for habitats, the floating platforms leave only the benthic footprint of moorings and submarine cables.\n\n2.1.1 Regions and Zones\n\n\n\n\n\nFigure 2.1: Regions (Atlantic, Gulf of Mexico, and Pacific) are subdivied into Zones corresponding to BOEM Planning Areas in federal waters clipped to the U.S. Exclusive Economic Zone (except Alaska and Hawaii). To prevent overcrowding of labels only abbreviations are shown for Central (CGM), Eastern (EGM) and Western (WGM) Gulf of Mexico.\n\n\n\n\n\n\n\n\n2.1.2 Blocks\n\n\n\n\n\n\nTable 2.1:  Summary of Blocks per Zone, grouped by Region. \n  \n  \n    \n      Zone\n      # of Blocks\n      Block Area (km2)\n    \n  \n  \n    \n      Atlantic\n    \n    Mid Atlantic\n2,165\n16,534\n    North Atlantic\n342\n859\n    South Atlantic\n801\n3,448\n    \n      Gulf of Mexico\n    \n    Central Gulf of Mexico\n33\n762\n    Western Gulf of Mexico\n96\n2,215\n    \n      Pacific\n    \n    Central California\n16\n23\n    Northern California\n237\n535\n    Southern California\n673\n2,590\n    Washington/Oregon\n753\n4,684"
+  },
+  {
+    "objectID": "methods.html#datasets",
+    "href": "methods.html#datasets",
+    "title": "2  Methods",
+    "section": "2.2 Datasets",
+    "text": "2.2 Datasets"
+  },
+  {
+    "objectID": "methods.html#analysis",
+    "href": "methods.html#analysis",
+    "title": "2  Methods",
+    "section": "2.3 Analysis",
+    "text": "2.3 Analysis\nA couple fundamental questions driving this analysis are: How different are existing lease areas from the rest of the region? (intra-region)\nAreas not already slated for the offshore wind leasing impact species and habitats less, so could be candidates for alternative future planning. Areas with designated military use and outside BOEM’s authority (e.g., National Marine Sanctuaries) need to be further excluded from consideration.\nHow different are existing lease areas from each other within a given region? (inter-lease)\nWithin the leasing process the most oversight can be exercised within existing lease areas, especially ones in the earlier stages of Proposed Sale Notices and Call Areas. Identifying less impacted lease areas may lend greater stakeholder support for development.\nBenthic habitats will be the focus of input data, predominantly available through the Marine Cadastre (Table 1), especially based on seafloor properties (e.g., rock, grain size, rugosity), the presence of habitat forming species (e.g, coral, seagrasses, kelp) and other species. Species data will also be assessed from the AquaMaps distribution and OBIS observations."
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Mooney, T Aran, Mathias H Andersson, and Jenni Stanley. 2022.\n“ACOUSTIC IMPACTS OF OFFSHORE WIND ENERGY ON FISHERY\nRESOURCES.” Oceanography, 15.\n\n\nWilson, Jennifer C., and Michael Elliott. 2009. “The\nHabitat-Creation Potential of Offshore Wind Farms.” Wind\nEnergy 12 (2): 203–12. https://doi.org/10.1002/we.324."
   }
 ]

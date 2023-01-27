@@ -1,0 +1,138 @@
+# Methods
+
+## Spatial Hierarchy: Regions > Zones > Blocks
+
+Determination of regions for which to assess offshore habitat was based on BOEM activity and representativeness of habitats across the continental United States (@fig-map-zones). The first (and presently only commercially in production) US wind farm at Block Island, NJ is in the North Atlantic where $4.4 billion was paid in offshore wind bids earlier this year (DOE news).  The Atlantic seaboard slopes gradually making it appropriate for fixed platforms, whereas the Pacific coast drops off quickly into deeper depths making floating platforms more suitable. These technological differences therefore affect the bottom habitats differently. Whereas fixed platforms involve pile driving and addition of additional hard surfaces for habitats, the floating platforms leave only the benthic footprint of moorings and submarine cables.
+
+### Regions and Zones
+
+```{r}
+#| label: fig-map-zones
+#| fig-cap: Regions (Atlantic, Gulf of Mexico, and Pacific) are subdivied into Zones corresponding to BOEM Planning Areas in federal waters clipped to the U.S. Exclusive Economic Zone (except Alaska and Hawaii). To prevent overcrowding of labels only abbreviations are shown for Central (CGM), Eastern (EGM) and Western (WGM) Gulf of Mexico.
+
+librarian::shelf(
+  dplyr, leaflet, sf)
+devtools::load_all(here::here("../offhabr"))
+
+f_rgns <- oh_zones |> 
+  group_by(region) |> 
+  summarize() |> 
+  st_simplify(T, 1000)
+
+f_zns <- oh_zones_s1k |>
+  filter(zone_version == 1)
+
+oh_map() |> 
+  addPolygons(
+    data        = f_zns |> 
+      filter(region != "Gulf of Mexico"),
+    color       = ~get_colors(zone_name),
+    weight      = 2,
+    opacity     = 1,
+    fillOpacity = 0.7,
+    label       = ~zone_name, # ~glue("{zone_name} ({toupper(zone_key)})"),
+    labelOptions = labelOptions(
+      noHide   = T,
+      textOnly = T,
+      textsize = "12px")) |> 
+  addPolygons(
+    data        = f_zns |> 
+      filter(region == "Gulf of Mexico"),
+    color       = ~get_colors(zone_name),
+    weight      = 2,
+    opacity     = 1,
+    fillOpacity = 0.7,
+    label       = ~toupper(zone_key),
+    labelOptions = labelOptions(
+      noHide = T,
+      textOnly = T,
+      textsize = "12px")) |> 
+  addPolygons(
+    data        = f_rgns |> 
+      filter(region != "Gulf of Mexico"),
+    color       = ~get_colors(region),
+    weight      = 3,
+    opacity     = 1,
+    fillOpacity = 0,
+    label       = ~region,
+    labelOptions = labelOptions(
+      noHide = T,
+      textOnly = T,
+      textsize = "18px")) |> 
+  addPolygons(
+    data        = f_rgns |> 
+      filter(region == "Gulf of Mexico"),
+    color       = ~get_colors(region),
+    weight      = 3,
+    opacity     = 1,
+    fillOpacity = 0,
+    label       = ~region,
+    labelOptions = labelOptions(
+      noHide = T,
+      offset = c(0, 30),
+      textOnly = T,
+      textsize = "18px"))
+```
+
+<!-- Figure 2. Pacific regions to include in the assessment: Washington/Oregon (left) and Southern California (right). The individual lease areas indicate Call Areas (red) and Proposed Sale Notices (blue). -->
+
+
+<!-- Figure 3. Atlantic regions to include in the assessment: North Atlantic (left) and Mid Atlantic (right). The individual lease areas indicate Call Areas (red) and Commercial Leases (green). -->
+
+
+<!-- Figure 4. Gulf of Mexico region to include in the assessment: Central Gulf of Mexico. The individual lease areas indicate Call Areas (red). -->
+
+### Blocks
+
+```{r}
+#| label: tbl-zone-blocks
+#| tbl-cap: Summary of Blocks per Zone, grouped by Region.
+
+librarian::shelf(
+  gt)
+
+oh_blocks |>
+  filter(zone_version == 1) |> 
+  st_drop_geometry() |> 
+  # region, zone_name from oh_zones
+  left_join(
+    oh_zones |> 
+      st_drop_geometry() |> 
+      select(zone_key, zone_name, region),
+    by = "zone_key") |> 
+  group_by(region, zone_name) |> 
+  summarize(
+    n        = n(),
+    area_km2 = sum(area_km2),
+    .groups  = "drop") |> 
+  group_by(region) |> 
+  gt() |> 
+  cols_label(
+    zone_name = "Zone",
+    n         = "# of Blocks",
+    area_km2  = html("Block Area (km<sup>2</sup>)")) |> 
+   fmt_number(
+     c(n,area_km2), decimals = 0)
+```
+
+## Datasets
+
+```{r}
+
+```
+
+
+
+## Analysis
+
+A couple fundamental questions driving this analysis are:
+How different are existing lease areas from the rest of the region? (intra-region)
+
+Areas not already slated for the offshore wind leasing impact species and habitats less, so could be candidates for alternative future planning. Areas with designated military use and outside BOEM’s authority (e.g., National Marine Sanctuaries) need to be further excluded from consideration.
+
+
+How different are existing lease areas from each other within a given region? (inter-lease)
+
+Within the leasing process the most oversight can be exercised within existing lease areas, especially ones in the earlier stages of Proposed Sale Notices and Call Areas. Identifying less impacted lease areas may lend greater stakeholder support for development.
+
+Benthic habitats will be the focus of input data, predominantly available through the Marine Cadastre (Table 1), especially based on seafloor properties (e.g., rock, grain size, rugosity), the presence of habitat forming species (e.g, coral, seagrasses, kelp) and other species. Species data will also be assessed from the AquaMaps distribution and OBIS observations. 
