@@ -7,7 +7,7 @@ execute:
   cache: false
 
 book:
-  title: "Offshore Wind Habitat Analysis Report"
+  title: "Offshore Habitat Assessment for US Wind Energy"
   author:
   - name: "Benjamin D. Best"
     orcid: 0000-0002-2686-0784

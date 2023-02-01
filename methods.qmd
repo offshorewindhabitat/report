@@ -1,8 +1,8 @@
 # Methods
 
-## Spatial Hierarchy: Regions > Zones > Blocks
+## Spatial Hierarchy: Regions \> Zones \> Blocks
 
-Determination of regions for which to assess offshore habitat was based on BOEM activity and representativeness of habitats across the continental United States (@fig-map-zones). The first (and presently only commercially in production) US wind farm at Block Island, NJ is in the North Atlantic where $4.4 billion was paid in offshore wind bids earlier this year (DOE news).  The Atlantic seaboard slopes gradually making it appropriate for fixed platforms, whereas the Pacific coast drops off quickly into deeper depths making floating platforms more suitable. These technological differences therefore affect the bottom habitats differently. Whereas fixed platforms involve pile driving and addition of additional hard surfaces for habitats, the floating platforms leave only the benthic footprint of moorings and submarine cables.
+Determination of regions for which to assess offshore habitat was based on BOEM activity and representativeness of habitats across the continental United States (@fig-map-zones). The first (and presently only commercially in production) US wind farm at Block Island, NJ is in the North Atlantic where \$4.4 billion was paid in offshore wind bids earlier this year (DOE news). The Atlantic seaboard slopes gradually making it appropriate for fixed platforms, whereas the Pacific coast drops off quickly into deeper depths making floating platforms more suitable. These technological differences therefore affect the bottom habitats differently. Whereas fixed platforms involve pile driving and addition of additional hard surfaces for habitats, the floating platforms leave only the benthic footprint of moorings and submarine cables.
 
 ### Regions and Zones
 
@@ -76,9 +76,7 @@ oh_map() |>
 
 <!-- Figure 2. Pacific regions to include in the assessment: Washington/Oregon (left) and Southern California (right). The individual lease areas indicate Call Areas (red) and Proposed Sale Notices (blue). -->
 
-
 <!-- Figure 3. Atlantic regions to include in the assessment: North Atlantic (left) and Mid Atlantic (right). The individual lease areas indicate Call Areas (red) and Commercial Leases (green). -->
-
 
 <!-- Figure 4. Gulf of Mexico region to include in the assessment: Central Gulf of Mexico. The individual lease areas indicate Call Areas (red). -->
 
@@ -87,7 +85,6 @@ oh_map() |>
 ```{r}
 #| label: tbl-zone-blocks
 #| tbl-cap: Summary of Blocks per Zone, grouped by Region.
-
 librarian::shelf(
   gt)
 
@@ -121,18 +118,82 @@ oh_blocks |>
 
 ```
 
-
-
 ## Analysis
 
-A couple fundamental questions driving this analysis are:
-How different are existing lease areas from the rest of the region? (intra-region)
+A couple fundamental questions driving this analysis are: How different are existing lease areas from the rest of the region? (intra-region)
 
-Areas not already slated for the offshore wind leasing impact species and habitats less, so could be candidates for alternative future planning. Areas with designated military use and outside BOEM’s authority (e.g., National Marine Sanctuaries) need to be further excluded from consideration.
-
+Areas not already slated for the offshore wind leasing impact species and habitats less, so could be candidates for alternative future planning. Areas with designated military use and outside BOEM's authority (e.g., National Marine Sanctuaries) need to be further excluded from consideration.
 
 How different are existing lease areas from each other within a given region? (inter-lease)
 
 Within the leasing process the most oversight can be exercised within existing lease areas, especially ones in the earlier stages of Proposed Sale Notices and Call Areas. Identifying less impacted lease areas may lend greater stakeholder support for development.
 
-Benthic habitats will be the focus of input data, predominantly available through the Marine Cadastre (Table 1), especially based on seafloor properties (e.g., rock, grain size, rugosity), the presence of habitat forming species (e.g, coral, seagrasses, kelp) and other species. Species data will also be assessed from the AquaMaps distribution and OBIS observations. 
+Benthic habitats will be the focus of input data, predominantly available through the Marine Cadastre (Table 1), especially based on seafloor properties (e.g., rock, grain size, rugosity), the presence of habitat forming species (e.g, coral, seagrasses, kelp) and other species. Species data will also be assessed from the AquaMaps distribution and OBIS observations.
+
+### Processing Steps
+
+```{r}
+librarian::shelf(
+  DBI, dplyr, devtools, here, readr)
+load_all(here("../offhabr"))
+
+con <- oh_con()
+# dbListTables(con)
+
+# smallest original value for a layer
+# 
+# tbl(con, "lyrs") |>
+#   filter(
+#     val_max == min(val_max))
+# 
+#   ds_key lyr_key   aphia_id   val_min val_max rescale_min rescale_max
+#   <chr>  <chr>        <dbl>     <dbl>   <dbl>       <dbl>       <dbl>
+# 1 sw     sw_137087   137087 0.0000633 0.00491           0         100
+# https://www.marinespecies.org/aphia.php?p=taxdetails&id=137087#vernaculars
+# [sw]: minke whale (Balaenoptera acutorostrata)
+acutorostrata_val_max <- 0.00491
+
+# largest original value for a layer
+# 
+# tbl(con, "lyrs") |> 
+#   filter(ds_key != "vg") |> 
+#   filter(
+#     val_max == max(val_max))
+# 
+#   ds_key lyr_key   aphia_id     val_min val_max rescale_min rescale_max
+#   <chr>  <chr>        <dbl>       <dbl>   <dbl>       <dbl>       <dbl>
+# 1 du     du_137094   137094 0.000000979    286.           0         100
+# https://www.marinespecies.org/aphia.php?p=taxdetails&id=137094#vernaculars
+# [du]: common dolphin (_Delphinus delphis_)
+delphis_val_max <- 286
+```
+
+1.  **Download dataset**\
+    As raster or vector
+
+2.  **Convert dataset layers to common raster format**\
+    In order to calculate quickly across a wide range of spatial data based on different formats (vector or raster), spatial units of analysis and projections, a common study area and grid was generated from the **GEBCO** elevation map and projected to Web Mercator for readily displaying in "slippy" maps online. The area-based distortion of Web Mercator was compensated for by calculating the true area per cell as a separate multiplicative layer for use in calculations.
+
+3.  **Average within dataset-species layers**\
+    Some datasets include seasonally (e.g., `[du]`) or regionally (e.g., `[nc]`) distinct density surfaces. These get averaged (for seasonal) and mosaicked (for regional) together to produce a single average per dataset and species.
+
+4.  **Rescale dataset-species layers 0 to 100% for all model types**\
+    While this analysis is detailed spatially, it is coarse in terms of abundance, since the best available spatial distribution information is combined across disparate dataset types, i.e. expert [***range***]{.underline} maps (i.e., `[rl]`), [***probability***]{.underline} of occurrence (i.e., `[am]`) and [***density***]{.underline} surface models (e.g., `[du]`, `[sw]`, `[nc]`, `[gm]`). Model values were rescaled 0 to 100%, i.e. normalized to the existing probability of occurrence range of values (i.e., `[am]`). For instance, the original maximum [***density***]{.underline} surface model value for common dolphins (*Delphinus delphis*) in the Atlantic from `[du]` is `r delphis_val_max` individuals per km^2^, whereas for the minke whale (Balaenoptera acutorostrata) in the Pacific from `[sw]` is `r acutorostrata_val_max` individuals per km^2^. Both of these maxima are converted to 100, since we are not comparing relative abundance between species but rather within species. Since expert [***range***]{.underline} maps are binary in nature, i.e. in or out of range, a single value of 50% is applied within the range. Converting the stored values to single unsigned integers (`INT1U` for the range \[0, 100\]) enables a significant reduction of individual raster file sizes. Furthermore zeros were converted to `NA` (not available) for the sake of calculating the species range.
+
+5.  **Mosaic to single taxa across datasets, taxa**
+
+6.  **Apply weights**\
+    extinction risk, endemism, trophic level,\....
+
+7.  **Summarize with equation**\
+
+8.  **Extract across spatial hierarchies**\
+    Study, Regions, Zones, Blocks
+
+9.  **Make scores relative to spatial hierarchy**\
+
+    \
+
+    \
+
+10. 
