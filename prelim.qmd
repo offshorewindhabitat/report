@@ -7,6 +7,7 @@ librarian::shelf(
   tibble, tidyr, 
   quiet = T)
 load_all("~/Github/ecoquants/offhabr")
+options(readr.show_col_types = F)
 ```
 
 ## Zones across U.S. (lower 48) Federal Waters
@@ -93,6 +94,86 @@ d_taxa <- d_z_spp |>
 d_taxa |>
   count_to_treemap()
 ```
+
+## Extinction Risk
+
+```{r}
+librarian::shelf(
+  glue, leaflet, offhabr, sf, terra)
+
+bb <- st_bbox(oh_zones_s1k) |> as.vector()
+cog_url <- "https://storage.googleapis.com/offhab_lyrs/er.tif"
+
+cog_tif <- glue("/vsicurl/{cog_url}")
+r <- rast(cog_tif) # r
+rng_r <- range(values(r), na.rm = T)
+v_r <- seq()
+# plet(r, tiles="Esri.NatGeoWorldMap")
+
+# https://api.cogeo.xyz/docs#/Cloud%20Optimized%20GeoTIFF
+tiles_url <- glue("https://api.cogeo.xyz/cog/tiles/WebMercatorQuad/{{z}}/{{x}}/{{y}}@2x?url={cog_url}&resampling_method=average&rescale={rng_r[1]},{rng_r[2]}&colormap_name=viridis")
+
+# return_mask=true&
+
+leaflet() |>
+  addProviderTiles(providers$Esri.NatGeoWorldMap) |>
+  addTiles(
+    urlTemplate=tiles_url) |>
+  fitBounds(bb[1], bb[2], bb[3], bb[4]) |>
+  addLegend(
+    pal    = colorNumeric("viridis", rng_r[1]:rng_r[2]),
+    values = rng_r[1]:rng_r[2],
+    title  = "Extinction Risk")
+```
+
+### Species for Extinction Risk
+
+```{r}
+er_csv <- "/Users/bbest/My Drive/projects/offhab/data/derived/er.csv"
+
+d_er <- read_csv(er_csv) |> 
+  select(
+    rl_score, category, kingdom, class, order, family, genus, scientificname, aphia_id) |> 
+  arrange(rl_score, kingdom, class, order, family, genus, scientificname) |>
+  select(-rl_score) |> 
+  mutate(n = 1)
+
+d_er |>
+  count_to_treemap()
+```
+
+
+## Productivity
+
+```{r}
+librarian::shelf(
+  glue, leaflet, offhabr, sf, terra)
+
+bb <- st_bbox(oh_zones_s1k) |> as.vector()
+cog_url <- "https://storage.googleapis.com/offhab_lyrs/vg.tif"
+
+cog_tif <- glue("/vsicurl/{cog_url}")
+r <- rast(cog_tif) # r
+rng_r <- range(values(r), na.rm = T)
+v_r <- seq()
+# plet(r, tiles="Esri.NatGeoWorldMap")
+
+# https://api.cogeo.xyz/docs#/Cloud%20Optimized%20GeoTIFF
+tiles_url <- glue("https://api.cogeo.xyz/cog/tiles/WebMercatorQuad/{{z}}/{{x}}/{{y}}@2x?url={cog_url}&resampling_method=average&rescale={rng_r[1]},{rng_r[2]}&colormap_name=viridis")
+
+# return_mask=true&
+
+leaflet() |>
+  addProviderTiles(providers$Esri.NatGeoWorldMap) |>
+  addTiles(
+    urlTemplate=tiles_url) |>
+  fitBounds(bb[1], bb[2], bb[3], bb[4]) |>
+  addLegend(
+    pal    = colorNumeric("viridis", rng_r[1]:rng_r[2]),
+    values = rng_r[1]:rng_r[2],
+    title  = "Productivity")
+```
+
 
 ## Block relative to Zones
 

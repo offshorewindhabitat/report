@@ -2,7 +2,7 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Offshore Wind Habitat Analysis Report",
+    "title": "Offshore Habitat Assessment for US Wind Energy",
     "section": "",
     "text": "Preface\nThis report was generated as a Quarto book."
   },
@@ -52,8 +52,8 @@
     "objectID": "prelim.html#block-relative-to-zones",
     "href": "prelim.html#block-relative-to-zones",
     "title": "3  Preliminary Results",
-    "section": "3.3 Block relative to Zones",
-    "text": "3.3 Block relative to Zones\n…"
+    "section": "3.5 Block relative to Zones",
+    "text": "3.5 Block relative to Zones\n…"
   },
   {
     "objectID": "summary.html",
@@ -96,5 +96,19 @@
     "title": "References",
     "section": "",
     "text": "Mooney, T Aran, Mathias H Andersson, and Jenni Stanley. 2022.\n“ACOUSTIC IMPACTS OF OFFSHORE WIND ENERGY ON FISHERY\nRESOURCES.” Oceanography, 15.\n\n\nWilson, Jennifer C., and Michael Elliott. 2009. “The\nHabitat-Creation Potential of Offshore Wind Farms.” Wind\nEnergy 12 (2): 203–12. https://doi.org/10.1002/we.324."
+  },
+  {
+    "objectID": "prelim.html#extinction-risk",
+    "href": "prelim.html#extinction-risk",
+    "title": "3  Preliminary Results",
+    "section": "3.3 Extinction Risk",
+    "text": "3.3 Extinction Risk\n\n\n\n\n\n\n\n3.3.1 Species for Extinction Risk"
+  },
+  {
+    "objectID": "prelim.html#productivity",
+    "href": "prelim.html#productivity",
+    "title": "3  Preliminary Results",
+    "section": "3.4 Productivity",
+    "text": "3.4 Productivity"
   }
 ]
