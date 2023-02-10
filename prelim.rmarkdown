@@ -1,5 +1,6 @@
 # Preliminary Results
 
+
 ```{r setup}
 librarian::shelf(
   devtools, dplyr, DT, fs, glue, htmltools, leaflet, leaflet.extras,
@@ -10,7 +11,9 @@ load_all("~/Github/ecoquants/offhabr")
 options(readr.show_col_types = F)
 ```
 
+
 ## Zones across U.S. (lower 48) Federal Waters
+
 
 ```{r}
 con <- oh_con()
@@ -30,9 +33,11 @@ f_z <- oh_zones_s1k |>
     d_z, by = "zone_id")
 ```
 
+
 ::: {.panel-tabset}
 
 ## Species Presence
+
 
 ```{r}
 oh_map() |> 
@@ -44,7 +49,9 @@ oh_map() |>
     str_id  = "Zone")
 ```
 
+
 ## Species Abundance
+
 
 ```{r}
 oh_map() |> 
@@ -57,6 +64,7 @@ oh_map() |>
   addFullscreenControl()
 ```
 
+
 <!-- 
 ## Extinction Risk
 Average extinction risk.
@@ -65,6 +73,7 @@ Average extinction risk.
 :::
 
 ## Species Composition for Study Area
+
 
 ```{r}
 d_z_spp <- tbl(con, "lyr_zone_stats") |> 
@@ -96,7 +105,9 @@ d_taxa |>
   count_to_treemap()
 ```
 
+
 ## Extinction Risk
+
 
 ```{r}
 librarian::shelf(
@@ -128,7 +139,9 @@ leaflet() |>
   addFullscreenControl()
 ```
 
+
 ### Species for Extinction Risk
+
 
 ```{r}
 er_csv <- "/Users/bbest/My Drive/projects/offhab/data/derived/er.csv"
@@ -163,7 +176,9 @@ d_er |>
 
 
 
+
 ## Productivity
+
 
 ```{r}
 librarian::shelf(
@@ -196,7 +211,9 @@ leaflet() |>
 ```
 
 
+
 ## Block relative to Zones
 
 ...
+
 

@@ -1,0 +1,18 @@
+{
+  "hash": "4af0092f1d2390a9d805748c2975763a",
+  "result": {
+    "markdown": "# Preliminary Results\n\n\n\n\n::: {.cell}\n\n:::\n\n\n\n\n## Zones across U.S. (lower 48) Federal Waters\n\n\n\n\n::: {.cell}\n\n:::\n\n\n\n\n::: {.panel-tabset}\n\n## Species Presence\n\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](prelim_files/figure-docx/unnamed-chunk-2-1.png)\n:::\n:::\n\n\n\n\n## Species Abundance\n\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](prelim_files/figure-docx/unnamed-chunk-3-1.png)\n:::\n:::\n\n\n\n\n<!-- \n## Extinction Risk\nAverage extinction risk.\n-->\n\n:::\n\n## Species Composition for Study Area\n\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n![](prelim_files/figure-docx/unnamed-chunk-4-1.png)\n:::\n:::\n\n\n\n\n## Block relative to Zones\n\n...\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {
+      "knitr": [
+        "{\"type\":\"list\",\"attributes\":{},\"value\":[]}"
+      ]
+    },
+    "preserve": null,
+    "postProcess": false
+  }
+}
