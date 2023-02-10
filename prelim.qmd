@@ -2,7 +2,7 @@
 
 ```{r setup}
 librarian::shelf(
-  devtools, dplyr, fs, glue, htmltools, leaflet, 
+  devtools, dplyr, DT, fs, glue, htmltools, leaflet, 
   yogevherz/plotme, purrr, readr, sf, stringr, 
   tibble, tidyr, 
   quiet = T)
@@ -133,14 +133,30 @@ er_csv <- "/Users/bbest/My Drive/projects/offhab/data/derived/er.csv"
 
 d_er <- read_csv(er_csv) |> 
   select(
-    rl_score, category, kingdom, class, order, family, genus, scientificname, aphia_id) |> 
-  arrange(rl_score, kingdom, class, order, family, genus, scientificname) |>
-  select(-rl_score) |> 
+    rl_score, rl_category = category, kingdom, class, order, family, genus, scientificname, aphia_id) |> 
+  arrange(desc(rl_score), kingdom, class, order, family, genus, scientificname) |> 
   mutate(n = 1)
 
 d_er |>
+  select(-rl_score, -aphia_id) |> 
   count_to_treemap()
+
+con <- oh_con()
+tbl(con, "taxa_rl_catscores") |> 
+  collect() |> 
+  select(
+    rl_category = category,
+    rl_score,
+    description) |> 
+  filter(
+    rl_category %in% unique(d_er$rl_category)) |> 
+  datatable()
+
+d_er |>
+  select(-n) |>     
+  datatable()
 ```
+
 
 
 ## Productivity
