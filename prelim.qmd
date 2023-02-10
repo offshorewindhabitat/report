@@ -2,7 +2,7 @@
 
 ```{r setup}
 librarian::shelf(
-  devtools, dplyr, DT, fs, glue, htmltools, leaflet, 
+  devtools, dplyr, DT, fs, glue, htmltools, leaflet, leaflet.extras,
   yogevherz/plotme, purrr, readr, sf, stringr, 
   tibble, tidyr, 
   quiet = T)
@@ -53,7 +53,8 @@ oh_map() |>
     fld_val = res_avg,
     fld_id  = zone_name,
     str_val = "% Habitat",
-    str_id  = "Zone")
+    str_id  = "Zone") |> 
+  addFullscreenControl()
 ```
 
 <!-- 
@@ -123,7 +124,8 @@ leaflet() |>
   addLegend(
     pal    = colorNumeric("viridis", rng_r[1]:rng_r[2]),
     values = rng_r[1]:rng_r[2],
-    title  = "Extinction Risk")
+    title  = "Extinction Risk") |> 
+  addFullscreenControl()
 ```
 
 ### Species for Extinction Risk
@@ -151,6 +153,8 @@ tbl(con, "taxa_rl_catscores") |>
   filter(
     rl_category %in% unique(d_er$rl_category)) |> 
   datatable()
+
+dbDisconnect(con, shutdown=T)
 
 d_er |>
   select(-n) |>     
@@ -187,7 +191,8 @@ leaflet() |>
   addLegend(
     pal    = colorNumeric("viridis", rng_r[1]:rng_r[2]),
     values = rng_r[1]:rng_r[2],
-    title  = "Productivity")
+    title  = "Productivity") |> 
+  addFullscreenControl()
 ```
 
 
