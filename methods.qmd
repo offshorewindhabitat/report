@@ -11,7 +11,7 @@ Determination of regions for which to assess offshore habitat was based on BOEM 
 #| fig-cap: Regions (Atlantic, Gulf of Mexico, and Pacific) are subdivied into Zones corresponding to BOEM Planning Areas in federal waters clipped to the U.S. Exclusive Economic Zone (except Alaska and Hawaii). To prevent overcrowding of labels only abbreviations are shown for Central (CGM), Eastern (EGM) and Western (WGM) Gulf of Mexico.
 
 librarian::shelf(
-  dplyr, leaflet, sf)
+  dplyr, gt, leaflet, purrr, sf)
 devtools::load_all(here::here("../offhabr"))
 
 f_rgns <- oh_zones |> 
@@ -85,8 +85,6 @@ oh_map() |>
 ```{r}
 #| label: tbl-zone-blocks
 #| tbl-cap: Summary of Blocks per Zone, grouped by Region.
-librarian::shelf(
-  gt)
 
 oh_blocks |>
   filter(zone_version == 1) |> 
@@ -115,7 +113,74 @@ oh_blocks |>
 ## Datasets
 
 ```{r}
+librarian::shelf(
+  DBI, dplyr, devtools, here, readr)
+load_all(here("../offhabr"))
 
+con <- oh_con() # dbDisconnect(con, shutdown = T)
+# dbListTables(con)
+
+d_ds <- tbl(con, "datasets") |> 
+  filter(
+    active,
+    ds_key != "oh") |> 
+  collect()
+
+d_lyrs_ds <- tbl(con, "lyrs") |>
+  filter(
+    !is.na(aphia_id),
+    is_ds_prime,
+    ds_key != "oh") |> 
+  group_by(ds_key) |> 
+  summarize(n_lyr = n()) |> 
+  left_join(
+    tbl(con, "lyr_rgn_ds") |>
+      left_join(
+        tbl(con, "datasets") |> 
+          select(ds_key, ds_id),
+        by = "ds_id") |> 
+      group_by(ds_key) |> 
+      summarize(n_rgn = n()),
+    by = "ds_key") |> 
+  arrange(ds_key) |> 
+  collect() |> 
+  # replace_na(list(n_rgn = 0)) |> 
+  mutate(
+    n_lyr_rgn = purrr::map2_int(n_lyr, n_rgn, sum, na.rm=T))
+
+d_ds <- d_ds |> 
+  left_join(
+    d_lyrs_ds,
+    by = "ds_key")
+
+d_ds |> 
+  arrange(taxa_classes, ds_key) |> 
+  select(
+    Key      = ds_key,
+    Name     = name_short,
+    Type     = type,
+    Taxa     = taxa_classes,
+    `# Taxa` = n_lyr_rgn,
+    Year     = year,
+    Pacific  = rgn_pacific,
+    Atlantic = rgn_atlantic,
+    GoMex    = rgn_gomex) |> 
+    gt() |> 
+    tab_spanner(
+      label   = "Regions",
+      columns = c(Pacific, Atlantic, GoMex)) |> 
+  opt_row_striping(row_striping = T) |> 
+  text_transform(
+    locations = cells_body(
+      columns = c(Pacific, Atlantic, GoMex)),
+    fn = function(x)
+      ifelse(x, "✓", "")) |> # heavy(✔) vs light(✓)
+  sub_missing(
+    columns      = c(Taxa, `# Taxa`),
+    missing_text = "") |> 
+  fmt_number(
+    columns  = `# Taxa`,
+    decimals = 0)
 ```
 
 ## Analysis
@@ -132,14 +197,7 @@ Benthic habitats will be the focus of input data, predominantly available throug
 
 ### Processing Steps
 
-```{r}
-librarian::shelf(
-  DBI, dplyr, devtools, here, readr)
-load_all(here("../offhabr"))
-
-con <- oh_con()
-# dbListTables(con)
-
+```{r OLD}
 # smallest original value for a layer
 # 
 # tbl(con, "lyrs") |>
@@ -197,3 +255,9 @@ delphis_val_max <- 286
     \
 
 10. 
+
+```{r dbDisconnect}
+dbDisconnect(con, shutdown=T)
+```
+
+

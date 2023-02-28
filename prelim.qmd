@@ -200,3 +200,8 @@ leaflet() |>
 
 ...
 
+
+```{r dbDisconnect}
+dbDisconnect(con, shutdown=T)
+```
+
