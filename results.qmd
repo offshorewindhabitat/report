@@ -27,7 +27,7 @@ con <- oh_con()
 # [16] "vg_web"          "vg_web_rescaled"
 ```
 
-## Zones across U.S. (lower 48) Federal Waters
+## Spatial
 
 ```{r}
 z_csv <- here("../offhab-scripts/data/zonal_zones.csv")
@@ -42,11 +42,11 @@ f_z <- oh_zones_s1k |>
 
 ::: {.panel-tabset}
 
-## Score
+### Score
 
 ::: {.panel-tabset}
 
-### Pixel Value
+#### Pixel Value
 
 ```{r pixel_score}
 lyr_key   <- "score_v1_web"
@@ -54,7 +54,7 @@ lyr_title <- "Score"
 oh_map_cog_lyr(lyr_key, lyr_title, con=con)
 ```
 
-### Zone Average
+#### Zone Average
 
 ```{r zone_score}
 oh_map() |> 
@@ -68,11 +68,11 @@ oh_map() |>
 
 :::
 
-## Species Richness
+### Species Richness
 
 ::::: {.panel-tabset}
 
-### Pixel Value
+#### Pixel Value
 
 ```{r pixel_sp}
 lyr_key   <- "sp_web"
@@ -80,7 +80,7 @@ lyr_title <- "# Taxa Present"
 oh_map_cog_lyr(lyr_key, lyr_title, con=con)
 ```
 
-### Zone Average
+#### Zone Average
 
 ```{r zone_sp}
 oh_map() |> 
@@ -95,11 +95,11 @@ oh_map() |>
 :::::
 
 
-## Species Abundance
+### Species Abundance
 
 ::::: {.panel-tabset}
 
-### Pixel Value
+#### Pixel Value
 
 ```{r pixel_sa}
 lyr_key   <- "sa_web"
@@ -107,7 +107,7 @@ lyr_title <- "Sum of Relative Abundance"
 oh_map_cog_lyr(lyr_key, lyr_title, con=con)
 ```
 
-### Zone Average
+#### Zone Average
 
 ```{r zone_sa}
 oh_map() |> 
@@ -121,11 +121,11 @@ oh_map() |>
 
 :::::
 
-## Extinction Risk
+### Extinction Risk
 
 ::::: {.panel-tabset}
 
-### Pixel Value
+#### Pixel Value
 
 ```{r pixel_er}
 lyr_key   <- "er_web"
@@ -133,7 +133,7 @@ lyr_title <- "Extinction Risk"
 oh_map_cog_lyr(lyr_key, lyr_title, con=con)
 ```
 
-### Zone Average
+#### Zone Average
 
 ```{r zone_er}
 oh_map() |> 
@@ -147,11 +147,11 @@ oh_map() |>
 
 :::::
 
-## Primary Productivity
+### Primary Productivity
 
 ::::: {.panel-tabset}
 
-### Pixel Value
+#### Pixel Value
 
 ```{r pixel_vg}
 lyr_key   <- "vg_web"
@@ -161,7 +161,7 @@ oh_map_cog_lyr(lyr_key, lyr_title, con=con)
 
 - TODO: units above (like mg C / L) and other layers
 
-### Zone Average
+#### Zone Average
 
 ```{r zone_vg}
 oh_map() |> 
@@ -175,12 +175,11 @@ oh_map() |>
 
 :::::
 
-
-## Hydrothermal Vents
+### Hydrothermal Vents
 
 ::::: {.panel-tabset}
 
-### Pixel Value
+#### Pixel Value
 
 ```{r pixel_ve}
 lyr_key   <- "ve_web"
@@ -196,7 +195,7 @@ d_rng <- tbl(con, "lyrs") |>
 oh_map_cog_lyr(lyr_key, lyr_title, con=con)
 ```
 
-### Zone Average
+#### Zone Average
 
 ```{r zone_ve}
 oh_map() |> 
@@ -210,11 +209,11 @@ oh_map() |>
 
 :::::
 
-## Seamounts
+### Seamounts
 
 ::::: {.panel-tabset}
 
-### Pixel Value
+#### Pixel Value
 
 ```{r pixel_sm}
 lyr_key   <- "sm_web"
@@ -222,7 +221,7 @@ lyr_title <- "Seamounts"
 oh_map_cog_lyr(lyr_key, lyr_title, con=con)
 ```
 
-### Zone Average
+#### Zone Average
 
 ```{r zone_sm}
 oh_map() |> 
@@ -238,142 +237,81 @@ oh_map() |>
 
 :::
 
-## Species Composition for Study Area
+## Taxa
 
-```{r}
-d_z_spp <- tbl(con, "lyr_zone_stats") |> 
+::: {.panel-tabset}
+
+### All Taxa in Study Area
+
+```{r taxa_treemap}
+d_taxa <- tbl(con, "lyrs") |> 
   filter(
-    ds_key != "oa") |> 
-  group_by(zone_id, aphia_id) |> 
-  summarize(
-    n_ds = n(), .groups = "drop") |> 
+    !is.na(aphia_id),
+    is_ds_prime) |> 
+  select(aphia_id) |> 
   left_join(
-    tbl(con, "taxa_wm") |> 
+    tbl(con, "taxa_wm") |>
       select(
-        aphia_id, kingdom, class, order, family, genus, scientificname), 
+        aphia_id, kingdom, phylum, class, 
+        order, family, genus, scientificname),
     by = "aphia_id") |> 
-  collect()
-
-d_taxa <- d_z_spp |> 
-  # filter(zone_id == 9) |> zone_name == "Southern California"
-  distinct(
-    kingdom, class, order, family, genus, scientificname) |> 
+  select(-aphia_id) |> 
   mutate(
     n = 1) |> 
-  group_by(
-    kingdom, class, order, family) |> 
-  summarize(
-    n = sum(n),
-    .groups = "drop")
-  
+  arrange(
+    kingdom, phylum, class, 
+    order, family, genus, scientificname) |> 
+  collect()
+# check no duplicates and has all info
+stopifnot(
+  sum(duplicated(d_taxa$aphia_id)) == 0,
+  sum(is.na(d_taxa$kingdom))       == 0)
+n_taxa <- nrow(d_taxa) # 10,061
+
+# TODO: add link 
+
 d_taxa |>
   count_to_treemap()
-```
-
-## Extinction Risk
-
-```{r}
-librarian::shelf(
-  glue, leaflet, offhabr, sf, terra)
-
-bb <- st_bbox(oh_zones_s1k) |> as.vector()
-cog_url <- "https://storage.googleapis.com/offhab_lyrs/er.tif"
-
-cog_tif <- glue("/vsicurl/{cog_url}")
-r <- rast(cog_tif) # r
-rng_r <- range(values(r), na.rm = T)
-v_r <- seq()
-# plet(r, tiles="Esri.NatGeoWorldMap")
-
-# https://api.cogeo.xyz/docs#/Cloud%20Optimized%20GeoTIFF
-tiles_url <- glue("https://api.cogeo.xyz/cog/tiles/WebMercatorQuad/{{z}}/{{x}}/{{y}}@2x?url={cog_url}&resampling_method=average&rescale={rng_r[1]},{rng_r[2]}&colormap_name=viridis")
-
-# return_mask=true&
-
-leaflet() |>
-  addProviderTiles(providers$Esri.NatGeoWorldMap) |>
-  addTiles(
-    urlTemplate=tiles_url) |>
-  fitBounds(bb[1], bb[2], bb[3], bb[4]) |>
-  addLegend(
-    pal    = colorNumeric("viridis", rng_r[1]:rng_r[2]),
-    values = rng_r[1]:rng_r[2],
-    title  = "Extinction Risk") |> 
-  addFullscreenControl()
-```
-
-### Species for Extinction Risk
-
-```{r}
-er_csv <- "/Users/bbest/My Drive/projects/offhab/data/derived/er.csv"
-
-d_er <- read_csv(er_csv) |> 
-  select(
-    rl_score, rl_category = category, kingdom, class, order, family, genus, scientificname, aphia_id) |> 
-  arrange(desc(rl_score), kingdom, class, order, family, genus, scientificname) |> 
-  mutate(n = 1)
-
-d_er |>
-  select(-rl_score, -aphia_id) |> 
-  count_to_treemap()
-
-con <- oh_con()
-tbl(con, "taxa_rl_catscores") |> 
-  collect() |> 
-  select(
-    rl_category = category,
-    rl_score,
-    description) |> 
-  filter(
-    rl_category %in% unique(d_er$rl_category)) |> 
-  datatable()
-
-dbDisconnect(con, shutdown=T)
 
 d_er |>
   select(-n) |>     
   datatable()
 ```
 
+- Number of taxa: `r n_taxa`
 
-
-## Productivity
+### Taxa with Extinction Risk
 
 ```{r}
-librarian::shelf(
-  glue, leaflet, offhabr, sf, terra)
+er_csv <- here("../offhab-scripts/data/er.csv")
 
-bb <- st_bbox(oh_zones_s1k) |> as.vector()
-cog_url <- "https://storage.googleapis.com/offhab_lyrs/vg.tif"
+d_er <- read_csv(er_csv) |> 
+  mutate(
+    n           = 1,
+    rl_category = recode(
+      category,
+      NT = "1. Near Threatened",
+      VU = "2. Vulnerable",
+      EN = "3. Endangered",
+      CR = "4. Critically Endangered")) |> 
+  arrange(desc(rl_category), kingdom, class, order, family, genus, scientificname) |>
+  select( rl_category, kingdom, class, order, family, genus, scientificname, n)
 
-cog_tif <- glue("/vsicurl/{cog_url}")
-r <- rast(cog_tif) # r
-rng_r <- range(values(r), na.rm = T)
-v_r <- seq()
-# plet(r, tiles="Esri.NatGeoWorldMap")
+d_er |>
+  count_to_treemap()
 
-# https://api.cogeo.xyz/docs#/Cloud%20Optimized%20GeoTIFF
-tiles_url <- glue("https://api.cogeo.xyz/cog/tiles/WebMercatorQuad/{{z}}/{{x}}/{{y}}@2x?url={cog_url}&resampling_method=average&rescale={rng_r[1]},{rng_r[2]}&colormap_name=viridis")
+table(d_er$rl_category)
 
-# return_mask=true&
-
-leaflet() |>
-  addProviderTiles(providers$Esri.NatGeoWorldMap) |>
-  addTiles(
-    urlTemplate=tiles_url) |>
-  fitBounds(bb[1], bb[2], bb[3], bb[4]) |>
-  addLegend(
-    pal    = colorNumeric("viridis", rng_r[1]:rng_r[2]),
-    values = rng_r[1]:rng_r[2],
-    title  = "Productivity") |> 
-  addFullscreenControl()
+d_er |>
+  select(-n) |>     
+  datatable()
 ```
 
+:::
 
 ## Block relative to Zones
 
-...
-
+TODO: ...
 
 ```{r dbDisconnect}
 dbDisconnect(con, shutdown=T)

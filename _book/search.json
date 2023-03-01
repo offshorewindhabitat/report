@@ -66,8 +66,8 @@
     "objectID": "results.html#block-relative-to-zones",
     "href": "results.html#block-relative-to-zones",
     "title": "3  Results",
-    "section": "3.5 Block relative to Zones",
-    "text": "3.5 Block relative to Zones\n…"
+    "section": "3.3 Block relative to Zones",
+    "text": "3.3 Block relative to Zones\nTODO: …"
   },
   {
     "objectID": "summary.html",
@@ -103,5 +103,19 @@
     "title": "3  Results",
     "section": "3.3 Extinction Risk",
     "text": "3.3 Extinction Risk\n\n\n\n\n\n\n\n3.3.1 Species for Extinction Risk"
+  },
+  {
+    "objectID": "results.html#spatial",
+    "href": "results.html#spatial",
+    "title": "3  Results",
+    "section": "3.1 Spatial",
+    "text": "3.1 Spatial\n\n\n\n\nScoreSpecies RichnessSpecies AbundanceExtinction RiskPrimary ProductivityHydrothermal VentsSeamounts\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\nTODO: units above (like mg C / L) and other layers\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average"
+  },
+  {
+    "objectID": "results.html#taxa",
+    "href": "results.html#taxa",
+    "title": "3  Results",
+    "section": "3.2 Taxa",
+    "text": "3.2 Taxa\n\nAll Taxa in Study AreaTaxa with Extinction Risk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNumber of taxa: 10061\n\n\n\n\n\n\n\n\n\n      1. Near Threatened            2. Vulnerable            3. Endangered \n                      57                       88                       36 \n4. Critically Endangered \n                      26"
   }
 ]
