@@ -256,6 +256,27 @@ delphis_val_max <- 286
 
 10. 
 
+## Combine Layers
+
+By combining disperate layers with weights we can arrive at a fundamental conservation index [@oharaAnticipatingFutureWorld2022].
+
+$$
+rescale(x) = [x - min(x)] / [max(x) - min(x)] \\
+\\
+Score_{raw} = w_{SR} * rescale(SpeciesRichness) \\
++ w_{SA} * rescale(SpeciesAbundance) \\
++ w_{ER} * rescale(ExtinctionRisk) \\
++ w_{PP} * rescale(PrimaryProductivity) \\
++ w_{HV} * rescale(HydrothermalVents) \\
++ w_{SM} * rescale(Seamounts) \\
+Score = rescale(Score_{raw}) * 100
+$$
+
+TODO:
+
+- $HydrothermalVents$ and $SeaMounts$ are presence-only (i.e., binary, `1` or `0`), so convert to a value of `0.5` where present, whereas the other layers have a range from `0` to `1`.
+
+
 ```{r dbDisconnect}
 dbDisconnect(con, shutdown=T)
 ```

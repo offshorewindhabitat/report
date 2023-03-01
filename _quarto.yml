@@ -25,7 +25,7 @@ book:
     - index.qmd
     - intro.qmd
     - methods.qmd
-    - prelim.qmd
+    - results.qmd
     - summary.qmd
     - references.qmd
   appendices:

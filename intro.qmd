@@ -9,3 +9,7 @@ A couple fundamental questions driving this analysis are:
 
 1.  _How different are existing lease areas from each other within a given region?_ (_**inter-lease**_)\
   Within the leasing process the most oversight can be exercised within existing lease areas, especially ones in the earlier stages of Proposed Sale Notices and Call Areas. Identifying less impacted lease areas may lend greater stakeholder support for development.
+  
+TODO: 
+
+- **EFH** is too coarse, not preferred by [@friedlandResourceOccurrenceProductivity2021]. See [methods notes | offhab - Google Docs](https://docs.google.com/document/d/1JSJMBqqL4c44c8fx01I-elx7gK8dNyuABjLinaxC95k/edit#bookmark=id.sky4lrftqqq8)

@@ -11,7 +11,7 @@
     "href": "intro.html",
     "title": "1  Introduction",
     "section": "",
-    "text": "Development of offshore wind energy will be essential for providing renewable energy to mitigate climate change impacts, yet needs to be sited responsibly to avoid sensitive habitats. Acoustic impacts from construction and operation may negatively impact some species (Mooney, Andersson, and Stanley 2022). Hard substrate provided by the platforms may actually benefit other species (Wilson and Elliott 2009). Wind energy areas are under active development by the Bureau of Ocean Energy Management (BOEM) throughout the United States. This study will assess habitats for sensitivity throughout strategic parts of the US.\nA couple fundamental questions driving this analysis are:\n\nHow different are existing lease areas from the rest of the region? (intra-region)\nAreas not already slated for the offshore wind leasing impact species and habitats less, so could be candidates for alternative future planning. Areas with designated military use and outside BOEM’s authority (e.g., National Marine Sanctuaries) need to be further excluded from consideration.\nHow different are existing lease areas from each other within a given region? (inter-lease)\nWithin the leasing process the most oversight can be exercised within existing lease areas, especially ones in the earlier stages of Proposed Sale Notices and Call Areas. Identifying less impacted lease areas may lend greater stakeholder support for development.\n\n\n\n\n\nMooney, T Aran, Mathias H Andersson, and Jenni Stanley. 2022. “ACOUSTIC IMPACTS OF OFFSHORE WIND ENERGY ON FISHERY RESOURCES.” Oceanography, 15.\n\n\nWilson, Jennifer C., and Michael Elliott. 2009. “The Habitat-Creation Potential of Offshore Wind Farms.” Wind Energy 12 (2): 203–12. https://doi.org/10.1002/we.324."
+    "text": "Development of offshore wind energy will be essential for providing renewable energy to mitigate climate change impacts, yet needs to be sited responsibly to avoid sensitive habitats. Acoustic impacts from construction and operation may negatively impact some species (Mooney, Andersson, and Stanley 2022). Hard substrate provided by the platforms may actually benefit other species (Wilson and Elliott 2009). Wind energy areas are under active development by the Bureau of Ocean Energy Management (BOEM) throughout the United States. This study will assess habitats for sensitivity throughout strategic parts of the US.\nA couple fundamental questions driving this analysis are:\n\nHow different are existing lease areas from the rest of the region? (intra-region)\nAreas not already slated for the offshore wind leasing impact species and habitats less, so could be candidates for alternative future planning. Areas with designated military use and outside BOEM’s authority (e.g., National Marine Sanctuaries) need to be further excluded from consideration.\nHow different are existing lease areas from each other within a given region? (inter-lease)\nWithin the leasing process the most oversight can be exercised within existing lease areas, especially ones in the earlier stages of Proposed Sale Notices and Call Areas. Identifying less impacted lease areas may lend greater stakeholder support for development.\n\nTODO:\n\nEFH is too coarse, not preferred by (Friedland et al. 2021). See methods notes | offhab - Google Docs\n\n\n\n\n\nFriedland, Kevin D., Elizabeth T. Methratta, Andrew B. Gill, Sarah K. Gaichas, Tobey H. Curtis, Evan M. Adams, Janelle L. Morano, Daniel P. Crear, M. Conor McManus, and Damian C. Brady. 2021. “Resource Occurrence and Productivity in Existing and Proposed Wind Energy Lease Areas on the Northeast US Shelf.” Frontiers in Marine Science 8.\n\n\nMooney, T Aran, Mathias H Andersson, and Jenni Stanley. 2022. “ACOUSTIC IMPACTS OF OFFSHORE WIND ENERGY ON FISHERY RESOURCES.” Oceanography, 15.\n\n\nWilson, Jennifer C., and Michael Elliott. 2009. “The Habitat-Creation Potential of Offshore Wind Farms.” Wind Energy 12 (2): 203–12. https://doi.org/10.1002/we.324."
   },
   {
     "objectID": "methods.html#spatial-hierarchy-regions-zones-blocks",
@@ -35,37 +35,37 @@
     "text": "2.3 Analysis\nA couple fundamental questions driving this analysis are: How different are existing lease areas from the rest of the region? (intra-region)\nAreas not already slated for the offshore wind leasing impact species and habitats less, so could be candidates for alternative future planning. Areas with designated military use and outside BOEM’s authority (e.g., National Marine Sanctuaries) need to be further excluded from consideration.\nHow different are existing lease areas from each other within a given region? (inter-lease)\nWithin the leasing process the most oversight can be exercised within existing lease areas, especially ones in the earlier stages of Proposed Sale Notices and Call Areas. Identifying less impacted lease areas may lend greater stakeholder support for development.\nBenthic habitats will be the focus of input data, predominantly available through the Marine Cadastre (Table 1), especially based on seafloor properties (e.g., rock, grain size, rugosity), the presence of habitat forming species (e.g, coral, seagrasses, kelp) and other species. Species data will also be assessed from the AquaMaps distribution and OBIS observations.\n\n2.3.1 Processing Steps\n\n\n\n\nDownload dataset\nAs raster or vector\nConvert dataset layers to common raster format\nIn order to calculate quickly across a wide range of spatial data based on different formats (vector or raster), spatial units of analysis and projections, a common study area and grid was generated from the GEBCO elevation map and projected to Web Mercator for readily displaying in “slippy” maps online. The area-based distortion of Web Mercator was compensated for by calculating the true area per cell as a separate multiplicative layer for use in calculations.\nAverage within dataset-species layers\nSome datasets include seasonally (e.g., [du]) or regionally (e.g., [nc]) distinct density surfaces. These get averaged (for seasonal) and mosaicked (for regional) together to produce a single average per dataset and species.\nRescale dataset-species layers 0 to 100% for all model types\nWhile this analysis is detailed spatially, it is coarse in terms of abundance, since the best available spatial distribution information is combined across disparate dataset types, i.e. expert range maps (i.e., [rl]), probability of occurrence (i.e., [am]) and density surface models (e.g., [du], [sw], [nc], [gm]). Model values were rescaled 0 to 100%, i.e. normalized to the existing probability of occurrence range of values (i.e., [am]). For instance, the original maximum density surface model value for common dolphins (Delphinus delphis) in the Atlantic from [du] is 286 individuals per km2, whereas for the minke whale (Balaenoptera acutorostrata) in the Pacific from [sw] is 0.00491 individuals per km2. Both of these maxima are converted to 100, since we are not comparing relative abundance between species but rather within species. Since expert range maps are binary in nature, i.e. in or out of range, a single value of 50% is applied within the range. Converting the stored values to single unsigned integers (INT1U for the range [0, 100]) enables a significant reduction of individual raster file sizes. Furthermore zeros were converted to NA (not available) for the sake of calculating the species range.\nMosaic to single taxa across datasets, taxa\nApply weights\nextinction risk, endemism, trophic level,.…\nSummarize with equation\n\nExtract across spatial hierarchies\nStudy, Regions, Zones, Blocks\nMake scores relative to spatial hierarchy"
   },
   {
-    "objectID": "prelim.html#zones-across-u.s.-lower-48-federal-waters",
-    "href": "prelim.html#zones-across-u.s.-lower-48-federal-waters",
-    "title": "3  Preliminary Results",
+    "objectID": "results.html#zones-across-u.s.-lower-48-federal-waters",
+    "href": "results.html#zones-across-u.s.-lower-48-federal-waters",
+    "title": "3  Results",
     "section": "3.1 Zones across U.S. (lower 48) Federal Waters",
-    "text": "3.1 Zones across U.S. (lower 48) Federal Waters\n\n\n\n\nSpecies PresenceSpecies Abundance"
+    "text": "3.1 Zones across U.S. (lower 48) Federal Waters\n\n\n\n\nScoreSpecies RichnessSpecies AbundanceExtinction RiskPrimary ProductivityHydrothermal VentsSeamounts\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\nTODO: units above (like mg C / L) and other layers\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPixel ValueZone Average"
   },
   {
-    "objectID": "prelim.html#species-composition-for-study-area",
-    "href": "prelim.html#species-composition-for-study-area",
-    "title": "3  Preliminary Results",
+    "objectID": "results.html#species-composition-for-study-area",
+    "href": "results.html#species-composition-for-study-area",
+    "title": "3  Results",
     "section": "3.2 Species Composition for Study Area",
     "text": "3.2 Species Composition for Study Area"
   },
   {
-    "objectID": "prelim.html#extinction-risk",
-    "href": "prelim.html#extinction-risk",
-    "title": "3  Preliminary Results",
+    "objectID": "results.html#extinction-risk",
+    "href": "results.html#extinction-risk",
+    "title": "3  Results",
     "section": "3.3 Extinction Risk",
     "text": "3.3 Extinction Risk\n\n\n\n\n\n\n\n3.3.1 Species for Extinction Risk"
   },
   {
-    "objectID": "prelim.html#productivity",
-    "href": "prelim.html#productivity",
-    "title": "3  Preliminary Results",
+    "objectID": "results.html#productivity",
+    "href": "results.html#productivity",
+    "title": "3  Results",
     "section": "3.4 Productivity",
     "text": "3.4 Productivity"
   },
   {
-    "objectID": "prelim.html#block-relative-to-zones",
-    "href": "prelim.html#block-relative-to-zones",
-    "title": "3  Preliminary Results",
+    "objectID": "results.html#block-relative-to-zones",
+    "href": "results.html#block-relative-to-zones",
+    "title": "3  Results",
     "section": "3.5 Block relative to Zones",
     "text": "3.5 Block relative to Zones\n…"
   },
@@ -89,5 +89,19 @@
     "title": "Appendix A — Technical",
     "section": "A.1 Relational Database Structure",
     "text": "A.1 Relational Database Structure\n\nA.1.1 Typography\n\n*: wildcard indicating any value, such as *.csv for any file name ending in .csv\n{*}: surrounding curly braces ({}) indicates variable substitution, e.g. ds_{mdl_key} would evaluate to the value ds_am for mdl_key = \"am\", as in the dataset (ds) for AquaMaps (am)\n[*]: surrounding brackets ([]) indicates an optional value, such as [ply_grp] is an optional column in the ds_gm table\n<*>: surrounds the columns used to identify columns that uniquely identify (and index) each row\n...: additional columns, unique to the table\n\nThe format below is of the following format where the top line of a bulleted list item describes the table and the columns in that table are directly below, nested in hierarchical order:\n\n{table name} ({description})\n<{column 1}, {column 2}>, {column 3}, ...\n\n\n\nA.1.2 Database Naming Conventions\n\nUse all lower-case column names with underscores (i.e. from using janitor::clean_names()) to prevent need to quote SQL statements.\nFor short unique identifiers use suffix *_id for integer and *_key for short text.\n\n\n\nA.1.3 Models Based on Polygons\nModels based on polygons have an attribute table that may contain multiple values of interest. The normalized form of the database should not require repeating the geometry for each polygon to reproduce the original dataset that may be shared across values for an individual model as well as across multiple models. If models in the dataset use more than one collection of polygons, then the polygon group ply_grp field is optionally used to differentiate which set of polygons to use.\nAll features are projected to the geographic (EPSG:4326) coordinate reference system for leaflet R package visualization of polygons with “slippy” basemaps (e.g. “Esri.OceanBasemap” at Leaflet Providers).\n\ndatasets\n<ds_key>, ...\ncells_ds_ply (cells to dataset polygons)\n<ds_key, ply_id, cell_id>\nds_{ds_key} (dataset model attributes)\n<ds_key, mdl_id>, aphia_id, fld_ply_val, val_type, ...\nds_{ds_key}_plys (dataset polygon attributes, including values)\n<ds_key, ply_id>, val = {fc_flds}, ...\n\n\n\nA.1.4 Models Based on Rasters\nAll rasters are projected to web Mercator (EPSG:3857) coordinate reference system for leaflet R package visualization of rasters with “slippy” basemaps (e.g. “Esri.OceanBasemap” at Leaflet Providers). Since the variable is usually continuous, new values may be interpolated to the web Mercator raster with method = \"bilinear\" option (versus method = \"nearest\"). Because of this, the value is directly stored in the _cells_rast table for all raster models (versus a lookup of OffHab cell_ids to the original raster’s pixel).\n\ndatasets <ds_key>, …\nds_cells_rast (cells to dataset pixel values)\n<ds_key, mdl_id, cell_id>, val\nmdls_{ds_key} (dataset model attributes)\n<ds_key, mdl_id>, aphia_id, val_type, ...\n\n\n\nA.1.5 Future Development\n\nAdd columns to handle relationships between models, such as uncertainty (e.g. sd/cv/ ci95pct / ci5pct; not using yet) associated with which density:\n\n{mdl_key}_mdls.: mdl_related | mdl_relationship\n\nAdd value transformation column (val_transform) to {mdl_key}_mdls to standardize values from original to val_type (not using yet since all relative so far):\n\noa_mdls.val_transform: \\(val^3\\)\ndu_mdls.val_transform \\(val/100\\)"
+  },
+  {
+    "objectID": "methods.html#combine-layers",
+    "href": "methods.html#combine-layers",
+    "title": "2  Methods",
+    "section": "2.4 Combine Layers",
+    "text": "2.4 Combine Layers\nBy combining disperate layers with weights we can arrive at a fundamental conservation index (O’Hara and Halpern 2022).\n\\[\nrescale(x) = [x - min(x)] / [max(x) - min(x)] \\\\\n\\\\\nScore_{raw} = w_{SR} * rescale(SpeciesRichness) \\\\\n+ w_{SA} * rescale(SpeciesAbundance) \\\\\n+ w_{ER} * rescale(ExtinctionRisk) \\\\\n+ w_{PP} * rescale(PrimaryProductivity) \\\\\n+ w_{HV} * rescale(HydrothermalVents) \\\\\n+ w_{SM} * rescale(Seamounts) \\\\\nScore = rescale(Score_{raw}) * 100\n\\]\nTODO:\n\n\\(HydrothermalVents\\) and \\(SeaMounts\\) are presence-only (i.e., binary, 1 or 0), so convert to a value of 0.5 where present, whereas the other layers have a range from 0 to 1.\n\n\n\n\n\n\n\n\nO’Hara, Casey C., and Benjamin S. Halpern. 2022. “Anticipating the Future of the World’s Ocean.” Annual Review of Environment and Resources 47 (1): null. https://doi.org/10.1146/annurev-environ-120120-053645."
+  },
+  {
+    "objectID": "results.html#extinction-risk-1",
+    "href": "results.html#extinction-risk-1",
+    "title": "3  Results",
+    "section": "3.3 Extinction Risk",
+    "text": "3.3 Extinction Risk\n\n\n\n\n\n\n\n3.3.1 Species for Extinction Risk"
   }
 ]
