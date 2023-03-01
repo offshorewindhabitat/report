@@ -261,15 +261,18 @@ delphis_val_max <- 286
 By combining disperate layers with weights we can arrive at a fundamental conservation index [@oharaAnticipatingFutureWorld2022].
 
 $$
-rescale(x) = [x - min(x)] / [max(x) - min(x)] \\
+\begin{aligned}
+& \mathrm rescale(x) = [x - min(x)] / [max(x) - min(x)] \\
 \\
-Score_{raw} = w_{SR} * rescale(SpeciesRichness) \\
-+ w_{SA} * rescale(SpeciesAbundance) \\
-+ w_{ER} * rescale(ExtinctionRisk) \\
-+ w_{PP} * rescale(PrimaryProductivity) \\
-+ w_{HV} * rescale(HydrothermalVents) \\
-+ w_{SM} * rescale(Seamounts) \\
-Score = rescale(Score_{raw}) * 100
+& \mathrm Score_{raw} = w_{SR} * rescale(SpeciesRichness) \\
+& \mathrm + w_{SA} * rescale(SpeciesAbundance) \\
+& \mathrm + w_{ER} * rescale(ExtinctionRisk) \\
+& \mathrm + w_{PP} * rescale(PrimaryProductivity) \\
+& \mathrm + w_{HV} * rescale(HydrothermalVents) \\
+& \mathrm + w_{SM} * rescale(Seamounts) \\
+\\
+& \mathrm Score = rescale(Score_{raw}) * 100
+\end{aligned}
 $$
 
 TODO:
