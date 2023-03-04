@@ -275,7 +275,7 @@ $$
 \end{aligned}
 $$
 
-TODO:
+TODO: Explain:
 
 - $HydrothermalVents$ and $SeaMounts$ are presence-only (i.e., binary, `1` or `0`), so convert to a value of `0.5` where present, whereas the other layers have a range from `0` to `1`.
 

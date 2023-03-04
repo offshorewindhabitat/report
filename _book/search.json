@@ -95,7 +95,7 @@
     "href": "methods.html#combine-layers",
     "title": "2  Methods",
     "section": "2.4 Combine Layers",
-    "text": "2.4 Combine Layers\nBy combining disperate layers with weights we can arrive at a fundamental conservation index (O’Hara and Halpern 2022).\n\\[\n\\begin{aligned}\n& \\mathrm rescale(x) = [x - min(x)] / [max(x) - min(x)] \\\\\n\\\\\n& \\mathrm Score_{raw} = w_{SR} * rescale(SpeciesRichness) \\\\\n& \\mathrm + w_{SA} * rescale(SpeciesAbundance) \\\\\n& \\mathrm + w_{ER} * rescale(ExtinctionRisk) \\\\\n& \\mathrm + w_{PP} * rescale(PrimaryProductivity) \\\\\n& \\mathrm + w_{HV} * rescale(HydrothermalVents) \\\\\n& \\mathrm + w_{SM} * rescale(Seamounts) \\\\\n\\\\\n& \\mathrm Score = rescale(Score_{raw}) * 100\n\\end{aligned}\n\\]\nTODO:\n\n\\(HydrothermalVents\\) and \\(SeaMounts\\) are presence-only (i.e., binary, 1 or 0), so convert to a value of 0.5 where present, whereas the other layers have a range from 0 to 1.\n\n\n\n\n\n\n\n\nO’Hara, Casey C., and Benjamin S. Halpern. 2022. “Anticipating the Future of the World’s Ocean.” Annual Review of Environment and Resources 47 (1): null. https://doi.org/10.1146/annurev-environ-120120-053645."
+    "text": "2.4 Combine Layers\nBy combining disperate layers with weights we can arrive at a fundamental conservation index (O’Hara and Halpern 2022).\n\\[\n\\begin{aligned}\n& \\mathrm rescale(x) = [x - min(x)] / [max(x) - min(x)] \\\\\n\\\\\n& \\mathrm Score_{raw} = w_{SR} * rescale(SpeciesRichness) \\\\\n& \\mathrm + w_{SA} * rescale(SpeciesAbundance) \\\\\n& \\mathrm + w_{ER} * rescale(ExtinctionRisk) \\\\\n& \\mathrm + w_{PP} * rescale(PrimaryProductivity) \\\\\n& \\mathrm + w_{HV} * rescale(HydrothermalVents) \\\\\n& \\mathrm + w_{SM} * rescale(Seamounts) \\\\\n\\\\\n& \\mathrm Score = rescale(Score_{raw}) * 100\n\\end{aligned}\n\\]\nTODO: Explain:\n\n\\(HydrothermalVents\\) and \\(SeaMounts\\) are presence-only (i.e., binary, 1 or 0), so convert to a value of 0.5 where present, whereas the other layers have a range from 0 to 1.\n\n\n\n\n\n\n\n\nO’Hara, Casey C., and Benjamin S. Halpern. 2022. “Anticipating the Future of the World’s Ocean.” Annual Review of Environment and Resources 47 (1): null. https://doi.org/10.1146/annurev-environ-120120-053645."
   },
   {
     "objectID": "results.html#extinction-risk-1",
@@ -116,6 +116,20 @@
     "href": "results.html#taxa",
     "title": "3  Results",
     "section": "3.2 Taxa",
-    "text": "3.2 Taxa\n\nAll Taxa in Study AreaTaxa with Extinction Risk\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNumber of taxa: 10061\n\n\n\n\n\n\n\n\n\n      1. Near Threatened            2. Vulnerable            3. Endangered \n                      57                       88                       36 \n4. Critically Endangered \n                      26"
+    "text": "3.2 Taxa\n\nAll Taxa in Study AreaTaxa with Extinction Risk\n\n\n\nTreemapTable\n\n\n\n\n\n\n\n\n\n\nNumber of taxa: 10061\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTreemapTable\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n      1. Near Threatened            2. Vulnerable            3. Endangered \n                      57                       88                       36 \n4. Critically Endangered \n                      26"
+  },
+  {
+    "objectID": "results.html#blocks",
+    "href": "results.html#blocks",
+    "title": "3  Results",
+    "section": "3.3 Blocks",
+    "text": "3.3 Blocks\nWhen zooming into the blocks in a zone, we look at deviation from the average score in the zone.\n\n\n\n\nattr(m, \"zone_name\")attr(m, \"zone_name\")attr(m, \"zone_name\")attr(m, \"zone_name\")attr(m, \"zone_name\")attr(m, \"zone_name\")attr(m, \"zone_name\")attr(m, \"zone_name\")attr(m, \"zone_name\")"
+  },
+  {
+    "objectID": "results.html#zones-with-blocks",
+    "href": "results.html#zones-with-blocks",
+    "title": "3  Results",
+    "section": "3.3 Zones with Blocks",
+    "text": "3.3 Zones with Blocks\nWhen zooming into the blocks in a zone, we look at deviation from the average score in the zone.\n\n\n\n\nWashington/OregonNorthern CaliforniaCentral CaliforniaSouthern CaliforniaWestern Gulf of MexicoCentral Gulf of MexicoSouth AtlanticMid AtlanticNorth Atlantic"
   }
 ]

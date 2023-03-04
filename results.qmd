@@ -14,7 +14,7 @@ librarian::shelf(
 load_all("~/Github/ecoquants/offhabr")
 options(readr.show_col_types = F)
 
-con <- oh_con()
+con <- oh_con() # dbDisconnect(con, shutdown=T)
 
 # tbl(con, "lyrs") |>
 #   filter(is.na(aphia_id), is_ds_prime) |> 
@@ -243,7 +243,11 @@ oh_map() |>
 
 ### All Taxa in Study Area
 
-```{r taxa_treemap}
+::::: {.panel-tabset}
+
+#### Treemap
+
+```{r all_taxa_treemap}
 d_taxa <- tbl(con, "lyrs") |> 
   filter(
     !is.na(aphia_id),
@@ -264,25 +268,37 @@ d_taxa <- tbl(con, "lyrs") |>
   collect()
 # check no duplicates and has all info
 stopifnot(
-  sum(duplicated(d_taxa$aphia_id)) == 0,
+  sum(duplicated(d_taxa$scientificname)) == 0,
   sum(is.na(d_taxa$kingdom))       == 0)
 n_taxa <- nrow(d_taxa) # 10,061
 
-# TODO: add link 
+# TODO: add link to shiny map, which should zoom to extent and display datasets
 
 d_taxa |>
   count_to_treemap()
 
-d_er |>
-  select(-n) |>     
-  datatable()
+# TODO: add vernacular names, so easily searchable / understandable
 ```
 
 - Number of taxa: `r n_taxa`
 
+#### Table
+
+```{r all_taxa_tbl}
+d_taxa |>
+  select(-n) |>     
+  datatable()
+```
+
+:::::
+
 ### Taxa with Extinction Risk
 
-```{r}
+::::: {.panel-tabset}
+
+#### Treemap
+
+```{r er_taxa_treemap}
 er_csv <- here("../offhab-scripts/data/er.csv")
 
 d_er <- read_csv(er_csv) |> 
@@ -299,19 +315,142 @@ d_er <- read_csv(er_csv) |>
 
 d_er |>
   count_to_treemap()
+```
 
-table(d_er$rl_category)
+#### Table
 
+```{r er_taxa_tbl}
 d_er |>
   select(-n) |>     
   datatable()
 ```
 
+```{r er_taxa_summary}
+table(d_er$rl_category)
+```
+
+:::::
+
 :::
 
-## Block relative to Zones
+## Zones with Blocks
 
-TODO: ...
+When zooming into the blocks in a zone, we look at deviation from the average score in the zone. 
+
+```{r}
+# offhabr::oh_blocks |> 
+#   st_drop_geometry() |> 
+#   filter(zone_version == 1) |> 
+#   pull(zone_key) |> 
+#   table()
+# cec  cgm  mda  noa  noc  soa  soc  wao  wgm 
+#  16   33 2165  342  237  801  673  753   96
+zone_keys  <- oh_blocks |> 
+  filter(zone_version == 1) |>  
+  pull(zone_key) |> 
+  unique()
+
+# arrange in order from NW Pacific to GoMex to NE
+# oh_zones_s1k |>
+#   st_drop_geometry() |> 
+#   filter(
+#     zone_version == 1,
+#     zone_key %in% zone_keys) |> 
+#   arrange(zone_name) |> 
+#   select(zone_name, zone_key)
+# wao, noc, cec, soc, wgm, cgm, soa, mda, noa
+m <- oh_map_zone_score_dev("wao")
+```
+
+::: {.panel-tabset}
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+
+```{r}
+m <- oh_map_zone_score_dev("noc")
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+
+```{r}
+m <- oh_map_zone_score_dev("cec")
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+
+```{r}
+m <- oh_map_zone_score_dev("soc")
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+
+```{r}
+m <- oh_map_zone_score_dev("wgm")
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+
+```{r}
+m <- oh_map_zone_score_dev("cgm")
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+
+```{r}
+m <- oh_map_zone_score_dev("soa")
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+
+```{r}
+m <- oh_map_zone_score_dev("mda")
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+
+```{r}
+m <- oh_map_zone_score_dev("noa")
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+
+:::
 
 ```{r dbDisconnect}
 dbDisconnect(con, shutdown=T)
