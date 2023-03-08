@@ -259,7 +259,7 @@ d_taxa <- tbl(con, "lyrs") |>
         aphia_id, kingdom, phylum, class, 
         order, family, genus, scientificname),
     by = "aphia_id") |> 
-  select(-aphia_id) |> 
+  #select(-aphia_id) |> 
   mutate(
     n = 1) |> 
   arrange(
@@ -275,6 +275,7 @@ n_taxa <- nrow(d_taxa) # 10,061
 # TODO: add link to shiny map, which should zoom to extent and display datasets
 
 d_taxa |>
+  select(-aphia_id) |> 
   count_to_treemap()
 
 # TODO: add vernacular names, so easily searchable / understandable
@@ -286,8 +287,20 @@ d_taxa |>
 
 ```{r all_taxa_tbl}
 d_taxa |>
-  select(-n) |>     
-  datatable()
+  rowwise() |>
+  mutate(
+    taxa_hierarchy = c(
+      kingdom, phylum, class, order,family,scientificname) |>  na.omit() |> 
+      paste(collapse = " > "),
+    taxa_link = glue(
+      "<a
+        target = _blank
+        href   = 'https://shiny.offshorewindhabitat.info/sp_map/?aphia_id={aphia_id}'>
+      {taxa_hierarchy}
+      </a>")) |> 
+  select(
+    `Taxa: Kingdom > Phylum > Class > Order > Family > Genus species (common name)` = taxa_link) |>     
+  datatable(escape = F)
 ```
 
 :::::
@@ -310,10 +323,13 @@ d_er <- read_csv(er_csv) |>
       VU = "2. Vulnerable",
       EN = "3. Endangered",
       CR = "4. Critically Endangered")) |> 
-  arrange(desc(rl_category), kingdom, class, order, family, genus, scientificname) |>
-  select( rl_category, kingdom, class, order, family, genus, scientificname, n)
+  arrange(desc(rl_category), kingdom, class, order, family, genus, scientificname)
 
-d_er |>
+d_er_tm <- d_er |>
+  select(
+    rl_category, kingdom, class, order, family, genus, scientificname, n)
+
+d_er_tm |>
   count_to_treemap()
 ```
 
@@ -321,8 +337,21 @@ d_er |>
 
 ```{r er_taxa_tbl}
 d_er |>
-  select(-n) |>     
-  datatable()
+  rowwise() |>
+  mutate(
+    taxa_hierarchy = c(
+      kingdom, phylum, class, order,family, scientificname) |> na.omit() |> 
+      paste(collapse = " > "),
+    taxa_link = glue(
+      "<a
+        target = _blank
+        href   = 'https://shiny.offshorewindhabitat.info/sp_map/?aphia_id={aphia_id}'>
+      {taxa_hierarchy}
+      </a>")) |> 
+  select(
+    `RedList Category` = rl_category, 
+    `Taxa: Kingdom > Phylum > Class > Order > Family > Genus species (common name)` = taxa_link) |>     
+  datatable(escape = F)
 ```
 
 ```{r er_taxa_summary}
