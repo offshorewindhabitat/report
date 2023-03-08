@@ -49,6 +49,9 @@ f_z <- oh_zones_s1k |>
 #### Pixel Value
 
 ```{r pixel_score}
+#| label: fig-pixel-score
+#| fig-cap: Interactive map of overall score throughout the study area.
+
 lyr_key   <- "score_v1_web"
 lyr_title <- "Score"
 oh_map_cog_lyr(lyr_key, lyr_title, con=con)
@@ -57,6 +60,9 @@ oh_map_cog_lyr(lyr_key, lyr_title, con=con)
 #### Zone Average
 
 ```{r zone_score}
+#| label: fig-zone-score
+#| fig-cap: Interactive map of overall score average per Zone.
+
 oh_map() |> 
   oh_add_ply(
     ply     = f_z,
@@ -75,6 +81,9 @@ oh_map() |>
 #### Pixel Value
 
 ```{r pixel_sp}
+#| label: fig-pixel-sp
+#| fig-cap: Interactive map of species richness across the study area.
+
 lyr_key   <- "sp_web"
 lyr_title <- "# Taxa Present"
 oh_map_cog_lyr(lyr_key, lyr_title, con=con)
@@ -83,6 +92,9 @@ oh_map_cog_lyr(lyr_key, lyr_title, con=con)
 #### Zone Average
 
 ```{r zone_sp}
+#| label: fig-zone-sp
+#| fig-cap: Interactive map of species richness average per Zone.
+
 oh_map() |> 
   oh_add_ply(
     ply     = f_z,
@@ -257,7 +269,7 @@ d_taxa <- tbl(con, "lyrs") |>
     tbl(con, "taxa_wm") |>
       select(
         aphia_id, kingdom, phylum, class, 
-        order, family, genus, scientificname),
+        order, family, genus, scientificname, vernacular),
     by = "aphia_id") |> 
   #select(-aphia_id) |> 
   mutate(
@@ -286,18 +298,27 @@ d_taxa |>
 #### Table
 
 ```{r all_taxa_tbl}
-d_taxa |>
-  rowwise() |>
-  mutate(
-    taxa_hierarchy = c(
-      kingdom, phylum, class, order,family,scientificname) |>  na.omit() |> 
-      paste(collapse = " > "),
-    taxa_link = glue(
-      "<a
+add_taxa_link <- function(d){
+  d |> 
+    rowwise() |> 
+    mutate(
+      taxa_hierarchy = c(
+        kingdom, phylum, class, order,family, scientificname) |> na.omit() |> 
+        paste(collapse = " > "),
+      vernacular_str = ifelse(
+        !is.na(vernacular), 
+        glue("({vernacular})"),
+        ""),
+      taxa_link = glue(
+        "<a
         target = _blank
         href   = 'https://shiny.offshorewindhabitat.info/sp_map/?aphia_id={aphia_id}'>
-      {taxa_hierarchy}
-      </a>")) |> 
+      {taxa_hierarchy} {vernacular_str}
+      </a>"))
+}
+
+d_taxa |>
+  add_taxa_link() |> 
   select(
     `Taxa: Kingdom > Phylum > Class > Order > Family > Genus species (common name)` = taxa_link) |>     
   datatable(escape = F)
@@ -323,7 +344,12 @@ d_er <- read_csv(er_csv) |>
       VU = "2. Vulnerable",
       EN = "3. Endangered",
       CR = "4. Critically Endangered")) |> 
-  arrange(desc(rl_category), kingdom, class, order, family, genus, scientificname)
+  arrange(desc(rl_category), kingdom, class, order, family, genus, scientificname) |> 
+  left_join(
+    tbl(con, "taxa_wm") |> 
+      select(aphia_id, vernacular) |> 
+      collect(),
+    by = "aphia_id")
 
 d_er_tm <- d_er |>
   select(
@@ -336,21 +362,14 @@ d_er_tm |>
 #### Table
 
 ```{r er_taxa_tbl}
-d_er |>
-  rowwise() |>
-  mutate(
-    taxa_hierarchy = c(
-      kingdom, phylum, class, order,family, scientificname) |> na.omit() |> 
-      paste(collapse = " > "),
-    taxa_link = glue(
-      "<a
-        target = _blank
-        href   = 'https://shiny.offshorewindhabitat.info/sp_map/?aphia_id={aphia_id}'>
-      {taxa_hierarchy}
-      </a>")) |> 
+d_er_dt <- d_er |>
+  add_taxa_link()
+
+# d_er_dt$taxa_hierarchy[1]
+d_er_dt |> 
   select(
     `RedList Category` = rl_category, 
-    `Taxa: Kingdom > Phylum > Class > Order > Family > Genus species (common name)` = taxa_link) |>     
+    `Taxa: Kingdom > Phylum > Class > Order > Family > Genus species (common name)` = taxa_link) |> 
   datatable(escape = F)
 ```
 
