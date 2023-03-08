@@ -27,7 +27,7 @@ con <- oh_con() # dbDisconnect(con, shutdown=T)
 # [16] "vg_web"          "vg_web_rescaled"
 ```
 
-## Spatial
+## Spatial Scoring
 
 ```{r}
 z_csv <- here("../offhab-scripts/data/zonal_zones.csv")
