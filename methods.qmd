@@ -2,7 +2,7 @@
 
 ## Spatial Hierarchy: Regions \> Zones \> Blocks
 
-Determination of regions for which to assess offshore habitat was based on BOEM activity and representativeness of habitats across the continental United States (@fig-map-zones). The first (and presently only commercially in production) US wind farm at Block Island, NJ is in the North Atlantic where \$4.4 billion was paid in offshore wind bids earlier this year (DOE news). The Atlantic seaboard slopes gradually making it appropriate for fixed platforms, whereas the Pacific coast drops off quickly into deeper depths making floating platforms more suitable. These technological differences therefore affect the bottom habitats differently. Whereas fixed platforms involve pile driving and addition of additional hard surfaces for habitats, the floating platforms leave only the benthic footprint of moorings and submarine cables.
+Determination of regions for which to assess offshore habitat was based on BOEM activity and representativeness of habitats across the continental United States (@fig-map-zones). The first (and presently only commercially in production) US wind farm at Block Island, NJ is in the North Atlantic where \$4.4 billion was paid in offshore wind bids earlier this year ([DOE news](https://poweralliance.org/2022/02/25/boem-sets-offshore-energy-records-with-4-37-billion-in-winning-bids-for-wind-sale/)). The Atlantic seaboard slopes gradually making it appropriate for fixed platforms, whereas the Pacific coast drops off quickly into deeper depths making floating platforms more suitable. These technological differences therefore affect the bottom habitats differently. Whereas fixed platforms involve pile driving and addition of additional hard surfaces for habitats, the floating platforms leave only the benthic footprint of moorings and submarine cables.
 
 ### Regions and Zones
 
@@ -183,19 +183,19 @@ d_ds |>
     decimals = 0)
 ```
 
-## Analysis
+<!-- ## Analysis -->
 
-A couple fundamental questions driving this analysis are: How different are existing lease areas from the rest of the region? (intra-region)
+<!-- A couple fundamental questions driving this analysis are: How different are existing lease areas from the rest of the region? (intra-region) -->
 
-Areas not already slated for the offshore wind leasing impact species and habitats less, so could be candidates for alternative future planning. Areas with designated military use and outside BOEM's authority (e.g., National Marine Sanctuaries) need to be further excluded from consideration.
+<!-- Areas not already slated for the offshore wind leasing impact species and habitats less, so could be candidates for alternative future planning. Areas with designated military use and outside BOEM's authority (e.g., National Marine Sanctuaries) need to be further excluded from consideration. -->
 
-How different are existing lease areas from each other within a given region? (inter-lease)
+<!-- How different are existing lease areas from each other within a given region? (inter-lease) -->
 
-Within the leasing process the most oversight can be exercised within existing lease areas, especially ones in the earlier stages of Proposed Sale Notices and Call Areas. Identifying less impacted lease areas may lend greater stakeholder support for development.
+<!-- Within the leasing process the most oversight can be exercised within existing lease areas, especially ones in the earlier stages of Proposed Sale Notices and Call Areas. Identifying less impacted lease areas may lend greater stakeholder support for development. -->
 
-Benthic habitats will be the focus of input data, predominantly available through the Marine Cadastre (Table 1), especially based on seafloor properties (e.g., rock, grain size, rugosity), the presence of habitat forming species (e.g, coral, seagrasses, kelp) and other species. Species data will also be assessed from the AquaMaps distribution and OBIS observations.
+<!-- Benthic habitats will be the focus of input data, predominantly available through the Marine Cadastre (Table 1), especially based on seafloor properties (e.g., rock, grain size, rugosity), the presence of habitat forming species (e.g, coral, seagrasses, kelp) and other species. Species data will also be assessed from the AquaMaps distribution and OBIS observations. -->
 
-### Processing Steps
+## Processing Steps
 
 ```{r OLD}
 # smallest original value for a layer
@@ -227,7 +227,7 @@ delphis_val_max <- 286
 ```
 
 1.  **Download dataset**\
-    As raster or vector
+    As raster or vector.
 
 2.  **Convert dataset layers to common raster format**\
     In order to calculate quickly across a wide range of spatial data based on different formats (vector or raster), spatial units of analysis and projections, a common study area and grid was generated from the **GEBCO** elevation map and projected to Web Mercator for readily displaying in "slippy" maps online. The area-based distortion of Web Mercator was compensated for by calculating the true area per cell as a separate multiplicative layer for use in calculations.
@@ -236,27 +236,38 @@ delphis_val_max <- 286
     Some datasets include seasonally (e.g., `[du]`) or regionally (e.g., `[nc]`) distinct density surfaces. These get averaged (for seasonal) and mosaicked (for regional) together to produce a single average per dataset and species.
 
 4.  **Rescale dataset-species layers 0 to 100% for all model types**\
-    While this analysis is detailed spatially, it is coarse in terms of abundance, since the best available spatial distribution information is combined across disparate dataset types, i.e. expert [***range***]{.underline} maps (i.e., `[rl]`), [***probability***]{.underline} of occurrence (i.e., `[am]`) and [***density***]{.underline} surface models (e.g., `[du]`, `[sw]`, `[nc]`, `[gm]`). Model values were rescaled 0 to 100%, i.e. normalized to the existing probability of occurrence range of values (i.e., `[am]`). For instance, the original maximum [***density***]{.underline} surface model value for common dolphins (*Delphinus delphis*) in the Atlantic from `[du]` is `r delphis_val_max` individuals per km^2^, whereas for the minke whale (Balaenoptera acutorostrata) in the Pacific from `[sw]` is `r acutorostrata_val_max` individuals per km^2^. Both of these maxima are converted to 100, since we are not comparing relative abundance between species but rather within species. Since expert [***range***]{.underline} maps are binary in nature, i.e. in or out of range, a single value of 50% is applied within the range. Converting the stored values to single unsigned integers (`INT1U` for the range \[0, 100\]) enables a significant reduction of individual raster file sizes. Furthermore zeros were converted to `NA` (not available) for the sake of calculating the species range.
+    While this analysis is detailed spatially, it is coarse in terms of abundance, since the best available spatial distribution information is combined across disparate dataset types, i.e. expert [***range***]{.underline} maps (i.e., `[rl]`), [***probability***]{.underline} of occurrence (i.e., `[am]`) and [***density***]{.underline} surface models (e.g., `[du]`, `[sw]`, `[nc]`, `[gm]`). Model values were rescaled 0 to 100%, i.e. normalized to the existing probability of occurrence range of values (i.e., `[am]`). For instance, the original maximum [***density***]{.underline} surface model value for common dolphins (*Delphinus delphis*) in the Atlantic from `[du]` is `r delphis_val_max` individuals per km^2^, whereas for the minke whale (Balaenoptera acutorostrata) in the Pacific from `[sw]` is `r acutorostrata_val_max` individuals per km^2^. Both of these maxima are converted to 100, since we are not comparing relative abundance between species but rather within species. Since expert [***range***]{.underline} maps are binary in nature, i.e. in or out of range, a single value of 50% is applied within the range. Converting the stored values to single unsigned integers (`INT1U` for the range \[0, 100\]) enables a significant reduction of individual raster file sizes. Furthermore zeros were converted to `NA` (not available) for the sake of calculating the species range. A similar hierarchy was taken for [Biologically Important Areas to Cetaceans](https://oceannoise.noaa.gov/biologically-important-areas) in the US [@labrecqueBiologicallyImportantAreas2015].
 
-5.  **Mosaic to single taxa across datasets, taxa**
+```{r}
+d_spp <- tbl(con, "lyrs") |> 
+  filter(
+    is_ds_prime == T,
+    !is.na(aphia_id)) |> 
+  collect()
+n_spp <- nrow(d_spp)
 
-6.  **Apply weights**\
-    extinction risk, endemism, trophic level,\....
+n_spp_oh <- d_spp |> 
+  filter(
+    ds_key == "oh") |> 
+  nrow()
+```
 
-7.  **Summarize with equation**\
+5.  **Mosaic to single taxa across datasets, taxa**\
+Since some datasets were not present in all regions, a mosaic approach was taken whereby different datasets could contribute to different regions, based on which had the most preferred data type (***density*** > ***probability*** > ***range*** > ***occurrence***) most recently collected (***newer*** > ***older***). Of `r format(n_spp, big.mark=',')` species, only `r n_spp_oh` had multiple datasets contributing to different regions.
+
+6.  **Aggregate layers to use as inputs to scoring**\
+**Species Richness** was calculated as the sum of the presence of taxa in a given pixel. **pecies Abundance** was the normalized abundance (ranging 1 to 100) within the pixel. **Extinction Risk** was based on species having an IUCN RedList Category and converted to a score:  `0` for Least Concern (LC), `1` for Near Threatened (NT), 2 for Vulnerable (VU), 3 for Endangered (EN) and 4 for Critically endangered (CR) [@juslenApplicationRedList2016a]. In future, endemism, trophic level, [MarineSpecies.org/Traits](https://MarineSpecies.org/Traits), [FishBase.org](FishBase.org), ...
+
+7.  **Score with input layers**\
+Calculate the score per pixel with the input aggregate layers using [@eq-scoring].
 
 8.  **Extract across spatial hierarchies**\
-    Study, Regions, Zones, Blocks
+Zonal statistics were then captured across the full spatial hierarchy of Study, Regions, Zones and Blocks. 
 
 9.  **Make scores relative to spatial hierarchy**\
+Normalize pixel and Block scores per Zone by subtracting the mean and dividing by the standard deviation ([@eq-normalizing]). This way pixels and Blocks equal to the mean will be 0, positive values containing higher conservation scores, negative values lower conservation scores.
 
-    \
-
-    \
-
-10. 
-
-## Combine Layers
+## Scoring Conservation Value
 
 By combining disperate layers with weights we can arrive at a fundamental conservation index [@oharaAnticipatingFutureWorld2022].
 
@@ -269,16 +280,28 @@ $$
 & \mathrm + w_{ER} * rescale(ExtinctionRisk) \\
 & \mathrm + w_{PP} * rescale(PrimaryProductivity) \\
 & \mathrm + w_{HV} * rescale(HydrothermalVents) \\
-& \mathrm + w_{SM} * rescale(Seamounts) \\
+& \mathrm + w_{S} * rescale(Seamounts) \\
 \\
 & \mathrm Score = rescale(Score_{raw}) * 100
 \end{aligned}
+$$ {#eq-scoring}
+
+The $HydrothermalVents$ and $SeaMounts$ layers are presence-only (i.e., binary, `1` or `0`), so convert to a value of `0.5` where present, whereas the other layers have a range from `0` to `1`.
+
+A naive weighting approach is taken in which all weights $w$ are given an identity value of `1`. To allow different value sets among users, a useful future application would calculate new scores on the fly with a slider for weight value applicable to each of the layers.
+
+## Normalizing within Zone for Block Comparison
+
+In order to evaluate conservation value within a given Zone, we normalized the score for each pixel by subtracting the Zone average ($\mu$) and dividing by the standard deviation ($\sigma$) of the scores in the given Zone:
+
 $$
-
-TODO: Explain:
-
-- $HydrothermalVents$ and $SeaMounts$ are presence-only (i.e., binary, `1` or `0`), so convert to a value of `0.5` where present, whereas the other layers have a range from `0` to `1`.
-
+\begin{aligned}
+Score_{normalized Zone} = (Score - \mu) / \sigma\\
+where:\\
+\mu = mean(Score_{Zone}) \\
+\sigma = sd(Sore_{Zone})
+\end{aligned}
+$$ {#eq-normalizing}
 
 ```{r dbDisconnect}
 dbDisconnect(con, shutdown=T)

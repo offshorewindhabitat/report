@@ -16,7 +16,7 @@ book:
       - name: EcoQuants LLC
         address: 211 W. Gutierrez St., Unit 12
         city: Santa Barbara
-        state: Ca
+        state: CA
         postal-code: 93101
 
   date: now
@@ -26,10 +26,10 @@ book:
     - intro.qmd
     - methods.qmd
     - results.qmd
-    - summary.qmd
+    - discussion.qmd
     - references.qmd
-  appendices:
-    - technical.qmd
+  # appendices:
+  #   - technical.qmd
 
 bibliography: zotero_offhab.bib
 
@@ -37,12 +37,12 @@ format:
   html:
     theme: cosmo
     number-sections: true
-  pdf:
-    documentclass: scrreprt
-    number-sections: true
-  docx:
-    toc: true
-    number-sections: true
+  # pdf:
+  #   documentclass: scrreprt
+  #   number-sections: true
+  # docx:
+  #   toc: true
+  #   number-sections: true
 
 editor: source
 editor_options:
