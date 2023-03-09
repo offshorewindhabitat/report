@@ -300,8 +300,8 @@ d_taxa |>
 #### Table
 
 ```{r all_taxa_tbl}
-#| label: tbl-all-taxa
-#| tbl-cap: Interactive table of taxa found in the study area. Click on the link to be taken to the interactive map of that species.
+#| label: fig-all-taxa-tbl
+#| fig-cap: Interactive table of taxa found in the study area. Click on the link to be taken to the interactive map of that species. Use the Search box to search any part of the Taxa name hierarchy.
 
 add_taxa_link <- function(d){
   d |> 
@@ -370,8 +370,8 @@ d_er_tm |>
 #### Table
 
 ```{r er_taxa_tbl}
-#| label: tbl-er-taxa
-#| tbl-cap: Interactive table of taxa in the study area having an extinction risk category as determined by the IUCN RedList. Click on the link to be taken to the interactive map of that species.
+#| label: fig-er-taxa-tbl
+#| fig-cap: Interactive table of taxa in the study area having an extinction risk category as determined by the IUCN RedList. Click on the link to be taken to the interactive map of that species. Use the Search box to search any part of the Taxa name hierarchy.
 
 d_er_dt <- d_er |>
   add_taxa_link()
@@ -394,7 +394,7 @@ table(d_er$rl_category)
 
 ## Zones with Blocks
 
-When zooming into the Blocks in a Zone, we look at deviation from the mean score in the Zone, so `0` is equivalent the Zone average. If the score values were normally distributed (like a bell curve) around the average, then one standard deviations (SDs) above/below is about 34.1% higher/lower than the average (so 68.2% of all values), two SDs is 47.7% higher/lower than the average (so 95.4% of all values) and three SDs are the most extreme at 49.9% higher/lower (so 99.9% of all values).
+When zooming into the Blocks in a Zone, we look at deviation from the mean score in the Zone, so `0` is equivalent the Zone average. If the score values were normally distributed (like a bell curve) around the average, then one standard deviation (SD) above/below is about 34.1% higher/lower than the average (so 68.2% of all values), two SDs is 47.7% higher/lower than the average (so 95.4% of all values) and three SDs are the most extreme at 49.9% higher/lower (so 99.9% of all values).
 
 ```{r}
 # offhabr::oh_blocks |> 
