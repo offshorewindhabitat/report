@@ -11,10 +11,10 @@ librarian::shelf(
   yogevherz/plotme, purrr, readr, sf, stringr, 
   tibble, tidyr, 
   quiet = T)
-load_all("~/Github/ecoquants/offhabr")
+load_all("~/Github/offshorewindhabitat/offhabr")
 options(readr.show_col_types = F)
 
-con <- oh_con() # dbDisconnect(con, shutdown=T)
+con <- oh_con() # DBI::dbDisconnect(con, shutdown=T)
 
 # tbl(con, "lyrs") |>
 #   filter(is.na(aphia_id), is_ds_prime) |> 
@@ -30,7 +30,7 @@ con <- oh_con() # dbDisconnect(con, shutdown=T)
 ## Spatial Scoring
 
 ```{r}
-z_csv <- here("../offhab-scripts/data/zonal_zones.csv")
+z_csv <- here("../scripts/data/zonal_zones.csv")
 
 f_z <- oh_zones_s1k |> 
   filter(zone_version == 1) |> 
@@ -197,7 +197,7 @@ oh_map() |>
 lyr_key   <- "ve_web"
 lyr_title <- "Hydrothermal Vents"
 
-load_all("~/Github/ecoquants/offhabr")
+load_all("~/Github/offshorewindhabitat/offhabr")
 
 d_rng <- tbl(con, "lyrs") |>
     filter(lyr_key == !!lyr_key) |>
@@ -268,11 +268,14 @@ d_taxa <- tbl(con, "lyrs") |>
   left_join(
     tbl(con, "taxa_wm") |>
       select(
-        aphia_id, kingdom, phylum, class, 
-        order, family, genus, scientificname, vernacular),
+        aphia_id, kingdom, phylum, class,
+        # TODO: add vernacular back
+        # order, family, genus, scientificname, vernacular),
+        order, family, genus, scientificname),
     by = "aphia_id") |> 
   #select(-aphia_id) |> 
   mutate(
+    vernacular = NA, # TODO: add vernacular back
     n = 1) |> 
   arrange(
     kingdom, phylum, class, 
@@ -317,7 +320,7 @@ add_taxa_link <- function(d){
       taxa_link = glue(
         "<a
         target = _blank
-        href   = 'https://shiny.offshorewindhabitat.info/sp_map/?aphia_id={aphia_id}'>
+        href   = 'https://offshorewindhabitat.shinyapps.io/sp_map/?aphia_id={aphia_id}'>
       {taxa_hierarchy} {vernacular_str}
       </a>"))
 }
@@ -341,7 +344,7 @@ d_taxa |>
 #| label: fig-er-taxa-treemap
 #| fig-cap: Interactive composition of taxa in the study area having an extinction risk category as determined by the IUCN RedList. Successive levels can be navigated for Kingdom > Phylum > Class > Order > Family > Genus species.
 
-er_csv <- here("../offhab-scripts/data/er.csv")
+er_csv <- here("../scripts/data/er.csv")
 
 d_er <- read_csv(er_csv) |> 
   mutate(
@@ -355,8 +358,12 @@ d_er <- read_csv(er_csv) |>
   arrange(desc(rl_category), kingdom, class, order, family, genus, scientificname) |> 
   left_join(
     tbl(con, "taxa_wm") |> 
-      select(aphia_id, vernacular) |> 
-      collect(),
+      # select(aphia_id, vernacular) |> 
+      # TODO: add vernacular back
+      select(aphia_id) |> 
+      collect() |>
+      mutate(
+        vernacular = NA),
     by = "aphia_id")
 
 d_er_tm <- d_er |>
@@ -418,6 +425,7 @@ zone_keys  <- oh_blocks |>
 #   arrange(zone_name) |> 
 #   select(zone_name, zone_key)
 # wao, noc, cec, soc, wgm, cgm, soa, mda, noa
+# load_all("~/Github/offshorewindhabitat/offhabr")
 m <- oh_map_zone_score_dev("wao")
 ```
 
