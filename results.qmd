@@ -426,7 +426,8 @@ zone_keys  <- oh_blocks |>
 #   select(zone_name, zone_key)
 # wao, noc, cec, soc, wgm, cgm, soa, mda, noa
 # load_all("~/Github/offshorewindhabitat/offhabr")
-m <- oh_map_zone_score_dev("wao")
+stack_web_tif <- "/Users/bbest/Library/CloudStorage/GoogleDrive-ben@ecoquants.com/.shortcut-targets-by-id/1sdT2ZZLmkgP0Zl8f1Yg0vOsVJR3Pms3Z/offhab/data/derived/stack_web.tif"
+m <- oh_map_zone_score_dev("wao", stk_web_tif = stack_web_tif)
 ```
 
 ::: {.panel-tabset}
@@ -440,7 +441,7 @@ m
 ```
 
 ```{r}
-m <- oh_map_zone_score_dev("noc")
+m <- oh_map_zone_score_dev("noc", stk_web_tif = stack_web_tif)
 ```
 
 ### `r attr(m, "zone_name")`
@@ -450,7 +451,7 @@ m
 ```
 
 ```{r}
-m <- oh_map_zone_score_dev("cec")
+m <- oh_map_zone_score_dev("cec", stk_web_tif = stack_web_tif)
 ```
 
 ### `r attr(m, "zone_name")`
@@ -460,7 +461,7 @@ m
 ```
 
 ```{r}
-m <- oh_map_zone_score_dev("soc")
+m <- oh_map_zone_score_dev("soc", stk_web_tif = stack_web_tif)
 ```
 
 ### `r attr(m, "zone_name")`
@@ -470,7 +471,7 @@ m
 ```
 
 ```{r}
-m <- oh_map_zone_score_dev("wgm")
+m <- oh_map_zone_score_dev("wgm", stk_web_tif = stack_web_tif)
 ```
 
 ### `r attr(m, "zone_name")`
@@ -480,7 +481,7 @@ m
 ```
 
 ```{r}
-m <- oh_map_zone_score_dev("cgm")
+m <- oh_map_zone_score_dev("cgm", stk_web_tif = stack_web_tif)
 ```
 
 ### `r attr(m, "zone_name")`
@@ -490,7 +491,7 @@ m
 ```
 
 ```{r}
-m <- oh_map_zone_score_dev("soa")
+m <- oh_map_zone_score_dev("soa", stk_web_tif = stack_web_tif)
 ```
 
 ### `r attr(m, "zone_name")`
@@ -500,7 +501,7 @@ m
 ```
 
 ```{r}
-m <- oh_map_zone_score_dev("mda")
+m <- oh_map_zone_score_dev("mda", stk_web_tif = stack_web_tif)
 ```
 
 ### `r attr(m, "zone_name")`
@@ -510,7 +511,7 @@ m
 ```
 
 ```{r}
-m <- oh_map_zone_score_dev("noa")
+m <- oh_map_zone_score_dev("noa", stk_web_tif = stack_web_tif)
 ```
 
 ### `r attr(m, "zone_name")`
