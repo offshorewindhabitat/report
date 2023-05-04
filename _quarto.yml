@@ -20,29 +20,35 @@ book:
         postal-code: 93101
 
   date: now
-  date-format: "YYYY-MM-DD HH:mm"
+  date-format: "YYYY-MM-DD" #  HH:mm
   chapters:
     - index.qmd
     - intro.qmd
     - methods.qmd
+    # - tmp.qmd
     - results.qmd
     - discussion.qmd
     - references.qmd
-  # appendices:
-  #   - technical.qmd
+  # appendices: include in html; exclude in docx [but manually add links]
+  appendices:
+    - appx_species.qmd
+    - appx_scoring.qmd
+    - appx_blocks.qmd
+    # - technical.qmd
 
-bibliography: zotero_offhab.bib
+bibliography: references.bib
 
 format:
   html:
     theme: cosmo
     number-sections: true
-  # pdf:
-  #   documentclass: scrreprt
-  #   number-sections: true
-  # docx:
-  #   toc: true
-  #   number-sections: true
+  docx:
+    toc: true
+    toc-title: Contents
+    toc-depth: 4
+    number-sections: true
+    number-depth: 4
+    highlight-style: github
 
 editor: source
 editor_options:

@@ -1,0 +1,307 @@
+---
+title: "Scoring"
+format: html
+---
+
+```{r setup}
+librarian::shelf(
+  devtools, dplyr, DT, fs, glue, gt, here, htmltools, knitr, leaflet, leaflet.extras,
+  offshorewindhabitat/offhabr,
+  yogevherz/plotme, purrr, readr, sf, stringr, 
+  tibble, tidyr, 
+  quiet = T)
+# load_all("~/Github/offshorewindhabitat/offhabr")
+options(readr.show_col_types = F)
+
+con <- oh_con() # DBI::dbDisconnect(con, shutdown=T)
+
+# tbl(con, "lyrs") |>
+#   filter(is.na(aphia_id), is_ds_prime) |> 
+#   pull(lyr_key)
+#  [1] "vg"              "sm"              "ve"             
+#  [4] "er_web_rescaled" "er_web"          "er_web_rescaled"
+#  [7] "sa_web"          "sa_web_rescaled" "score_v1_web"   
+# [10] "sm_web"          "sm_web_rescaled" "sp_web"         
+# [13] "sp_web_rescaled" "ve_web"          "ve_web_rescaled"
+# [16] "vg_web"          "vg_web_rescaled"
+```
+
+```{r}
+z_csv <- here("../scripts/data/zonal_zones.csv")
+
+# zone spatial features
+f_z <- oh_zones_s1k |> 
+  filter(zone_version == 1) |> 
+  left_join(
+    read_csv(z_csv) |> 
+      mutate(across(where(is.numeric), \(x) round(x, 1))), 
+    by = c("zone_id" = "zone_id_v1")) |> 
+  mutate(
+    area_km2 = round(area_km2, 1))
+
+# region spatial features, as area-weighted means
+f_r <- f_z |> 
+  group_by(region) |> 
+  summarize(
+    score_v1_web = weighted.mean(score_v1_web, area_km2),
+    sp_web       = weighted.mean(sp_web, area_km2),
+    sa_web       = weighted.mean(sa_web, area_km2),
+    er_web       = weighted.mean(er_web, area_km2),
+    vg_web       = weighted.mean(vg_web, area_km2),
+    ve_web       = weighted.mean(ve_web, area_km2, na.rm = T),
+    sm_web       = weighted.mean(sm_web, area_km2, na.rm = T),
+    area_km2     = sum(area_km2)) |> 
+  mutate(
+    zone_name = "ALL") |> 
+  mutate(
+    across(where(is.numeric), ~ round(.x, 1)))
+
+# data of zones (and regions) to display as a table
+d_z <- f_z |> 
+  st_drop_geometry() |> 
+  bind_rows(
+    f_r |> 
+      st_drop_geometry()) |> 
+  arrange(region, zone_name) |> 
+  select(
+    region, 
+    zone  = zone_name,
+    score = score_v1_web,
+    sp    = sp_web,
+    sa    = sa_web,
+    er    = er_web,
+    vg    = vg_web,
+    ve    = ve_web,
+    sm    = sm_web,
+    area_km2) |> 
+  mutate(
+    score_clr = "",
+    sp_clr    = "",
+    sa_clr    = "",
+    er_clr    = "",
+    vg_clr    = "",
+    ve_clr    = "",
+    sm_clr    = "",
+    area_clr  = "") |> 
+  relocate(score_clr, .after = score) |> 
+  relocate(sp_clr, .after = sp) |> 
+  relocate(sa_clr, .after = sa) |> 
+  relocate(er_clr, .after = er) |> 
+  relocate(vg_clr, .after = vg) |> 
+  relocate(ve_clr, .after = ve) |> 
+  relocate(sm_clr, .after = sm) |> 
+  relocate(area_clr, .after = area_km2)
+```
+
+::: {.panel-tabset}
+
+## Score
+
+::::: {.panel-tabset}
+
+### Pixel Values
+
+```{r map_pixel_score}
+#| label: fig-pixel-score
+#| fig-cap: Interactive map of overall score throughout the study area.
+
+lyr_key   <- "score_v1_web"
+lyr_title <- "Score"
+offhabr::oh_map
+oh_map_cog_lyr(lyr_key, lyr_title, con=con)
+```
+
+### Zone Averages
+
+```{r map_zone_score}
+#| label: fig-zone-score
+#| fig-cap: Interactive map of overall score average per Zone.
+oh_map() |> 
+  oh_add_ply(
+    ply     = f_z,
+    fld_val = all_of(lyr_key),
+    fld_id  = zone_name,
+    str_val = lyr_title,
+    str_id  = "Zone")
+```
+
+:::::
+
+## Species Richness
+
+::::: {.panel-tabset}
+
+### Pixel Value
+
+```{r pixel_sp}
+#| label: fig-pixel-sp
+#| fig-cap: Interactive map of species richness across the study area.
+
+lyr_key   <- "sp_web"
+lyr_title <- "# Taxa Present"
+oh_map_cog_lyr(lyr_key, lyr_title, con=con)
+```
+
+### Zone Average
+
+```{r zone_sp}
+#| label: fig-zone-sp
+#| fig-cap: Interactive map of species richness average per Zone.
+
+oh_map() |> 
+  oh_add_ply(
+    ply     = f_z,
+    fld_val = all_of(lyr_key),
+    fld_id  = zone_name,
+    str_val = lyr_title,
+    str_id  = "Zone")
+```
+
+:::::
+
+
+## Species Abundance
+
+::::: {.panel-tabset}
+
+### Pixel Value
+
+```{r pixel_sa}
+lyr_key   <- "sa_web"
+lyr_title <- "Sum of Relative Abundance"
+oh_map_cog_lyr(lyr_key, lyr_title, con=con)
+```
+
+### Zone Average
+
+```{r zone_sa}
+oh_map() |> 
+  oh_add_ply(
+    ply     = f_z,
+    fld_val = all_of(lyr_key),
+    fld_id  = zone_name,
+    str_val = lyr_title,
+    str_id  = "Zone")
+```
+
+:::::
+
+## Extinction Risk
+
+::::: {.panel-tabset}
+
+### Pixel Value
+
+```{r pixel_er}
+lyr_key   <- "er_web"
+lyr_title <- "Extinction Risk"
+oh_map_cog_lyr(lyr_key, lyr_title, con=con)
+```
+
+### Zone Average
+
+```{r zone_er}
+oh_map() |> 
+  oh_add_ply(
+    ply     = f_z,
+    fld_val = all_of(lyr_key),
+    fld_id  = zone_name,
+    str_val = lyr_title,
+    str_id  = "Zone")
+```
+
+:::::
+
+## Primary Productivity
+
+::::: {.panel-tabset}
+
+### Pixel Value
+
+```{r pixel_vg}
+lyr_key   <- "vg_web"
+lyr_title <- "Primary Productivity"
+oh_map_cog_lyr(lyr_key, lyr_title, con=con)
+```
+
+- TODO: units above (like mg C / L) and other layers
+
+### Zone Average
+
+```{r zone_vg}
+oh_map() |> 
+  oh_add_ply(
+    ply     = f_z,
+    fld_val = all_of(lyr_key),
+    fld_id  = zone_name,
+    str_val = lyr_title,
+    str_id  = "Zone")
+```
+
+:::::
+
+## Hydrothermal Vents
+
+::::: {.panel-tabset}
+
+### Pixel Value
+
+```{r pixel_ve}
+lyr_key   <- "ve_web"
+lyr_title <- "Hydrothermal Vents"
+
+load_all("~/Github/offshorewindhabitat/offhabr")
+
+d_rng <- tbl(con, "lyrs") |>
+    filter(lyr_key == !!lyr_key) |>
+    select(val_min, val_max) |>
+    collect()
+
+oh_map_cog_lyr(lyr_key, lyr_title, con=con)
+```
+
+### Zone Average
+
+```{r zone_ve}
+oh_map() |> 
+  oh_add_ply(
+    ply     = f_z,
+    fld_val = all_of(lyr_key),
+    fld_id  = zone_name,
+    str_val = lyr_title,
+    str_id  = "Zone")
+```
+
+:::::
+
+## Seamounts
+
+::::: {.panel-tabset}
+
+### Pixel Value
+
+```{r pixel_sm}
+lyr_key   <- "sm_web"
+lyr_title <- "Seamounts"
+oh_map_cog_lyr(lyr_key, lyr_title, con=con)
+```
+
+### Zone Average
+
+```{r zone_sm}
+oh_map() |> 
+  oh_add_ply(
+    ply     = f_z,
+    fld_val = all_of(lyr_key),
+    fld_id  = zone_name,
+    str_val = lyr_title,
+    str_id  = "Zone")
+```
+
+:::::
+
+:::
+
+```{r dbDisconnect}
+DBI::dbDisconnect(con, shutdown=T)
+```

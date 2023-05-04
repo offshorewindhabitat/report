@@ -1,6 +1,108 @@
+# Abstract
+
+```{r setup-intro}
+do_figs = F
+do_tbls = F
+
+librarian::shelf(
+  DBI, dplyr, gt, here, leaflet, purrr, readr, sf, terra)
+devtools::load_all(here::here("../offhabr"))
+terraOptions(progress=0)
+
+con <- oh_con() # dbDisconnect(con, shutdown = T)
+# dbListTables(con)
+```
+
+```{r}
+d_ds <- tbl(con, "datasets") |> 
+  filter(
+    active,
+    ds_key != "oh") |> 
+  collect()
+
+d_lyrs_ds <- tbl(con, "lyrs") |>
+  filter(
+    !is.na(aphia_id),
+    is_ds_prime,
+    ds_key != "oh") |> 
+  group_by(ds_key) |> 
+  summarize(n_lyr = n()) |> 
+  left_join(
+    tbl(con, "lyr_rgn_ds") |>
+      left_join(
+        tbl(con, "datasets") |> 
+          select(ds_key, ds_id),
+        by = "ds_id") |> 
+      group_by(ds_key) |> 
+      summarize(n_rgn = n()),
+    by = "ds_key") |> 
+  arrange(ds_key) |> 
+  collect() |> 
+  # replace_na(list(n_rgn = 0)) |> 
+  mutate(
+    n_lyr_rgn = purrr::map2_int(n_lyr, n_rgn, sum, na.rm=T))
+
+d_ds <- d_ds |> 
+  left_join(
+    d_lyrs_ds,
+    by = "ds_key")
+
+nspp_density <- d_ds |> 
+  filter(type == "density") |> 
+  summarize(
+    n_taxa = sum(n_lyr_rgn)) |> 
+  pull(n_taxa)
+nspp_probability <- d_ds |> 
+  filter(type == "probability") |> 
+  summarize(
+    n_taxa = sum(n_lyr_rgn)) |> 
+  pull(n_taxa)
+nspp_range <- d_ds |> 
+  filter(type == "range") |> 
+  summarize(
+    n_taxa = sum(n_lyr_rgn)) |> 
+  pull(n_taxa)
+
+r_depth <- rast(
+  system.file("oh_elev_m.tif", package="offhabr"))
+r_depth_web <- rast(
+  system.file("oh_elev_m_web.tif", package="offhabr"))
+
+r_areakm2 <- cellSize(r_depth, unit="km") |> 
+  mask(r_depth)
+rng_areakm2 <- global(r_areakm2, "range", na.rm=T)
+#            min       max
+# area 0.1022107 0.1927433
+r_web_areakm2 <- cellSize(r_depth_web, unit="km") |> 
+  mask(r_depth_web)
+rng_web_areakm2 <- global(r_web_areakm2, "range", na.rm=T)
+#            min       max
+# area 0.1642863 0.3114606
+```
+
+
+Development of offshore wind energy will be essential for providing renewable energy to mitigate climate change impacts, yet should be responsibly sited to minimize impacts on sensitive species and habitats. The Bureau of Ocean Energy Management (BOEM) manages the federal offshore leasing of wind energy for the United States (U.S.) and has defined regions, zones and individual lease blocks, which were used to evaluate differences in species and habitats for the federal waters of the U.S. lower 48 states (excluding Alaska and Hawaii). Species distributions were collated from a variety of sources and rescaled (0 to 100) according to a preferred hierarchy of response terms: 1) density surface models (response: # individuals / km^2^; `r nspp_density` species of marine mammals, seabirds and sea turtles across 4 datasets); 2) habitat probability models (response: 0 to 1; `r format(nspp_probability, big.mark=",")` species from AquaMaps); 3) and expert range maps (response: 0 or 1; `r nspp_range` species from IUCN Red List). All data layers were downscaled to a common grid of roughly 15 arc-seconds (each pixel ranging in area `r paste(format(range(rng_web_areakm2), digits=2), collapse = " to ")` km^2^) aligned with the GEBCO high resolution global bathymetry in order to calculate differences between individual lease blocks (ranging in area `r paste(format(range(offhabr::oh_blocks$area_km2), digits=2), collapse = " to ")` km^2^). Species richness and species abundance were calculated per pixel along with an aggregate extinction risk for those species having an IUCN Red List category assigned. An overall conservation score also incorporated primary productivity, hydrothermal vents and seamounts with equal weighting for each layer.
+
+<!--
+[
+TODO: next
+- + Tables
+  - Spatial Scoring: Zone Average
+  - Zones with Blocks
+- move to Appendix
+
+- future
+  - app to change weights
+  - app to extract species with extinction risk per AoI / pixel / block / zone
+]
+
+ -->
+
 # Introduction
 
-Development of offshore wind energy will be essential for providing renewable energy to mitigate climate change impacts, yet needs to be sited responsibly to avoid sensitive habitats. Acoustic impacts from construction and operation may negatively impact some species [@mooneyACOUSTICIMPACTSOFFSHORE2022]. Hard substrate provided by the platforms may actually benefit other species [@wilsonHabitatcreationPotentialOffshore2009]. Wind energy areas are under active development by the Bureau of Ocean Energy Management (BOEM) throughout the United States. This study will assess habitats for sensitivity throughout strategic parts of the US.
+Development of offshore wind energy will be essential for providing renewable energy to mitigate climate change impacts, yet should be responsibly sited to minimize impacts on sensitive species and habitats. Acoustic impacts from construction and operation may negatively impact some species [@mooneyACOUSTICIMPACTSOFFSHORE2022]. Hard substrate provided by the platforms may actually benefit other species [@wilsonHabitatcreationPotentialOffshore2009]. Although only 42 megawatts (MW) of offshore wind energy capacity is operational (in Rhode Island and New York) as of May 31 2022, the pipeline of potential generating capacity is estimated to be 40 gigawatts (GW) -- enough to power 13 million homes [@musialOffshoreWindMarket2022].
+
+Wind energy areas are under active development by the Bureau of Ocean Energy Management (BOEM) throughout the United States. This study will assess habitats for sensitivity throughout strategic parts of the US.
 
 A couple fundamental questions driving this analysis are:
 
@@ -12,4 +114,11 @@ A couple fundamental questions driving this analysis are:
 
 ...
 
+While density surfaces are most preferable, especially for determining number of individuals impacted by human activity (e.g., for Potential Biological Removal as mandated by the Marine Mammal Protection Act), the distributions of relatively few taxa have been described by these models for the .
+
 - Essential Fish Habitat (EFH) is too coarse, not preferred by [@friedlandResourceOccurrenceProductivity2021] (see [methods notes | offhab - Google Docs](https://docs.google.com/document/d/1JSJMBqqL4c44c8fx01I-elx7gK8dNyuABjLinaxC95k/edit#bookmark=id.sky4lrftqqq8))
+
+```{r}
+dbDisconnect(con, shutdown = T)
+```
+

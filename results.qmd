@@ -3,11 +3,12 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
 # Results
 
 ```{r setup}
 librarian::shelf(
-  devtools, dplyr, DT, fs, glue, here, htmltools, leaflet, leaflet.extras,
+  devtools, dplyr, DT, fs, glue, gt, here, htmltools, knitr, leaflet, leaflet.extras,
   yogevherz/plotme, purrr, readr, sf, stringr, 
   tibble, tidyr, 
   quiet = T)
@@ -27,502 +28,207 @@ con <- oh_con() # DBI::dbDisconnect(con, shutdown=T)
 # [16] "vg_web"          "vg_web_rescaled"
 ```
 
-## Spatial Scoring
 
 ```{r}
 z_csv <- here("../scripts/data/zonal_zones.csv")
 
+# zone spatial features
 f_z <- oh_zones_s1k |> 
   filter(zone_version == 1) |> 
   left_join(
     read_csv(z_csv) |> 
-      mutate(across(where(is.numeric), round, 1)), 
-    by = c("zone_id" = "zone_id_v1"))
-```
-
-::: {.panel-tabset}
-
-### Score
-
-::: {.panel-tabset}
-
-#### Pixel Value
-
-```{r pixel_score}
-#| label: fig-pixel-score
-#| fig-cap: Interactive map of overall score throughout the study area.
-
-lyr_key   <- "score_v1_web"
-lyr_title <- "Score"
-oh_map_cog_lyr(lyr_key, lyr_title, con=con)
-```
-
-#### Zone Average
-
-```{r zone_score}
-#| label: fig-zone-score
-#| fig-cap: Interactive map of overall score average per Zone.
-
-oh_map() |> 
-  oh_add_ply(
-    ply     = f_z,
-    fld_val = all_of(lyr_key),
-    fld_id  = zone_name,
-    str_val = lyr_title,
-    str_id  = "Zone")
-```
-
-:::
-
-### Species Richness
-
-::::: {.panel-tabset}
-
-#### Pixel Value
-
-```{r pixel_sp}
-#| label: fig-pixel-sp
-#| fig-cap: Interactive map of species richness across the study area.
-
-lyr_key   <- "sp_web"
-lyr_title <- "# Taxa Present"
-oh_map_cog_lyr(lyr_key, lyr_title, con=con)
-```
-
-#### Zone Average
-
-```{r zone_sp}
-#| label: fig-zone-sp
-#| fig-cap: Interactive map of species richness average per Zone.
-
-oh_map() |> 
-  oh_add_ply(
-    ply     = f_z,
-    fld_val = all_of(lyr_key),
-    fld_id  = zone_name,
-    str_val = lyr_title,
-    str_id  = "Zone")
-```
-
-:::::
-
-
-### Species Abundance
-
-::::: {.panel-tabset}
-
-#### Pixel Value
-
-```{r pixel_sa}
-lyr_key   <- "sa_web"
-lyr_title <- "Sum of Relative Abundance"
-oh_map_cog_lyr(lyr_key, lyr_title, con=con)
-```
-
-#### Zone Average
-
-```{r zone_sa}
-oh_map() |> 
-  oh_add_ply(
-    ply     = f_z,
-    fld_val = all_of(lyr_key),
-    fld_id  = zone_name,
-    str_val = lyr_title,
-    str_id  = "Zone")
-```
-
-:::::
-
-### Extinction Risk
-
-::::: {.panel-tabset}
-
-#### Pixel Value
-
-```{r pixel_er}
-lyr_key   <- "er_web"
-lyr_title <- "Extinction Risk"
-oh_map_cog_lyr(lyr_key, lyr_title, con=con)
-```
-
-#### Zone Average
-
-```{r zone_er}
-oh_map() |> 
-  oh_add_ply(
-    ply     = f_z,
-    fld_val = all_of(lyr_key),
-    fld_id  = zone_name,
-    str_val = lyr_title,
-    str_id  = "Zone")
-```
-
-:::::
-
-### Primary Productivity
-
-::::: {.panel-tabset}
-
-#### Pixel Value
-
-```{r pixel_vg}
-lyr_key   <- "vg_web"
-lyr_title <- "Primary Productivity"
-oh_map_cog_lyr(lyr_key, lyr_title, con=con)
-```
-
-- TODO: units above (like mg C / L) and other layers
-
-#### Zone Average
-
-```{r zone_vg}
-oh_map() |> 
-  oh_add_ply(
-    ply     = f_z,
-    fld_val = all_of(lyr_key),
-    fld_id  = zone_name,
-    str_val = lyr_title,
-    str_id  = "Zone")
-```
-
-:::::
-
-### Hydrothermal Vents
-
-::::: {.panel-tabset}
-
-#### Pixel Value
-
-```{r pixel_ve}
-lyr_key   <- "ve_web"
-lyr_title <- "Hydrothermal Vents"
-
-load_all("~/Github/offshorewindhabitat/offhabr")
-
-d_rng <- tbl(con, "lyrs") |>
-    filter(lyr_key == !!lyr_key) |>
-    select(val_min, val_max) |>
-    collect()
-
-oh_map_cog_lyr(lyr_key, lyr_title, con=con)
-```
-
-#### Zone Average
-
-```{r zone_ve}
-oh_map() |> 
-  oh_add_ply(
-    ply     = f_z,
-    fld_val = all_of(lyr_key),
-    fld_id  = zone_name,
-    str_val = lyr_title,
-    str_id  = "Zone")
-```
-
-:::::
-
-### Seamounts
-
-::::: {.panel-tabset}
-
-#### Pixel Value
-
-```{r pixel_sm}
-lyr_key   <- "sm_web"
-lyr_title <- "Seamounts"
-oh_map_cog_lyr(lyr_key, lyr_title, con=con)
-```
-
-#### Zone Average
-
-```{r zone_sm}
-oh_map() |> 
-  oh_add_ply(
-    ply     = f_z,
-    fld_val = all_of(lyr_key),
-    fld_id  = zone_name,
-    str_val = lyr_title,
-    str_id  = "Zone")
-```
-
-:::::
-
-:::
-
-## Taxa
-
-::: {.panel-tabset}
-
-### All Taxa in Study Area
-
-::::: {.panel-tabset}
-
-#### Treemap
-
-```{r calc_all_taxa_treemap}
-d_taxa <- tbl(con, "lyrs") |> 
-  filter(
-    !is.na(aphia_id),
-    is_ds_prime) |> 
-  select(aphia_id) |> 
-  left_join(
-    tbl(con, "taxa_wm") |>
-      select(
-        aphia_id, kingdom, phylum, class,
-        # TODO: add vernacular back
-        # order, family, genus, scientificname, vernacular),
-        order, family, genus, scientificname),
-    by = "aphia_id") |> 
-  #select(-aphia_id) |> 
+      mutate(across(where(is.numeric), \(x) round(x, 1))), 
+    by = c("zone_id" = "zone_id_v1")) |> 
   mutate(
-    vernacular = NA, # TODO: add vernacular back
-    n = 1) |> 
-  arrange(
-    kingdom, phylum, class, 
-    order, family, genus, scientificname) |> 
-  collect()
-# check no duplicates and has all info
-stopifnot(
-  sum(duplicated(d_taxa$scientificname)) == 0,
-  sum(is.na(d_taxa$kingdom))       == 0)
-n_taxa <- nrow(d_taxa) # 10,061
-```
+    area_km2 = round(area_km2, 1))
 
-
-```{r all_taxa_treemap}
-#| label: fig-all-taxa-treemap
-#| fig-cap: Interactive composition of all taxa in the study area with successive levels for Kingdom > Phylum > Class > Order > Family > Genus species.
-
-d_taxa |>
-  select(-aphia_id) |> 
-  count_to_treemap()
-```
-
-<!-- - Number of taxa: `r n_taxa` -->
-
-#### Table
-
-```{r all_taxa_tbl}
-#| label: fig-all-taxa-tbl
-#| fig-cap: Interactive table of taxa found in the study area. Click on the link to be taken to the interactive map of that species. Use the Search box to search any part of the Taxa name hierarchy.
-
-add_taxa_link <- function(d){
-  d |> 
-    rowwise() |> 
-    mutate(
-      taxa_hierarchy = c(
-        kingdom, phylum, class, order,family, scientificname) |> na.omit() |> 
-        paste(collapse = " > "),
-      vernacular_str = ifelse(
-        !is.na(vernacular), 
-        glue("({vernacular})"),
-        ""),
-      taxa_link = glue(
-        "<a
-        target = _blank
-        href   = 'https://offshorewindhabitat.shinyapps.io/sp_map/?aphia_id={aphia_id}'>
-      {taxa_hierarchy} {vernacular_str}
-      </a>"))
-}
-
-d_taxa |>
-  add_taxa_link() |> 
-  select(
-    `Taxa: Kingdom > Phylum > Class > Order > Family > Genus species (common name)` = taxa_link) |>     
-  datatable(escape = F)
-```
-
-:::::
-
-### Taxa with Extinction Risk
-
-::::: {.panel-tabset}
-
-#### Treemap
-
-```{r er_taxa_treemap}
-#| label: fig-er-taxa-treemap
-#| fig-cap: Interactive composition of taxa in the study area having an extinction risk category as determined by the IUCN RedList. Successive levels can be navigated for Kingdom > Phylum > Class > Order > Family > Genus species.
-
-er_csv <- here("../scripts/data/er.csv")
-
-d_er <- read_csv(er_csv) |> 
+# region spatial features, as area-weighted means
+f_r <- f_z |> 
+  group_by(region) |> 
+  summarize(
+    score_v1_web = weighted.mean(score_v1_web, area_km2),
+    sp_web       = weighted.mean(sp_web, area_km2),
+    sa_web       = weighted.mean(sa_web, area_km2),
+    er_web       = weighted.mean(er_web, area_km2),
+    vg_web       = weighted.mean(vg_web, area_km2),
+    ve_web       = weighted.mean(ve_web, area_km2, na.rm = T),
+    sm_web       = weighted.mean(sm_web, area_km2, na.rm = T),
+    area_km2     = sum(area_km2)) |> 
   mutate(
-    n           = 1,
-    rl_category = recode(
-      category,
-      NT = "1. Near Threatened",
-      VU = "2. Vulnerable",
-      EN = "3. Endangered",
-      CR = "4. Critically Endangered")) |> 
-  arrange(desc(rl_category), kingdom, class, order, family, genus, scientificname) |> 
-  left_join(
-    tbl(con, "taxa_wm") |> 
-      # select(aphia_id, vernacular) |> 
-      # TODO: add vernacular back
-      select(aphia_id) |> 
-      collect() |>
-      mutate(
-        vernacular = NA),
-    by = "aphia_id")
+    zone_name = "ALL") |> 
+  mutate(
+    across(where(is.numeric), ~ round(.x, 1)))
 
-d_er_tm <- d_er |>
+# data of zones (and regions) to display as a table
+d_z <- f_z |> 
+  st_drop_geometry() |> 
+  bind_rows(
+    f_r |> 
+      st_drop_geometry()) |> 
+  arrange(region, zone_name) |> 
   select(
-    rl_category, kingdom, class, order, family, genus, scientificname, n)
-
-d_er_tm |>
-  count_to_treemap()
+    region, 
+    zone  = zone_name,
+    score = score_v1_web,
+    sp    = sp_web,
+    sa    = sa_web,
+    er    = er_web,
+    vg    = vg_web,
+    ve    = ve_web,
+    sm    = sm_web,
+    area_km2) |> 
+  mutate(
+    score_clr = "",
+    sp_clr    = "",
+    sa_clr    = "",
+    er_clr    = "",
+    vg_clr    = "",
+    ve_clr    = "",
+    sm_clr    = "",
+    area_clr  = "") |> 
+  relocate(score_clr, .after = score) |> 
+  relocate(sp_clr, .after = sp) |> 
+  relocate(sa_clr, .after = sa) |> 
+  relocate(er_clr, .after = er) |> 
+  relocate(vg_clr, .after = vg) |> 
+  relocate(ve_clr, .after = ve) |> 
+  relocate(sm_clr, .after = sm) |> 
+  relocate(area_clr, .after = area_km2)
 ```
 
-#### Table
+<a name="tbl-zones"></a>
+```{r tbl_zones}
+#| label: tbl_zones
+#| column: screen-inset
+# tbl-cap: !expr cap_docx
 
-```{r er_taxa_tbl}
-#| label: fig-er-taxa-tbl
-#| fig-cap: Interactive table of taxa in the study area having an extinction risk category as determined by the IUCN RedList. Click on the link to be taken to the interactive map of that species. Use the Search box to search any part of the Taxa name hierarchy.
+cap <- "Table [tbl-zones]. Average pixel values across Regions and Zones for overall Score as well as input layers. Values are colored per column highest to lowest: red, orange, yellow, green, blue, violet."
+cap_html <- glue("{cap} Columns are sortable.")
+cap_docx <- glue("{cap} Sortable table is [online](https://offshorewindhabitat.info/report/results.html#tbl-zones).")
 
-d_er_dt <- d_er |>
-  add_taxa_link()
 
-# d_er_dt$taxa_hierarchy[1]
-d_er_dt |> 
-  select(
-    `RedList Category` = rl_category, 
-    `Taxa: Kingdom > Phylum > Class > Order > Family > Genus species (common name)` = taxa_link) |> 
-  datatable(escape = F)
+hdr_html = withTags(table(
+  class = "display",
+  thead(
+    tr(
+      th(rowspan = 2, "Region"),
+      th(rowspan = 2, "Zone"),
+      th(rowspan = 2, "Score"),
+      th(rowspan = 2, ""),
+      th(colspan = 6, "Species"),
+      th(colspan = 6, "Habitats"),
+      th(rowspan = 2, HTML("Area (km<sup>2</sup>)")),
+      th(rowspan = 2, "")),
+    tr(
+      th("Richness"),
+      th(""),
+      th("Abundance"),
+      th(""),
+      th("Extinction Risk"),
+      th(""),
+      th("1º Productivity"),
+      th(""),
+      th("Hydrothermal Vents"),
+      th(""),
+      th("Seamounts"),
+      th("") ) ) ))
+
+flds_clr <- colnames(select(d_z, ends_with("_clr")))
+tbl_html <- d_z |> 
+  datatable(
+    container = hdr_html,
+    rownames = F,
+    escape = F,
+    caption = cap_html,
+    options = list(
+      columnDefs = list(
+        list(
+          width = '0px', targets = flds_clr),
+        list(
+          orderable = F, targets = flds_clr)),
+      pageLength = nrow(d_z),
+      dom = 't')) |> 
+  formatRound(c("score", "sp", "sa", "er", "vg", "area_km2"), 1) |> 
+  formatRound(c("ve", "sm"), 0) |> 
+  dt_color_fld("score") |> 
+  dt_color_fld("sp") |>
+  dt_color_fld("sa") |>
+  dt_color_fld("er") |>
+  dt_color_fld("vg") |>
+  dt_color_fld("ve") |>
+  dt_color_fld("sm") |>
+  dt_color_fld("area_km2", "area_clr")
+
+tbl_docx <- d_z |> 
+  gt() |> 
+  fmt_number(decimals = 1) |> 
+  fmt_number(
+    columns = c(ve,	sm), decimals = 0) |> 
+  sub_missing(missing_text = "–") |> 
+  cols_label(
+    region     = "Region",
+    zone       = "Zone",
+    score      = "Score",
+    score_clr  = "",
+    sp         = "Richness",
+    sp_clr     = "",
+    sa         = "Abundance",
+    sa_clr     = "",
+    er         = "Extinction Risk",
+    er_clr     = "",
+    vg         = "1º Productivity",
+    vg_clr     = "",
+    ve         = "Hydrothermal Vents",
+    ve_clr     = "",
+    sm         = "Seamounts",
+    sm_clr     = "",
+    area_clr   = "",
+    area_km2   = "Area (km²)") |> 
+  data_color(
+    columns = score, target_columns = score_clr,
+    method  = "numeric", palette = "Spectral", reverse = T) |> 
+  data_color(
+    columns = sp, target_columns = sp_clr,
+    method  = "numeric", palette = "Spectral", reverse = T) |> 
+  data_color(
+    columns = sa, target_columns = sa_clr,
+    method  = "numeric", palette = "Spectral", reverse = T) |> 
+  data_color(
+    columns = er, target_columns = er_clr,
+    method  = "numeric", palette = "Spectral", reverse = T) |> 
+  data_color(
+    columns = vg, target_columns = vg_clr,
+    method  = "numeric", palette = "Spectral", reverse = T) |> 
+  data_color(
+    columns = ve, target_columns = ve_clr,
+    method  = "numeric", palette = "Spectral", reverse = T) |> 
+  data_color(
+    columns = sm, target_columns = sm_clr,
+    method  = "numeric", palette = "Spectral", reverse = T) |> 
+  data_color(
+    columns = area_km2, target_columns = area_clr,
+    method  = "numeric", palette = "Spectral", reverse = T) |> 
+  tab_spanner(
+    label = "Species",  
+    columns = c(sp, sp_clr, sa, sa_clr, er, er_clr)) |> 
+  tab_spanner(
+    label = "Habitats", 
+    columns = c(vg, vg_clr, ve, ve_clr, sm, sm_clr)) |> 
+  tab_options(
+    table.font.size = "6px") |> 
+  tab_caption(cap_docx)
+
+switch(
+  is_html_output() |> as.character(),
+  `TRUE`  = tbl_html,
+  `FALSE` = tbl_docx)
 ```
 
-```{r er_taxa_summary}
-table(d_er$rl_category)
-```
+`r if(!is_html_output()) glue("[TODO: format table as Calibri size 8. R-click: Insert caption, borders, merge cells, swap state codes like example.\n\n{cap_docx}\n]")`
 
-:::::
-
-:::
-
-## Zones with Blocks
-
-When zooming into the Blocks in a Zone, we look at deviation from the mean score in the Zone, so `0` is equivalent the Zone average. If the score values were normally distributed (like a bell curve) around the average, then one standard deviation (SD) above/below is about 34.1% higher/lower than the average (so 68.2% of all values), two SDs is 47.7% higher/lower than the average (so 95.4% of all values) and three SDs are the most extreme at 49.9% higher/lower (so 99.9% of all values).
-
-```{r}
-# offhabr::oh_blocks |> 
-#   st_drop_geometry() |> 
-#   filter(zone_version == 1) |> 
-#   pull(zone_key) |> 
-#   table()
-# cec  cgm  mda  noa  noc  soa  soc  wao  wgm 
-#  16   33 2165  342  237  801  673  753   96
-zone_keys  <- oh_blocks |> 
-  filter(zone_version == 1) |>  
-  pull(zone_key) |> 
-  unique()
-
-# arrange in order from NW Pacific to GoMex to NE
-# oh_zones_s1k |>
-#   st_drop_geometry() |> 
-#   filter(
-#     zone_version == 1,
-#     zone_key %in% zone_keys) |> 
-#   arrange(zone_name) |> 
-#   select(zone_name, zone_key)
-# wao, noc, cec, soc, wgm, cgm, soa, mda, noa
-# load_all("~/Github/offshorewindhabitat/offhabr")
-stack_web_tif <- "/Users/bbest/Library/CloudStorage/GoogleDrive-ben@ecoquants.com/.shortcut-targets-by-id/1sdT2ZZLmkgP0Zl8f1Yg0vOsVJR3Pms3Z/offhab/data/derived/stack_web.tif"
-m <- oh_map_zone_score_dev("wao", stk_web_tif = stack_web_tif)
-```
-
-::: {.panel-tabset}
-
-### `r attr(m, "zone_name")`
-
-```{r map_zone_score_dev_wao}
-#| label: fig-map-zone-score-dev-wao
-#| fig-cap: Interactive map of standard deviations from the average score in the zone. Fullscreen option available.
-m
-```
-
-```{r}
-m <- oh_map_zone_score_dev("noc", stk_web_tif = stack_web_tif)
-```
-
-### `r attr(m, "zone_name")`
-
-```{r}
-m
-```
-
-```{r}
-m <- oh_map_zone_score_dev("cec", stk_web_tif = stack_web_tif)
-```
-
-### `r attr(m, "zone_name")`
-
-```{r}
-m
-```
-
-```{r}
-m <- oh_map_zone_score_dev("soc", stk_web_tif = stack_web_tif)
-```
-
-### `r attr(m, "zone_name")`
-
-```{r}
-m
-```
-
-```{r}
-m <- oh_map_zone_score_dev("wgm", stk_web_tif = stack_web_tif)
-```
-
-### `r attr(m, "zone_name")`
-
-```{r}
-m
-```
-
-```{r}
-m <- oh_map_zone_score_dev("cgm", stk_web_tif = stack_web_tif)
-```
-
-### `r attr(m, "zone_name")`
-
-```{r}
-m
-```
-
-```{r}
-m <- oh_map_zone_score_dev("soa", stk_web_tif = stack_web_tif)
-```
-
-### `r attr(m, "zone_name")`
-
-```{r}
-m
-```
-
-```{r}
-m <- oh_map_zone_score_dev("mda", stk_web_tif = stack_web_tif)
-```
-
-### `r attr(m, "zone_name")`
-
-```{r}
-m
-```
-
-```{r}
-m <- oh_map_zone_score_dev("noa", stk_web_tif = stack_web_tif)
-```
-
-### `r attr(m, "zone_name")`
-
-```{r}
-m
-```
-
-:::
+See [Table [tbl-zones]](#tbl-zones).
 
 ```{r dbDisconnect}
-dbDisconnect(con, shutdown=T)
+DBI::dbDisconnect(con, shutdown=T)
 ```
 

@@ -1,18 +1,26 @@
 # Methods
 
+```{r setup-methods}
+do_figs = T
+do_tbls = T
+
+librarian::shelf(
+  DBI, dplyr, gt, here, leaflet, purrr, readr, sf)
+devtools::load_all(here::here("../offhabr"))
+
+con <- oh_con() # dbDisconnect(con, shutdown = T)
+# dbListTables(con)
+```
+
 ## Spatial Hierarchy: Regions \> Zones \> Blocks
 
 Determination of regions for which to assess offshore habitat was based on BOEM activity and representativeness of habitats across the continental United States (@fig-map-zones). The first (and presently only commercially in production) US wind farm at Block Island, NJ is in the North Atlantic where \$4.4 billion was paid in offshore wind bids earlier this year ([DOE news](https://poweralliance.org/2022/02/25/boem-sets-offshore-energy-records-with-4-37-billion-in-winning-bids-for-wind-sale/)). The Atlantic seaboard slopes gradually making it appropriate for fixed platforms, whereas the Pacific coast drops off quickly into deeper depths making floating platforms more suitable. These technological differences therefore affect the bottom habitats differently. Whereas fixed platforms involve pile driving and addition of additional hard surfaces for habitats, the floating platforms leave only the benthic footprint of moorings and submarine cables.
 
 ### Regions and Zones
 
-```{r}
+```{r eval=do_figs}
 #| label: fig-map-zones
-#| fig-cap: Regions (Atlantic, Gulf of Mexico, and Pacific) are subdivied into Zones corresponding to BOEM Planning Areas in federal waters clipped to the U.S. Exclusive Economic Zone (except Alaska and Hawaii). To prevent overcrowding of labels only abbreviations are shown for Central (CGM), Eastern (EGM) and Western (WGM) Gulf of Mexico.
-
-librarian::shelf(
-  dplyr, gt, leaflet, purrr, sf)
-devtools::load_all(here::here("../offhabr"))
+#| fig-cap: !expr link_caption("Regions (Atlantic, Gulf of Mexico, and Pacific) are subdivied into Zones corresponding to BOEM Planning Areas in federal waters clipped to the U.S. Exclusive Economic Zone (except Alaska and Hawaii). To prevent overcrowding of labels only abbreviations are shown for Central (CGM), Eastern (EGM) and Western (WGM) Gulf of Mexico.")
 
 f_rgns <- oh_zones |> 
   group_by(region) |> 
@@ -82,7 +90,7 @@ oh_map() |>
 
 ### Blocks
 
-```{r}
+```{r eval=do_tbls}
 #| label: tbl-zone-blocks
 #| tbl-cap: Summary of Blocks per Zone, grouped by Region.
 
@@ -112,13 +120,9 @@ oh_blocks |>
 
 ## Datasets
 
-```{r}
-librarian::shelf(
-  DBI, dplyr, devtools, here, readr)
-load_all(here("../offhabr"))
-
-con <- oh_con() # dbDisconnect(con, shutdown = T)
-# dbListTables(con)
+```{r eval=do_tbls}
+#| label: tbl-datasets
+#| tbl-cap: Summary of datasets.
 
 d_ds <- tbl(con, "datasets") |> 
   filter(
@@ -197,7 +201,7 @@ d_ds |>
 
 ## Processing Steps
 
-```{r OLD}
+```{r TODOfixOLD}
 # smallest original value for a layer
 # 
 # tbl(con, "lyrs") |>
@@ -238,7 +242,7 @@ delphis_val_max <- 286
 4.  **Rescale dataset-species layers 0 to 100% for all model types**\
     While this analysis is detailed spatially, it is coarse in terms of abundance, since the best available spatial distribution information is combined across disparate dataset types, i.e. expert [***range***]{.underline} maps (i.e., `[rl]`), [***probability***]{.underline} of occurrence (i.e., `[am]`) and [***density***]{.underline} surface models (e.g., `[du]`, `[sw]`, `[nc]`, `[gm]`). Model values were rescaled 0 to 100%, i.e. normalized to the existing probability of occurrence range of values (i.e., `[am]`). For instance, the original maximum [***density***]{.underline} surface model value for common dolphins (*Delphinus delphis*) in the Atlantic from `[du]` is `r delphis_val_max` individuals per km^2^, whereas for the minke whale (Balaenoptera acutorostrata) in the Pacific from `[sw]` is `r acutorostrata_val_max` individuals per km^2^. Both of these maxima are converted to 100, since we are not comparing relative abundance between species but rather within species. Since expert [***range***]{.underline} maps are binary in nature, i.e. in or out of range, a single value of 50% is applied within the range. Converting the stored values to single unsigned integers (`INT1U` for the range \[0, 100\]) enables a significant reduction of individual raster file sizes. Furthermore zeros were converted to `NA` (not available) for the sake of calculating the species range. A similar hierarchy was taken for [Biologically Important Areas to Cetaceans](https://oceannoise.noaa.gov/biologically-important-areas) in the US [@labrecqueBiologicallyImportantAreas2015].
 
-```{r}
+```{r n_spp}
 d_spp <- tbl(con, "lyrs") |> 
   filter(
     is_ds_prime == T,
@@ -304,7 +308,7 @@ where:\\
 $$ {#eq-normalizing}
 
 ```{r dbDisconnect}
-dbDisconnect(con, shutdown=T)
+DBI::dbDisconnect(con, shutdown=T)
 ```
 
 

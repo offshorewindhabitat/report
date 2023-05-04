@@ -1,0 +1,170 @@
+---
+title: "Species"
+format: html
+---
+
+```{r setup}
+librarian::shelf(
+  devtools, dplyr, DBI, DT, fs, glue, gt, here, htmltools, knitr, leaflet, leaflet.extras,
+  offshorewindhabitat/offhabr,
+  yogevherz/plotme, purrr, readr, sf, stringr, 
+  tibble, tidyr, 
+  quiet = T)
+# load_all("~/Github/offshorewindhabitat/offhabr")
+options(readr.show_col_types = F)
+
+con <- oh_con() # DBI::dbDisconnect(con, shutdown=T)
+```
+
+::: {.panel-tabset}
+
+## All Species in Study Area
+
+::::: {.panel-tabset}
+
+### Treemap
+
+```{r calc_all_spp_treemap}
+d_spp <- tbl(con, "lyrs") |> 
+  filter(
+    !is.na(aphia_id),
+    is_ds_prime) |> 
+  select(aphia_id) |> 
+  left_join(
+    tbl(con, "taxa_wm") |>
+      select(
+        aphia_id, kingdom, phylum, class,
+        # TODO: add vernacular back
+        # order, family, genus, scientificname, vernacular),
+        order, family, genus, scientificname),
+    by = "aphia_id") |> 
+  #select(-aphia_id) |> 
+  mutate(
+    vernacular = NA, # TODO: add vernacular back
+    n = 1) |> 
+  arrange(
+    kingdom, phylum, class, 
+    order, family, genus, scientificname) |> 
+  collect()
+# check no duplicates and has all info
+stopifnot(
+  sum(duplicated(d_spp$scientificname)) == 0,
+  sum(is.na(d_spp$kingdom))       == 0)
+n_spp <- nrow(d_spp) # 10,061
+```
+
+
+```{r all_spp_treemap}
+#| label: fig-all-spp-treemap
+#| fig-cap: Interactive taxonomic composition of all species in the study area with successive levels for Kingdom > Phylum > Class > Order > Family > Genus species.
+
+#- Number of species: `r n_spp`
+
+d_spp |>
+  select(-aphia_id) |> 
+  count_to_treemap()
+```
+
+
+### Table
+
+```{r all_spp_tbl}
+#| label: fig-all-spp-tbl
+#| fig-cap: Interactive table of species found in the study area. Click on the link to be taken to the interactive map of that species. Use the Search box to search any part of the taxonomic name hierarchy.
+
+add_taxa_link <- function(d){
+  d |> 
+    rowwise() |> 
+    mutate(
+      taxa_hierarchy = c(
+        kingdom, phylum, class, order,family, scientificname) |> na.omit() |> 
+        paste(collapse = " > "),
+      vernacular_str = ifelse(
+        !is.na(vernacular), 
+        glue("({vernacular})"),
+        ""),
+      taxa_link = glue(
+        "<a
+        target = _blank
+        href   = 'https://offshorewindhabitat.shinyapps.io/sp_map/?aphia_id={aphia_id}'>
+      {taxa_hierarchy} {vernacular_str}
+      </a>"))
+}
+
+d_spp |>
+  add_taxa_link() |> 
+  select(
+    `Taxa: Kingdom > Phylum > Class > Order > Family > Genus species (common name)` = taxa_link) |>     
+  datatable(escape = F)
+```
+
+:::::
+
+## Species with Extinction Risk
+
+::::: {.panel-tabset}
+
+### Treemap
+
+```{r er_spp_treemap}
+#| label: fig-er-spp-treemap
+#| fig-cap: Interactive taxonomic composition of species in the study area having an extinction risk category as determined by the IUCN RedList. Successive levels can be navigated for Kingdom > Phylum > Class > Order > Family > Genus species.
+
+er_csv <- here("../scripts/data/er.csv")
+
+d_er <- read_csv(er_csv) |> 
+  mutate(
+    n           = 1,
+    rl_category = recode(
+      category,
+      NT = "1. Near Threatened",
+      VU = "2. Vulnerable",
+      EN = "3. Endangered",
+      CR = "4. Critically Endangered")) |> 
+  arrange(desc(rl_category), kingdom, class, order, family, genus, scientificname) |> 
+  left_join(
+    tbl(con, "taxa_wm") |> 
+      # select(aphia_id, vernacular) |> 
+      # TODO: add vernacular back
+      select(aphia_id) |> 
+      collect() |>
+      mutate(
+        vernacular = NA),
+    by = "aphia_id")
+
+d_er_tm <- d_er |>
+  select(
+    rl_category, kingdom, class, order, family, genus, scientificname, n)
+
+d_er_tm |>
+  count_to_treemap()
+```
+
+### Table
+
+```{r er_spp_tbl}
+#| label: fig-er-spp-tbl
+#| fig-cap: Interactive table of species in the study area having an extinction risk category as determined by the IUCN RedList. Click on the link to be taken to the interactive map of that species. Use the Search box to search any part of the Taxa name hierarchy.
+
+d_er_dt <- d_er |>
+  add_taxa_link()
+
+# d_er_dt$taxa_hierarchy[1]
+d_er_dt |> 
+  select(
+    `RedList Category` = rl_category, 
+    `Taxa: Kingdom > Phylum > Class > Order > Family > Genus species (common name)` = taxa_link) |> 
+  datatable(escape = F)
+```
+
+```{r er_taxa_summary}
+table(d_er$rl_category)
+```
+
+:::::
+
+:::
+
+```{r dbDisconnect}
+DBI::dbDisconnect(con, shutdown=T)
+```

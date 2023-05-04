@@ -1,0 +1,275 @@
+---
+title: "Blocks"
+format: html
+---
+
+```{r setup}
+librarian::shelf(
+  dplyr, DT, fs, glue, gt, here, htmltools, knitr, leaflet, leaflet.extras,
+  yogevherz/plotme, purrr, readr, sf, stringr, 
+  offshorewindhabitat/offhabr,
+  tibble, tidyr, 
+  quiet = T)
+# devtools::install_local(here::here("../offhabr"))
+# load_all("~/Github/offshorewindhabitat/offhabr")
+options(readr.show_col_types = F)
+
+con <- oh_con() # DBI::dbDisconnect(con, shutdown=T)
+
+# tbl(con, "lyrs") |>
+#   filter(is.na(aphia_id), is_ds_prime) |> 
+#   pull(lyr_key)
+#  [1] "vg"              "sm"              "ve"             
+#  [4] "er_web_rescaled" "er_web"          "er_web_rescaled"
+#  [7] "sa_web"          "sa_web_rescaled" "score_v1_web"   
+# [10] "sm_web"          "sm_web_rescaled" "sp_web"         
+# [13] "sp_web_rescaled" "ve_web"          "ve_web_rescaled"
+# [16] "vg_web"          "vg_web_rescaled"
+```
+
+```{r zonal}
+z_csv <- here("../scripts/data/zonal_zones.csv")
+
+# zone spatial features
+f_z <- oh_zones_s1k |> 
+  filter(zone_version == 1) |> 
+  left_join(
+    read_csv(z_csv) |> 
+      mutate(across(where(is.numeric), \(x) round(x, 1))), 
+    by = c("zone_id" = "zone_id_v1")) |> 
+  mutate(
+    area_km2 = round(area_km2, 1))
+
+# region spatial features, as area-weighted means
+f_r <- f_z |> 
+  group_by(region) |> 
+  summarize(
+    score_v1_web = weighted.mean(score_v1_web, area_km2),
+    sp_web       = weighted.mean(sp_web, area_km2),
+    sa_web       = weighted.mean(sa_web, area_km2),
+    er_web       = weighted.mean(er_web, area_km2),
+    vg_web       = weighted.mean(vg_web, area_km2),
+    ve_web       = weighted.mean(ve_web, area_km2, na.rm = T),
+    sm_web       = weighted.mean(sm_web, area_km2, na.rm = T),
+    area_km2     = sum(area_km2)) |> 
+  mutate(
+    zone_name = "ALL") |> 
+  mutate(
+    across(where(is.numeric), ~ round(.x, 1)))
+
+# data of zones (and regions) to display as a table
+d_z <- f_z |> 
+  st_drop_geometry() |> 
+  bind_rows(
+    f_r |> 
+      st_drop_geometry()) |> 
+  arrange(region, zone_name) |> 
+  select(
+    region, 
+    zone  = zone_name,
+    score = score_v1_web,
+    sp    = sp_web,
+    sa    = sa_web,
+    er    = er_web,
+    vg    = vg_web,
+    ve    = ve_web,
+    sm    = sm_web,
+    area_km2) |> 
+  mutate(
+    score_clr = "",
+    sp_clr    = "",
+    sa_clr    = "",
+    er_clr    = "",
+    vg_clr    = "",
+    ve_clr    = "",
+    sm_clr    = "",
+    area_clr  = "") |> 
+  relocate(score_clr, .after = score) |> 
+  relocate(sp_clr, .after = sp) |> 
+  relocate(sa_clr, .after = sa) |> 
+  relocate(er_clr, .after = er) |> 
+  relocate(vg_clr, .after = vg) |> 
+  relocate(ve_clr, .after = ve) |> 
+  relocate(sm_clr, .after = sm) |> 
+  relocate(area_clr, .after = area_km2)
+```
+
+## Zones with Blocks
+
+When zooming into the Blocks in a Zone, we look at deviation from the mean score in the Zone, so `0` is equivalent the Zone average. If the score values were normally distributed (like a bell curve) around the average, then one standard deviation (SD) above/below is about 34.1% higher/lower than the average (so 68.2% of all values), two SDs is 47.7% higher/lower than the average (so 95.4% of all values) and three SDs are the most extreme at 49.9% higher/lower (so 99.9% of all values).
+
+```{r}
+# offhabr::oh_blocks |> 
+#   st_drop_geometry() |> 
+#   filter(zone_version == 1) |> 
+#   pull(zone_key) |> 
+#   table()
+# cec  cgm  mda  noa  noc  soa  soc  wao  wgm 
+#  16   33 2165  342  237  801  673  753   96
+zone_keys  <- oh_blocks |> 
+  filter(zone_version == 1) |>  
+  pull(zone_key) |> 
+  unique()
+
+# arrange in order from NW Pacific to GoMex to NE
+# oh_zones_s1k |>
+#   st_drop_geometry() |> 
+#   filter(
+#     zone_version == 1,
+#     zone_key %in% zone_keys) |> 
+#   arrange(zone_name) |> 
+#   select(zone_name, zone_key)
+# wao, noc, cec, soc, wgm, cgm, soa, mda, noa
+stack_web_tif <- "/Users/bbest/Library/CloudStorage/GoogleDrive-ben@ecoquants.com/.shortcut-targets-by-id/1sdT2ZZLmkgP0Zl8f1Yg0vOsVJR3Pms3Z/offhab/data/derived/stack_web.tif"
+zone_key <- "wao"
+m <- oh_map_zone_score_dev(zone_key, stk_web_tif = stack_web_tif)
+```
+
+::: {.panel-tabset}
+
+### `r attr(m, "zone_name")`
+
+```{r map_zone_score_dev_wao}
+#| label: fig-map-zone-score-dev-wao
+#| fig-cap: Interactive map of standard deviations from the average score in the zone. Fullscreen option available.
+m
+```
+
+<a name='`r glue("tbl-blocks-{zone_key}")`'></a>
+```{r}
+oh_tbl_zone_score_dev(m)
+```
+
+
+```{r}
+zone_key <- "noc"
+m <- oh_map_zone_score_dev(zone_key, stk_web_tif = stack_web_tif)
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+<a name='`r glue("tbl-blocks-{zone_key}")`'></a>
+```{r}
+oh_tbl_zone_score_dev(m)
+```
+
+
+```{r}
+zone_key <- "cec"
+m <- oh_map_zone_score_dev(zone_key, stk_web_tif = stack_web_tif)
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+<a name='`r glue("tbl-blocks-{zone_key}")`'></a>
+```{r}
+oh_tbl_zone_score_dev(m)
+```
+
+
+```{r}
+zone_key <- "soc"
+m <- oh_map_zone_score_dev(zone_key, stk_web_tif = stack_web_tif)
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+<a name='`r glue("tbl-blocks-{zone_key}")`'></a>
+```{r}
+oh_tbl_zone_score_dev(m)
+```
+
+
+```{r}
+zone_key <- "wgm"
+m <- oh_map_zone_score_dev(zone_key, stk_web_tif = stack_web_tif)
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+<a name='`r glue("tbl-blocks-{zone_key}")`'></a>
+```{r}
+oh_tbl_zone_score_dev(m)
+```
+
+
+```{r}
+zone_key <- "cgm"
+m <- oh_map_zone_score_dev(zone_key, stk_web_tif = stack_web_tif)
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+<a name='`r glue("tbl-blocks-{zone_key}")`'></a>
+```{r}
+oh_tbl_zone_score_dev(m)
+```
+
+
+```{r}
+zone_key <- "soa"
+m <- oh_map_zone_score_dev(zone_key, stk_web_tif = stack_web_tif)
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+<a name='`r glue("tbl-blocks-{zone_key}")`'></a>
+```{r}
+oh_tbl_zone_score_dev(m)
+```
+
+
+```{r}
+zone_key <- "mda"
+m <- oh_map_zone_score_dev(zone_key, stk_web_tif = stack_web_tif)
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+<a name='`r glue("tbl-blocks-{zone_key}")`'></a>
+```{r}
+oh_tbl_zone_score_dev(m)
+```
+
+
+```{r}
+zone_key <- "noa"
+m <- oh_map_zone_score_dev(zone_key, stk_web_tif = stack_web_tif)
+```
+
+### `r attr(m, "zone_name")`
+
+```{r}
+m
+```
+<a name='`r glue("tbl-blocks-{zone_key}")`'></a>
+```{r}
+oh_tbl_zone_score_dev(m)
+```
+
+:::
+
+```{r dbDisconnect}
+DBI::dbDisconnect(con, shutdown=T)
+```
