@@ -1,7 +1,8 @@
 ---
-title: "Species"
 format: html
 ---
+
+# Species {#sec-species}
 
 ```{r setup}
 librarian::shelf(

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.335">
+<meta name="generator" content="quarto-1.3.361">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,7 +17,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
 </style>
@@ -57,17 +57,18 @@ ul.task-list li input[type="checkbox"] {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
 <script src="site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
 <link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
-<script src="site_libs/datatables-binding-0.27/datatables.js"></script>
+<script src="site_libs/datatables-binding-0.28/datatables.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<link href="site_libs/dt-core-1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
-<link href="site_libs/dt-core-1.12.1/css/jquery.dataTables.extra.css" rel="stylesheet">
-<script src="site_libs/dt-core-1.12.1/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet">
+<link href="site_libs/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet">
+<script src="site_libs/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
 <link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet">
 <script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 
@@ -78,11 +79,16 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-    <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results</span></h1>
-      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
-        <i class="bi bi-chevron-right"></i>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./results.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
       </button>
     </div>
   </nav>
@@ -90,70 +96,80 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">Offshore Habitat Assessment for US Wind Energy</a> 
     </div>
       </div>
-      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
         <div id="quarto-search" class="" title="Search"></div>
         </div>
-      </div>
+        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Abstract</span></a>
+  <a href="./intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Abstract</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./methods.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods</span></a>
+  <a href="./methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Methods</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./results.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results</span></a>
+  <a href="./results.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./discussion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Discussion</span></a>
+  <a href="./discussion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Discussion</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Appendices</a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./appx_species.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Species</span></a>
+  <a href="./appx_species.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Species</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./appx_scoring.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Scoring</span></a>
+  <a href="./appx_scoring.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Scoring</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./appx_blocks.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Blocks</span></a>
+  <a href="./appx_blocks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">C</span>&nbsp; <span class="chapter-title">Blocks</span></span></a>
   </div>
 </li>
       </ul>
@@ -161,6 +177,7 @@ ul.task-list li input[type="checkbox"] {
     </ul>
     </div>
 </nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
@@ -170,7 +187,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Results</span></h1>
 </div>
 
 
@@ -185,23 +202,15 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<div class="cell">
-
-</div>
-<div class="cell">
-
-</div>
+<p>From the fine scale pixelated maps we aggregate up to the Block, Zone and at the broadest level Region. All species used in the analysis are visible under <a href="appx_species.html"><span>Appendix&nbsp;A</span></a> as a Treemap or Table. Importantly, every harmonized Species Distribution Model (SDM) can be retrieved by visiting the link in the table, e.g., for the humpback whale <a href="https://offshorewindhabitat.shinyapps.io/sp_map/?aphia_id=100599"><em>Megaptera novaeangliae</em></a>. These individual SDMs contribute to metrics for overall Species Richness (the sum of species present as 1 versus absent 0), Species Abundance (the sum of the harmonized score ranging 0 to 100), and Extinction Risk (sum of extinction risk weighted score 0 to 4). The final pixelated maps are visible under the “Pixel Values” subheadings of <a href="appx_scoring.html"><span>Appendix&nbsp;B</span></a> and there also are maps under the “Zone Averages” subheadings displaying the comparative Zone’s average pixel value. The average pixel values of each summary metric per Zone and broader Region are summarized into Table <a href="#tbl-zones">tbl-zones</a>. The Block values are displayed as a map and table per Zone under <a href="appx_blocks.html"><span>Appendix&nbsp;C</span></a>. These values have been normalized to display the deviation from the average value within the containing Zone so as to answer the question, which blocks are unusually high or low relative to the Zone’s average?</p>
+<p>Based on the best available species distributions, the Atlantic Region displays the highest average species richness (698.6 species per pixel), compared to the moderate Gulf of Mexico (38.9) or lowest Pacific (15.5).</p>
 <p><a name="tbl-zones"></a></p>
 <div class="cell page-columns page-full">
 <div class="cell-output-display column-screen-inset">
 
-<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-64155826527b133d0635" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-64155826527b133d0635">{"x":{"filter":"none","vertical":false,"class":"display","caption":"<caption>Table [tbl-zones]. Average pixel values across Regions and Zones for overall Score as well as input layers. Values are colored per column highest to lowest: red, orange, yellow, green, blue, violet. Columns are sortable.<\/caption>","data":[["Atlantic","Atlantic","Atlantic","Atlantic","Atlantic","Gulf of Mexico","Gulf of Mexico","Gulf of Mexico","Gulf of Mexico","Pacific","Pacific","Pacific","Pacific","Pacific"],["ALL","Mid Atlantic","North Atlantic","South Atlantic","Straits of Florida","ALL","Central Gulf of Mexico","Eastern Gulf of Mexico","Western Gulf of Mexico","ALL","Central California","Northern California","Southern California","Washington/Oregon"],[31.5,25.8,27.1,41.1,64.7,38.9,30.9,45.4,42.7,15.5,14.1,13.6,18.2,14.2],["","","","","","","","","","","","","",""],[1840.1,1447.9,1507.5,2507.6,4391.2,2468.8,1878.9,2923.2,2784.5,698.6,569.2,638.4,806.6,686.6],["","","","","","","","","","","","","",""],[126838.2,101259.9,89085.2,182516.7,359686.3,176382.8,126988.5,215881.9,199604.4,42241,33341.2,37967.7,52071.2,38685],["","","","","","","","","","","","","",""],[8542.5,7790.5,7066.8,10984.1,14115.1,9313.6,7549.6,11054.2,9410.9,4428.1,3935.6,3955.9,5465.5,3792.6],["","","","","","","","","","","","","",""],[777.9,588,1101.1,655.6,425.4,815.1,911.9,672.4,914.2,922,1046.7,810,938.6,892.2],["","","","","","","","","","","","","",""],[null,null,null,null,null,null,null,null,null,1,null,1,null,1],["","","","","","","","","","","","","",""],[1,null,1,null,null,null,null,null,null,1,1,1,1,1],["","","","","","","","","","","","","",""],[866082.4,323451.1,306210.9,198772,37648.4,627105.6,257622.8,254654.9,114827.9,794098.2,143978.4,138500.5,275850.4,235768.9],["","","","","","","","","","","","","",""]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th rowspan=\"2\">Region<\/th>\n      <th rowspan=\"2\">Zone<\/th>\n      <th rowspan=\"2\">Score<\/th>\n      <th rowspan=\"2\"><\/th>\n      <th colspan=\"6\">Species<\/th>\n      <th colspan=\"6\">Habitats<\/th>\n      <th rowspan=\"2\">Area (km<sup>2<\/sup>)<\/th>\n      <th rowspan=\"2\"><\/th>\n    <\/tr>\n    <tr>\n      <th>Richness<\/th>\n      <th><\/th>\n      <th>Abundance<\/th>\n      <th><\/th>\n      <th>Extinction Risk<\/th>\n      <th><\/th>\n      <th>1º Productivity<\/th>\n      <th><\/th>\n      <th>Hydrothermal Vents<\/th>\n      <th><\/th>\n      <th>Seamounts<\/th>\n      <th><\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":12,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":14,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":2,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":4,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":6,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":8,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":10,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":16,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"width":"0px","targets":[3,5,7,9,11,13,15,17]},{"orderable":false,"targets":[3,5,7,9,11,13,15,17]},{"className":"dt-right","targets":[2,4,6,8,10,12,14,16]}],"pageLength":14,"dom":"t","order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,14,25,50,100],"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[2]; $(this.api().cell(row, 3).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 14.9447 ? \"#5E4FA2\" : value <= 17.6342 ? \"#4F6EB0\" : value <= 20.3237 ? \"#378BBC\" : value <= 23.0132 ? \"#57A9B0\" : value <= 25.7026 ? \"#6EC5A5\" : value <= 28.3921 ? \"#94D3A4\" : value <= 31.0816 ? \"#B5E1A2\" : value <= 33.7711 ? \"#D4ED9C\" : value <= 36.4605 ? \"#EBF7A0\" : value <= 39.15 ? \"#F9FCB5\" : value <= 41.8395 ? \"#FFF7B1\" : value <= 44.5289 ? \"#FFE696\" : value <= 47.2184 ? \"#FED07E\" : value <= 49.9079 ? \"#FEB668\" : value <= 52.5974 ? \"#FA9756\" : value <= 55.2868 ? \"#F57446\" : value <= 57.9763 ? \"#E75A49\" : value <= 60.6658 ? \"#D7414F\" : value <= 63.3553 ? \"#BB2749\" : \"#9E0142\"});\nvar value=data[4]; $(this.api().cell(row, 5).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 669.7789 ? \"#5E4FA2\" : value <= 870.9368 ? \"#4F6EB0\" : value <= 1072.0947 ? \"#378BBC\" : value <= 1273.2526 ? \"#57A9B0\" : value <= 1474.4105 ? \"#6EC5A5\" : value <= 1675.5684 ? \"#94D3A4\" : value <= 1876.7263 ? \"#B5E1A2\" : value <= 2077.8842 ? \"#D4ED9C\" : value <= 2279.0421 ? \"#EBF7A0\" : value <= 2480.2 ? \"#F9FCB5\" : value <= 2681.3579 ? \"#FFF7B1\" : value <= 2882.5158 ? \"#FFE696\" : value <= 3083.6737 ? \"#FED07E\" : value <= 3284.8316 ? \"#FEB668\" : value <= 3485.9895 ? \"#FA9756\" : value <= 3687.1474 ? \"#F57446\" : value <= 3888.3053 ? \"#E75A49\" : value <= 4089.4632 ? \"#D7414F\" : value <= 4290.6211 ? \"#BB2749\" : \"#9E0142\"});\nvar value=data[6]; $(this.api().cell(row, 7).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 41929.2289 ? \"#5E4FA2\" : value <= 59105.2868 ? \"#4F6EB0\" : value <= 76281.3447 ? \"#378BBC\" : value <= 93457.4026 ? \"#57A9B0\" : value <= 110633.4605 ? \"#6EC5A5\" : value <= 127809.5184 ? \"#94D3A4\" : value <= 144985.5763 ? \"#B5E1A2\" : value <= 162161.6342 ? \"#D4ED9C\" : value <= 179337.6921 ? \"#EBF7A0\" : value <= 196513.75 ? \"#F9FCB5\" : value <= 213689.8079 ? \"#FFF7B1\" : value <= 230865.8658 ? \"#FFE696\" : value <= 248041.9237 ? \"#FED07E\" : value <= 265217.9816 ? \"#FEB668\" : value <= 282394.0395 ? \"#FA9756\" : value <= 299570.0974 ? \"#F57446\" : value <= 316746.1553 ? \"#E75A49\" : value <= 333922.2132 ? \"#D7414F\" : value <= 351098.2711 ? \"#BB2749\" : \"#9E0142\"});\nvar value=data[8]; $(this.api().cell(row, 9).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 4064.2447 ? \"#5E4FA2\" : value <= 4607.5342 ? \"#4F6EB0\" : value <= 5150.8237 ? \"#378BBC\" : value <= 5694.1132 ? \"#57A9B0\" : value <= 6237.4026 ? \"#6EC5A5\" : value <= 6780.6921 ? \"#94D3A4\" : value <= 7323.9816 ? \"#B5E1A2\" : value <= 7867.2711 ? \"#D4ED9C\" : value <= 8410.5605 ? \"#EBF7A0\" : value <= 8953.85 ? \"#F9FCB5\" : value <= 9497.1395 ? \"#FFF7B1\" : value <= 10040.4289 ? \"#FFE696\" : value <= 10583.7184 ? \"#FED07E\" : value <= 11127.0079 ? \"#FEB668\" : value <= 11670.2974 ? \"#FA9756\" : value <= 12213.5868 ? \"#F57446\" : value <= 12756.8763 ? \"#E75A49\" : value <= 13300.1658 ? \"#D7414F\" : value <= 13843.4553 ? \"#BB2749\" : \"#9E0142\"});\nvar value=data[10]; $(this.api().cell(row, 11).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 443.1816 ? \"#5E4FA2\" : value <= 478.7447 ? \"#4F6EB0\" : value <= 514.3079 ? \"#378BBC\" : value <= 549.8711 ? \"#57A9B0\" : value <= 585.4342 ? \"#6EC5A5\" : value <= 620.9974 ? \"#94D3A4\" : value <= 656.5605 ? \"#B5E1A2\" : value <= 692.1237 ? \"#D4ED9C\" : value <= 727.6868 ? \"#EBF7A0\" : value <= 763.25 ? \"#F9FCB5\" : value <= 798.8132 ? \"#FFF7B1\" : value <= 834.3763 ? \"#FFE696\" : value <= 869.9395 ? \"#FED07E\" : value <= 905.5026 ? \"#FEB668\" : value <= 941.0658 ? \"#FA9756\" : value <= 976.6289 ? \"#F57446\" : value <= 1012.1921 ? \"#E75A49\" : value <= 1047.7553 ? \"#D7414F\" : value <= 1083.3184 ? \"#BB2749\" : \"#9E0142\"});\nvar value=data[12]; $(this.api().cell(row, 13).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 1 ? \"#FFFFBF\" : \"#9E0142\"});\nvar value=data[14]; $(this.api().cell(row, 15).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 1 ? \"#FFFFBF\" : \"#9E0142\"});\nvar value=data[16]; $(this.api().cell(row, 17).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 59449.2947 ? \"#5E4FA2\" : value <= 103051.0842 ? \"#4F6EB0\" : value <= 146652.8737 ? \"#378BBC\" : value <= 190254.6632 ? \"#57A9B0\" : value <= 233856.4526 ? \"#6EC5A5\" : value <= 277458.2421 ? \"#94D3A4\" : value <= 321060.0316 ? \"#B5E1A2\" : value <= 364661.8211 ? \"#D4ED9C\" : value <= 408263.6105 ? \"#EBF7A0\" : value <= 451865.4 ? \"#F9FCB5\" : value <= 495467.1895 ? \"#FFF7B1\" : value <= 539068.9789 ? \"#FFE696\" : value <= 582670.7684 ? \"#FED07E\" : value <= 626272.5579 ? \"#FEB668\" : value <= 669874.3474 ? \"#FA9756\" : value <= 713476.1368 ? \"#F57446\" : value <= 757077.9263 ? \"#E75A49\" : value <= 800679.7158 ? \"#D7414F\" : value <= 844281.5053 ? \"#BB2749\" : \"#9E0142\"});\n}"},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render","options.columnDefs.4.render","options.columnDefs.5.render","options.columnDefs.6.render","options.columnDefs.7.render","options.rowCallback"],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-8a9d5fd869b7ab7b52a7" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-8a9d5fd869b7ab7b52a7">{"x":{"filter":"none","vertical":false,"class":"display","caption":"<caption>Table [tbl-zones]. Average pixel values across Regions and Zones for overall Score as well as input layers. Values are colored per column highest to lowest: red, orange, yellow, green, blue, violet. Columns are sortable.<\/caption>","data":[["Atlantic","Atlantic","Atlantic","Atlantic","Atlantic","Gulf of Mexico","Gulf of Mexico","Gulf of Mexico","Gulf of Mexico","Pacific","Pacific","Pacific","Pacific","Pacific"],["ALL","Mid Atlantic","North Atlantic","South Atlantic","Straits of Florida","ALL","Central Gulf of Mexico","Eastern Gulf of Mexico","Western Gulf of Mexico","ALL","Central California","Northern California","Southern California","Washington/Oregon"],[31.5,25.8,27.1,41.1,64.7,38.9,30.9,45.4,42.7,15.5,14.1,13.6,18.2,14.2],["","","","","","","","","","","","","",""],[1840.1,1447.9,1507.5,2507.6,4391.2,2468.8,1878.9,2923.2,2784.5,698.6,569.2,638.4,806.6,686.6],["","","","","","","","","","","","","",""],[126838.2,101259.9,89085.2,182516.7,359686.3,176382.8,126988.5,215881.9,199604.4,42241,33341.2,37967.7,52071.2,38685],["","","","","","","","","","","","","",""],[8542.5,7790.5,7066.8,10984.1,14115.1,9313.6,7549.6,11054.2,9410.9,4428.1,3935.6,3955.9,5465.5,3792.6],["","","","","","","","","","","","","",""],[777.9,588,1101.1,655.6,425.4,815.1,911.9,672.4,914.2,922,1046.7,810,938.6,892.2],["","","","","","","","","","","","","",""],[null,null,null,null,null,null,null,null,null,1,null,1,null,1],["","","","","","","","","","","","","",""],[1,null,1,null,null,null,null,null,null,1,1,1,1,1],["","","","","","","","","","","","","",""],[866082.4,323451.1,306210.9,198772,37648.4,627105.6,257622.8,254654.9,114827.9,794098.2,143978.4,138500.5,275850.4,235768.9],["","","","","","","","","","","","","",""]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th rowspan=\"2\">Region<\/th>\n      <th rowspan=\"2\">Zone<\/th>\n      <th rowspan=\"2\">Score<\/th>\n      <th rowspan=\"2\"><\/th>\n      <th colspan=\"6\">Species<\/th>\n      <th colspan=\"6\">Habitats<\/th>\n      <th rowspan=\"2\">Area (km<sup>2<\/sup>)<\/th>\n      <th rowspan=\"2\"><\/th>\n    <\/tr>\n    <tr>\n      <th>Richness<\/th>\n      <th><\/th>\n      <th>Abundance<\/th>\n      <th><\/th>\n      <th>Extinction Risk<\/th>\n      <th><\/th>\n      <th>1º Productivity<\/th>\n      <th><\/th>\n      <th>Hydrothermal Vents<\/th>\n      <th><\/th>\n      <th>Seamounts<\/th>\n      <th><\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"targets":12,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":14,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 0, 3, \",\", \".\", null);\n  }"},{"targets":2,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":4,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":6,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":8,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":10,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":16,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"width":"0px","targets":[3,5,7,9,11,13,15,17]},{"orderable":false,"targets":[3,5,7,9,11,13,15,17]},{"className":"dt-right","targets":[2,4,6,8,10,12,14,16]}],"pageLength":14,"dom":"t","order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,14,25,50,100],"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[2]; $(this.api().cell(row, 3).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 14.9447 ? \"#5E4FA2\" : value <= 17.6342 ? \"#4F6EB0\" : value <= 20.3237 ? \"#378BBC\" : value <= 23.0132 ? \"#57A9B0\" : value <= 25.7026 ? \"#6EC5A5\" : value <= 28.3921 ? \"#94D3A4\" : value <= 31.0816 ? \"#B5E1A2\" : value <= 33.7711 ? \"#D4ED9C\" : value <= 36.4605 ? \"#EBF7A0\" : value <= 39.15 ? \"#F9FCB5\" : value <= 41.8395 ? \"#FFF7B1\" : value <= 44.5289 ? \"#FFE696\" : value <= 47.2184 ? \"#FED07E\" : value <= 49.9079 ? \"#FEB668\" : value <= 52.5974 ? \"#FA9756\" : value <= 55.2868 ? \"#F57446\" : value <= 57.9763 ? \"#E75A49\" : value <= 60.6658 ? \"#D7414F\" : value <= 63.3553 ? \"#BB2749\" : \"#9E0142\"});\nvar value=data[4]; $(this.api().cell(row, 5).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 669.7789 ? \"#5E4FA2\" : value <= 870.9368 ? \"#4F6EB0\" : value <= 1072.0947 ? \"#378BBC\" : value <= 1273.2526 ? \"#57A9B0\" : value <= 1474.4105 ? \"#6EC5A5\" : value <= 1675.5684 ? \"#94D3A4\" : value <= 1876.7263 ? \"#B5E1A2\" : value <= 2077.8842 ? \"#D4ED9C\" : value <= 2279.0421 ? \"#EBF7A0\" : value <= 2480.2 ? \"#F9FCB5\" : value <= 2681.3579 ? \"#FFF7B1\" : value <= 2882.5158 ? \"#FFE696\" : value <= 3083.6737 ? \"#FED07E\" : value <= 3284.8316 ? \"#FEB668\" : value <= 3485.9895 ? \"#FA9756\" : value <= 3687.1474 ? \"#F57446\" : value <= 3888.3053 ? \"#E75A49\" : value <= 4089.4632 ? \"#D7414F\" : value <= 4290.6211 ? \"#BB2749\" : \"#9E0142\"});\nvar value=data[6]; $(this.api().cell(row, 7).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 41929.2289 ? \"#5E4FA2\" : value <= 59105.2868 ? \"#4F6EB0\" : value <= 76281.3447 ? \"#378BBC\" : value <= 93457.4026 ? \"#57A9B0\" : value <= 110633.4605 ? \"#6EC5A5\" : value <= 127809.5184 ? \"#94D3A4\" : value <= 144985.5763 ? \"#B5E1A2\" : value <= 162161.6342 ? \"#D4ED9C\" : value <= 179337.6921 ? \"#EBF7A0\" : value <= 196513.75 ? \"#F9FCB5\" : value <= 213689.8079 ? \"#FFF7B1\" : value <= 230865.8658 ? \"#FFE696\" : value <= 248041.9237 ? \"#FED07E\" : value <= 265217.9816 ? \"#FEB668\" : value <= 282394.0395 ? \"#FA9756\" : value <= 299570.0974 ? \"#F57446\" : value <= 316746.1553 ? \"#E75A49\" : value <= 333922.2132 ? \"#D7414F\" : value <= 351098.2711 ? \"#BB2749\" : \"#9E0142\"});\nvar value=data[8]; $(this.api().cell(row, 9).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 4064.2447 ? \"#5E4FA2\" : value <= 4607.5342 ? \"#4F6EB0\" : value <= 5150.8237 ? \"#378BBC\" : value <= 5694.1132 ? \"#57A9B0\" : value <= 6237.4026 ? \"#6EC5A5\" : value <= 6780.6921 ? \"#94D3A4\" : value <= 7323.9816 ? \"#B5E1A2\" : value <= 7867.2711 ? \"#D4ED9C\" : value <= 8410.5605 ? \"#EBF7A0\" : value <= 8953.85 ? \"#F9FCB5\" : value <= 9497.1395 ? \"#FFF7B1\" : value <= 10040.4289 ? \"#FFE696\" : value <= 10583.7184 ? \"#FED07E\" : value <= 11127.0079 ? \"#FEB668\" : value <= 11670.2974 ? \"#FA9756\" : value <= 12213.5868 ? \"#F57446\" : value <= 12756.8763 ? \"#E75A49\" : value <= 13300.1658 ? \"#D7414F\" : value <= 13843.4553 ? \"#BB2749\" : \"#9E0142\"});\nvar value=data[10]; $(this.api().cell(row, 11).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 443.1816 ? \"#5E4FA2\" : value <= 478.7447 ? \"#4F6EB0\" : value <= 514.3079 ? \"#378BBC\" : value <= 549.8711 ? \"#57A9B0\" : value <= 585.4342 ? \"#6EC5A5\" : value <= 620.9974 ? \"#94D3A4\" : value <= 656.5605 ? \"#B5E1A2\" : value <= 692.1237 ? \"#D4ED9C\" : value <= 727.6868 ? \"#EBF7A0\" : value <= 763.25 ? \"#F9FCB5\" : value <= 798.8132 ? \"#FFF7B1\" : value <= 834.3763 ? \"#FFE696\" : value <= 869.9395 ? \"#FED07E\" : value <= 905.5026 ? \"#FEB668\" : value <= 941.0658 ? \"#FA9756\" : value <= 976.6289 ? \"#F57446\" : value <= 1012.1921 ? \"#E75A49\" : value <= 1047.7553 ? \"#D7414F\" : value <= 1083.3184 ? \"#BB2749\" : \"#9E0142\"});\nvar value=data[12]; $(this.api().cell(row, 13).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 1 ? \"#FFFFBF\" : \"#9E0142\"});\nvar value=data[14]; $(this.api().cell(row, 15).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 1 ? \"#FFFFBF\" : \"#9E0142\"});\nvar value=data[16]; $(this.api().cell(row, 17).node()).css({'background-color':isNaN(parseFloat(value)) ? '' : value <= 59449.2947 ? \"#5E4FA2\" : value <= 103051.0842 ? \"#4F6EB0\" : value <= 146652.8737 ? \"#378BBC\" : value <= 190254.6632 ? \"#57A9B0\" : value <= 233856.4526 ? \"#6EC5A5\" : value <= 277458.2421 ? \"#94D3A4\" : value <= 321060.0316 ? \"#B5E1A2\" : value <= 364661.8211 ? \"#D4ED9C\" : value <= 408263.6105 ? \"#EBF7A0\" : value <= 451865.4 ? \"#F9FCB5\" : value <= 495467.1895 ? \"#FFF7B1\" : value <= 539068.9789 ? \"#FFE696\" : value <= 582670.7684 ? \"#FED07E\" : value <= 626272.5579 ? \"#FEB668\" : value <= 669874.3474 ? \"#FA9756\" : value <= 713476.1368 ? \"#F57446\" : value <= 757077.9263 ? \"#E75A49\" : value <= 800679.7158 ? \"#D7414F\" : value <= 844281.5053 ? \"#BB2749\" : \"#9E0142\"});\n}"},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render","options.columnDefs.4.render","options.columnDefs.5.render","options.columnDefs.6.render","options.columnDefs.7.render","options.rowCallback"],"jsHooks":[]}</script>
 </div>
-</div>
-<p>See <a href="#tbl-zones">Table [tbl-zones]</a>.</p>
-<div class="cell">
-
 </div>
 
 
@@ -234,9 +243,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -301,6 +324,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {

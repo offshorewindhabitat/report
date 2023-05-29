@@ -6,6 +6,11 @@ editor_options:
 
 # Results
 
+From the fine scale pixelated maps we aggregate up to the Block, Zone and at the broadest level Region. All species used in the analysis are visible under @sec-species as a Treemap or Table. Importantly, every harmonized Species Distribution Model (SDM) can be retrieved by visiting the link in the table, e.g., for the humpback whale [_Megaptera novaeangliae_](https://offshorewindhabitat.shinyapps.io/sp_map/?aphia_id=100599). These individual SDMs contribute to metrics for overall Species Richness (the sum of species present as 1 versus absent 0), Species Abundance (the sum of the harmonized score ranging 0 to 100), and Extinction Risk (sum of extinction risk weighted score 0 to 4). The final pixelated maps are visible under the "Pixel Values" subheadings of @sec-scoring and there also are maps under the "Zone Averages" subheadings displaying the comparative Zone's average pixel value. The average pixel values of each summary metric per Zone and broader Region are summarized into Table [tbl-zones](#tbl-zones). The Block values are displayed as a map and table per Zone under @sec-blocks. These values have been normalized to display the deviation from the average value within the containing Zone so as to answer the question, which blocks are unusually high or low relative to the Zone's average?
+
+Based on the best available species distributions, the Atlantic Region displays the highest average species richness (698.6 species per pixel), compared to the moderate Gulf of Mexico (38.9) or lowest Pacific (15.5).
+
+
 ```{r setup}
 librarian::shelf(
   devtools, dplyr, DT, fs, glue, gt, here, htmltools, knitr, leaflet, leaflet.extras,
@@ -29,7 +34,7 @@ con <- oh_con() # DBI::dbDisconnect(con, shutdown=T)
 ```
 
 
-```{r}
+```{r zonal-prep}
 z_csv <- here("../scripts/data/zonal_zones.csv")
 
 # zone spatial features
@@ -225,8 +230,6 @@ switch(
 ```
 
 `r if(!is_html_output()) glue("[TODO: format table as Calibri size 8. R-click: Insert caption, borders, merge cells, swap state codes like example.\n\n{cap_docx}\n]")`
-
-See [Table [tbl-zones]](#tbl-zones).
 
 ```{r dbDisconnect}
 DBI::dbDisconnect(con, shutdown=T)

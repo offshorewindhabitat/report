@@ -1,7 +1,8 @@
 ---
-title: "Scoring"
 format: html
 ---
+
+# Scoring {#sec-scoring}
 
 ```{r setup}
 librarian::shelf(
@@ -26,7 +27,7 @@ con <- oh_con() # DBI::dbDisconnect(con, shutdown=T)
 # [16] "vg_web"          "vg_web_rescaled"
 ```
 
-```{r}
+```{r zone-prep}
 z_csv <- here("../scripts/data/zonal_zones.csv")
 
 # zone spatial features
@@ -101,19 +102,18 @@ d_z <- f_z |>
 
 ### Pixel Values
 
-```{r map_pixel_score}
+```{r pixel_score}
 #| label: fig-pixel-score
 #| fig-cap: Interactive map of overall score throughout the study area.
 
 lyr_key   <- "score_v1_web"
 lyr_title <- "Score"
-offhabr::oh_map
 oh_map_cog_lyr(lyr_key, lyr_title, con=con)
 ```
 
 ### Zone Averages
 
-```{r map_zone_score}
+```{r zone_score}
 #| label: fig-zone-score
 #| fig-cap: Interactive map of overall score average per Zone.
 oh_map() |> 

@@ -5,8 +5,10 @@ do_figs = F
 do_tbls = F
 
 librarian::shelf(
-  DBI, dplyr, gt, here, leaflet, purrr, readr, sf, terra)
-devtools::load_all(here::here("../offhabr"))
+  DBI, dplyr, gt, here, leaflet, purrr, readr, sf, terra,
+  offshorewindhabitat/offhabr)
+# devtools::load_all(here::here("../offhabr"))
+# devtools::install_github("offshorewindhabitat/offhabr", force = T)
 terraOptions(progress=0)
 
 con <- oh_con() # dbDisconnect(con, shutdown = T)
@@ -81,10 +83,14 @@ rng_web_areakm2 <- global(r_web_areakm2, "range", na.rm=T)
 ```
 
 
-Development of offshore wind energy will be essential for providing renewable energy to mitigate climate change impacts, yet should be responsibly sited to minimize impacts on sensitive species and habitats. The Bureau of Ocean Energy Management (BOEM) manages the federal offshore leasing of wind energy for the United States (U.S.) and has defined regions, zones and individual lease blocks, which were used to evaluate differences in species and habitats for the federal waters of the U.S. lower 48 states (excluding Alaska and Hawaii). Species distributions were collated from a variety of sources and rescaled (0 to 100) according to a preferred hierarchy of response terms: 1) density surface models (response: # individuals / km^2^; `r nspp_density` species of marine mammals, seabirds and sea turtles across 4 datasets); 2) habitat probability models (response: 0 to 1; `r format(nspp_probability, big.mark=",")` species from AquaMaps); 3) and expert range maps (response: 0 or 1; `r nspp_range` species from IUCN Red List). All data layers were downscaled to a common grid of roughly 15 arc-seconds (each pixel ranging in area `r paste(format(range(rng_web_areakm2), digits=2), collapse = " to ")` km^2^) aligned with the GEBCO high resolution global bathymetry in order to calculate differences between individual lease blocks (ranging in area `r paste(format(range(offhabr::oh_blocks$area_km2), digits=2), collapse = " to ")` km^2^). Species richness and species abundance were calculated per pixel along with an aggregate extinction risk for those species having an IUCN Red List category assigned. An overall conservation score also incorporated primary productivity, hydrothermal vents and seamounts with equal weighting for each layer.
+Development of offshore wind energy will be essential for providing renewable energy to mitigate climate change impacts, yet should be responsibly sited to minimize impacts on sensitive species and habitats. The Bureau of Ocean Energy Management (BOEM) manages the federal offshore leasing of wind energy for the United States (U.S.) and has defined regions, zones and individual lease blocks, which were used to evaluate differences in species and habitats for the federal waters of the U.S. lower 48 states (excluding Alaska and Hawaii). In order to combine species distribution models (SDMs) from varying sources, they needed to be harmonized according to: 1) a common taxonomy, using the AphiaID from the World Register of Marine Species (WoRMS) at [MarineSpecies.org](MarineSpecies.org); 2) a common geography, using the most refined available global bathymetric raster, the General Bathymetric Chart of the Oceans (GEBCO) at [GEBCO.net](https://www.gebco.net); and 3) a common response term. The harmonized response term rescaled input SDMs 0 to 100 according to a preferred hierarchy of available models for the same species: 1) density surface models, where original response was # individuals / km^2^ for `r nspp_density` species of marine mammals, seabirds and sea turtles across 4 datasets; 2) habitat probability models, which had a continuous response of 0 to 1 for `r format(nspp_probability, big.mark=",")` species from [AquaMaps.org](https://www.aquamaps.org); and 3) expert range maps  with a binary response of 0 or 1 for `r nspp_range` species from the [IUCN Red List](https://www.iucnredlist.org/resources/spatial-data-download). From the combined SDMs, species richness and species abundance were calculated per pixel along with an aggregate extinction risk for those species having an IUCN Red List category assigned. An overall conservation score also incorporated primary productivity, hydrothermal vents and seamounts with equal weighting for each layer. Alth
 
 <!--
 [
+Abstract other points:
+- overall patterns by region and zone
+- lease standardizing
+
 TODO: next
 - + Tables
   - Spatial Scoring: Zone Average
@@ -117,6 +123,8 @@ A couple fundamental questions driving this analysis are:
 While density surfaces are most preferable, especially for determining number of individuals impacted by human activity (e.g., for Potential Biological Removal as mandated by the Marine Mammal Protection Act), the distributions of relatively few taxa have been described by these models for the .
 
 - Essential Fish Habitat (EFH) is too coarse, not preferred by [@friedlandResourceOccurrenceProductivity2021] (see [methods notes | offhab - Google Docs](https://docs.google.com/document/d/1JSJMBqqL4c44c8fx01I-elx7gK8dNyuABjLinaxC95k/edit#bookmark=id.sky4lrftqqq8))
+
+All data layers were downscaled to a common grid of roughly 15 arc-seconds (each pixel ranging in area `r paste(format(range(rng_web_areakm2), digits=2), collapse = " to ")` km^2^) aligned with the GEBCO high resolution global bathymetry in order to calculate differences between individual lease blocks (ranging in area `r paste(format(range(offhabr::oh_blocks$area_km2), digits=2), collapse = " to ")` km^2^).
 
 ```{r}
 dbDisconnect(con, shutdown = T)

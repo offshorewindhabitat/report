@@ -1,7 +1,8 @@
 ---
-title: "Blocks"
 format: html
 ---
+
+# Blocks {#sec-blocks}
 
 ```{r setup}
 librarian::shelf(
