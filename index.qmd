@@ -1,3 +1,7 @@
 # Preface {.unnumbered}
 
 This report was funded by the [Resources Legacy Fund](https://resourceslegacyfund.org/).
+
+This report is available also as a Microsoft Word document (.docx):
+
+- [Offshore-Habitat-Assessment-for-US-Wind-Energy.docx](https://raw.githubusercontent.com/offshorewindhabitat/report/main/_book_docx/Offshore-Habitat-Assessment-for-US-Wind-Energy.docx)

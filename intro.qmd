@@ -1,130 +1,34 @@
-# Abstract
+# Introduction
 
 ```{r setup-intro}
-do_figs = F
-do_tbls = F
-
-librarian::shelf(
-  DBI, dplyr, gt, here, leaflet, purrr, readr, sf, terra,
-  offshorewindhabitat/offhabr)
-# devtools::load_all(here::here("../offhabr"))
-# devtools::install_github("offshorewindhabitat/offhabr", force = T)
-terraOptions(progress=0)
-
-con <- oh_con() # dbDisconnect(con, shutdown = T)
-# dbListTables(con)
+source("scripts/setup.R")
 ```
-
-```{r}
-d_ds <- tbl(con, "datasets") |> 
-  filter(
-    active,
-    ds_key != "oh") |> 
-  collect()
-
-d_lyrs_ds <- tbl(con, "lyrs") |>
-  filter(
-    !is.na(aphia_id),
-    is_ds_prime,
-    ds_key != "oh") |> 
-  group_by(ds_key) |> 
-  summarize(n_lyr = n()) |> 
-  left_join(
-    tbl(con, "lyr_rgn_ds") |>
-      left_join(
-        tbl(con, "datasets") |> 
-          select(ds_key, ds_id),
-        by = "ds_id") |> 
-      group_by(ds_key) |> 
-      summarize(n_rgn = n()),
-    by = "ds_key") |> 
-  arrange(ds_key) |> 
-  collect() |> 
-  # replace_na(list(n_rgn = 0)) |> 
-  mutate(
-    n_lyr_rgn = purrr::map2_int(n_lyr, n_rgn, sum, na.rm=T))
-
-d_ds <- d_ds |> 
-  left_join(
-    d_lyrs_ds,
-    by = "ds_key")
-
-nspp_density <- d_ds |> 
-  filter(type == "density") |> 
-  summarize(
-    n_taxa = sum(n_lyr_rgn)) |> 
-  pull(n_taxa)
-nspp_probability <- d_ds |> 
-  filter(type == "probability") |> 
-  summarize(
-    n_taxa = sum(n_lyr_rgn)) |> 
-  pull(n_taxa)
-nspp_range <- d_ds |> 
-  filter(type == "range") |> 
-  summarize(
-    n_taxa = sum(n_lyr_rgn)) |> 
-  pull(n_taxa)
-
-r_depth <- rast(
-  system.file("oh_elev_m.tif", package="offhabr"))
-r_depth_web <- rast(
-  system.file("oh_elev_m_web.tif", package="offhabr"))
-
-r_areakm2 <- cellSize(r_depth, unit="km") |> 
-  mask(r_depth)
-rng_areakm2 <- global(r_areakm2, "range", na.rm=T)
-#            min       max
-# area 0.1022107 0.1927433
-r_web_areakm2 <- cellSize(r_depth_web, unit="km") |> 
-  mask(r_depth_web)
-rng_web_areakm2 <- global(r_web_areakm2, "range", na.rm=T)
-#            min       max
-# area 0.1642863 0.3114606
-```
-
-
-Development of offshore wind energy will be essential for providing renewable energy to mitigate climate change impacts, yet should be responsibly sited to minimize impacts on sensitive species and habitats. The Bureau of Ocean Energy Management (BOEM) manages the federal offshore leasing of wind energy for the United States (U.S.) and has defined regions, zones and individual lease blocks, which were used to evaluate differences in species and habitats for the federal waters of the U.S. lower 48 states (excluding Alaska and Hawaii). In order to combine species distribution models (SDMs) from varying sources, they needed to be harmonized according to: 1) a common taxonomy, using the AphiaID from the World Register of Marine Species (WoRMS) at [MarineSpecies.org](MarineSpecies.org); 2) a common geography, using the most refined available global bathymetric raster, the General Bathymetric Chart of the Oceans (GEBCO) at [GEBCO.net](https://www.gebco.net); and 3) a common response term. The harmonized response term rescaled input SDMs 0 to 100 according to a preferred hierarchy of available models for the same species: 1) density surface models, where original response was # individuals / km^2^ for `r nspp_density` species of marine mammals, seabirds and sea turtles across 4 datasets; 2) habitat probability models, which had a continuous response of 0 to 1 for `r format(nspp_probability, big.mark=",")` species from [AquaMaps.org](https://www.aquamaps.org); and 3) expert range maps  with a binary response of 0 or 1 for `r nspp_range` species from the [IUCN Red List](https://www.iucnredlist.org/resources/spatial-data-download). From the combined SDMs, species richness and species abundance were calculated per pixel along with an aggregate extinction risk for those species having an IUCN Red List category assigned. An overall conservation score also incorporated primary productivity, hydrothermal vents and seamounts with equal weighting for each layer. Alth
-
-<!--
-[
-Abstract other points:
-- overall patterns by region and zone
-- lease standardizing
-
-TODO: next
-- + Tables
-  - Spatial Scoring: Zone Average
-  - Zones with Blocks
-- move to Appendix
-
-- future
-  - app to change weights
-  - app to extract species with extinction risk per AoI / pixel / block / zone
-]
-
- -->
-
-# Introduction
 
 Development of offshore wind energy will be essential for providing renewable energy to mitigate climate change impacts, yet should be responsibly sited to minimize impacts on sensitive species and habitats. Acoustic impacts from construction and operation may negatively impact some species [@mooneyACOUSTICIMPACTSOFFSHORE2022]. Hard substrate provided by the platforms may actually benefit other species [@wilsonHabitatcreationPotentialOffshore2009]. Although only 42 megawatts (MW) of offshore wind energy capacity is operational (in Rhode Island and New York) as of May 31 2022, the pipeline of potential generating capacity is estimated to be 40 gigawatts (GW) -- enough to power 13 million homes [@musialOffshoreWindMarket2022].
 
-Wind energy areas are under active development by the Bureau of Ocean Energy Management (BOEM) throughout the United States. This study will assess habitats for sensitivity throughout strategic parts of the US.
+Wind energy areas are under active development by the Bureau of Ocean Energy Management (BOEM) throughout the United States. This report assesses habitats for sensitivity throughout the federal waters of the U.S. lower 48 states (excluding Alaska and Hawaii).
 
 A couple fundamental questions driving this analysis are:
 
-1. _How different are existing lease areas from the rest of the region?_ (_**intra-region**_)\
+1. _How different are zones (and regions)?_ (_**inter-zone/region**_)\
   Areas not already slated for the offshore wind leasing impact species and habitats less, so could be candidates for alternative future planning. Areas with designated military use and outside BOEM’s authority (e.g., National Marine Sanctuaries) need to be further excluded from consideration.
 
-1.  _How different are existing lease areas from each other within a given region?_ (_**inter-lease**_)\
+1.  _How different are blocks from each other within a given region?_ (_**inter-block**_, _**intra-zone**_)\
   Within the leasing process the most oversight can be exercised within existing lease areas, especially ones in the earlier stages of Proposed Sale Notices and Call Areas. Identifying less impacted lease areas may lend greater stakeholder support for development.
 
-...
+While density surfaces are most preferable, especially for determining number of individuals impacted by human activity (e.g., for Potential Biological Removal as mandated by the Marine Mammal Protection Act [@romanMarineMammalProtection2013]), the distributions of relatively few taxa have been described by these model types. The most comprehensive atlas of marine species distributions comes from the AquaMaps [@kaschnerAquaMapsPredictedRange2019], which uses only 4 terms per environmental predictor (min, max and preferred min and max) to produce a gradient of habitat suitability [@readyPredictingDistributionsMarine2010]. Yet another type of distributional information is based on a binary range map, such as produced by taxonomic experts with the IUCN RedList process. 
 
-While density surfaces are most preferable, especially for determining number of individuals impacted by human activity (e.g., for Potential Biological Removal as mandated by the Marine Mammal Protection Act), the distributions of relatively few taxa have been described by these models for the .
+Collating the best available data has been a significant challenge to date and has become all the more important with the global push for 30% conservation protection of land and sea by 2030 with the Kunming-Montreal Global Biodiversity Framework resolution passed at the Convention of Biological Diversity meeting in Montreal in December, 2022 [@findlayCOP15Crunch2023]. Although the U.S. was notably absent from the 190 signatory countries, President Biden has advocated for similar protections nationally through the "America the Beautiful" initiative. The lack of comprehensive biodiversity information has been noted [@carrollUSConservationAtlas2022].
 
-- Essential Fish Habitat (EFH) is too coarse, not preferred by [@friedlandResourceOccurrenceProductivity2021] (see [methods notes | offhab - Google Docs](https://docs.google.com/document/d/1JSJMBqqL4c44c8fx01I-elx7gK8dNyuABjLinaxC95k/edit#bookmark=id.sky4lrftqqq8))
+<!-- 
 
-All data layers were downscaled to a common grid of roughly 15 arc-seconds (each pixel ranging in area `r paste(format(range(rng_web_areakm2), digits=2), collapse = " to ")` km^2^) aligned with the GEBCO high resolution global bathymetry in order to calculate differences between individual lease blocks (ranging in area `r paste(format(range(offhabr::oh_blocks$area_km2), digits=2), collapse = " to ")` km^2^).
+TODO:
+
+- Essential Fish Habitat (EFH) is too coarse, not preferred by [@friedlandResourceOccurrenceProductivity2021] (see [methods notes | offhab - Google Docs](https://docs.google.com/document/d/1JSJMBqqL4c44c8fx01I-elx7gK8dNyuABjLinaxC95k/edit#bookmark=id.sky4lrftqqq8)) 
+
+- review [oharaAligningMarineSpecies2017]: compares AquaMaps with IUCN and brings up how aligns and misaligns. Points for Intro + Discussion.
+-->
+
 
 ```{r}
 dbDisconnect(con, shutdown = T)

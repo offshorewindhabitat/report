@@ -23,6 +23,7 @@ book:
   date-format: "YYYY-MM-DD" #  HH:mm
   chapters:
     - index.qmd
+    - abstract.qmd
     - intro.qmd
     - methods.qmd
     # - tmp.qmd

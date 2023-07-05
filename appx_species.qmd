@@ -1,15 +1,14 @@
----
-format: html
----
-
 # Species {#sec-species}
 
-```{r setup}
+
+```{r setup-species}
+source("scripts/setup.R")
+
 librarian::shelf(
-  devtools, dplyr, DBI, DT, fs, glue, gt, here, htmltools, knitr, leaflet, leaflet.extras,
+  devtools, dplyr, DBI, DT, fs, glue, gt, here, htmltools, htmlwidgets, knitr, leaflet, leaflet.extras,
   offshorewindhabitat/offhabr,
   yogevherz/plotme, purrr, readr, sf, stringr, 
-  tibble, tidyr, 
+  tibble, tidyr, webshot,
   quiet = T)
 # load_all("~/Github/offshorewindhabitat/offhabr")
 options(readr.show_col_types = F)
@@ -25,52 +24,20 @@ con <- oh_con() # DBI::dbDisconnect(con, shutdown=T)
 
 ### Treemap
 
-```{r calc_all_spp_treemap}
-d_spp <- tbl(con, "lyrs") |> 
-  filter(
-    !is.na(aphia_id),
-    is_ds_prime) |> 
-  select(aphia_id) |> 
-  left_join(
-    tbl(con, "taxa_wm") |>
-      select(
-        aphia_id, kingdom, phylum, class,
-        # TODO: add vernacular back
-        # order, family, genus, scientificname, vernacular),
-        order, family, genus, scientificname),
-    by = "aphia_id") |> 
-  #select(-aphia_id) |> 
-  mutate(
-    vernacular = NA, # TODO: add vernacular back
-    n = 1) |> 
-  arrange(
-    kingdom, phylum, class, 
-    order, family, genus, scientificname) |> 
-  collect()
-# check no duplicates and has all info
-stopifnot(
-  sum(duplicated(d_spp$scientificname)) == 0,
-  sum(is.na(d_spp$kingdom))       == 0)
-n_spp <- nrow(d_spp) # 10,061
-```
-
-
-```{r all_spp_treemap}
-#| label: fig-all-spp-treemap
+```{r}
+#| label: fig-species-all-treemap
 #| fig-cap: Interactive taxonomic composition of all species in the study area with successive levels for Kingdom > Phylum > Class > Order > Family > Genus species.
-
-#- Number of species: `r n_spp`
-
+d_spp <- get_d_spp()
 d_spp |>
   select(-aphia_id) |> 
-  count_to_treemap()
+  count_to_treemap() |> 
+  widget_webshot(species_all_treemap_png)
 ```
-
 
 ### Table
 
-```{r all_spp_tbl}
-#| label: fig-all-spp-tbl
+```{r}
+#| label: fig-species_all_table
 #| fig-cap: Interactive table of species found in the study area. Click on the link to be taken to the interactive map of that species. Use the Search box to search any part of the taxonomic name hierarchy.
 
 add_taxa_link <- function(d){
@@ -96,7 +63,8 @@ d_spp |>
   add_taxa_link() |> 
   select(
     `Taxa: Kingdom > Phylum > Class > Order > Family > Genus species (common name)` = taxa_link) |>     
-  datatable(escape = F)
+  datatable(escape = F) |> 
+  widget_webshot(species_all_table_png) # had to manually screenshot
 ```
 
 :::::
@@ -107,8 +75,8 @@ d_spp |>
 
 ### Treemap
 
-```{r er_spp_treemap}
-#| label: fig-er-spp-treemap
+```{r}
+#| label: fig-species_extinction-risk-treemap
 #| fig-cap: Interactive taxonomic composition of species in the study area having an extinction risk category as determined by the IUCN RedList. Successive levels can be navigated for Kingdom > Phylum > Class > Order > Family > Genus species.
 
 er_csv <- here("../scripts/data/er.csv")

@@ -1,10 +1,8 @@
----
-format: html
----
-
 # Scoring {#sec-scoring}
 
 ```{r setup}
+source("scripts/setup.R")
+
 librarian::shelf(
   devtools, dplyr, DT, fs, glue, gt, here, htmltools, knitr, leaflet, leaflet.extras,
   offshorewindhabitat/offhabr,
@@ -103,7 +101,7 @@ d_z <- f_z |>
 ### Pixel Values
 
 ```{r pixel_score}
-#| label: fig-pixel-score
+#| label: fig-scoring_pixel_score
 #| fig-cap: Interactive map of overall score throughout the study area.
 
 lyr_key   <- "score_v1_web"

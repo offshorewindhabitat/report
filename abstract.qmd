@@ -1,0 +1,28 @@
+# Abstract
+
+```{r setup-abstract}
+source("scripts/setup.R")
+```
+
+Development of offshore wind energy will be essential for providing renewable energy to mitigate climate change impacts, yet should be responsibly sited to minimize impacts on sensitive species and habitats. The Bureau of Ocean Energy Management (BOEM) manages the federal offshore leasing of wind energy for the United States (U.S.) and has defined regions, zones and individual lease blocks, which were used to evaluate differences in species and habitats for the federal waters of the U.S. lower 48 states (excluding Alaska and Hawaii). In order to combine species distribution models (SDMs) from varying sources, they needed to be harmonized according to: 1) a common taxonomy, using the AphiaID from the World Register of Marine Species (WoRMS) at [MarineSpecies.org](MarineSpecies.org); 2) a common geography, using the most refined available global bathymetric raster, the General Bathymetric Chart of the Oceans (GEBCO) at [GEBCO.net](https://www.gebco.net); and 3) a common response term. The harmonized response term rescaled input SDMs 0 to 100 according to a preferred hierarchy of available models for the same species: 1) density surface models, where the original response was # individuals / km^2^ for `r nspp_density` species of marine mammals, seabirds and sea turtles across 4 datasets; 2) habitat probability models, which had a continuous response of 0 to 1 for `r format(nspp_probability, big.mark=",")` species from [AquaMaps.org](https://www.aquamaps.org); and 3) expert range maps  with a binary response of 0 or 1 for `r nspp_range` species from the [IUCN Red List](https://www.iucnredlist.org/resources/spatial-data-download). From the combined SDMs, species richness and species abundance were calculated per pixel along with an aggregate extinction risk for those species having an IUCN Red List category assigned. An overall conservation score also incorporated primary productivity, hydrothermal vents and seamounts with equal weighting for each layer. These scores were calculated on a per pixel basis as well as aggregated to zone and region levels. At the block level, the standard deviation from the zone's mean score was calculated to differentiate and rank blocks.
+
+<!--
+Abstract other points:
+- overall patterns by region and zone
+- lease standardizing
+
+TODO: next
+- + Tables
+  - Spatial Scoring: Zone Average
+  - Zones with Blocks
+- move to Appendix
+
+- future
+  - app to change weights
+  - app to extract species with extinction risk per AoI / pixel / block / zone
+ -->
+
+```{r}
+dbDisconnect(con, shutdown = T)
+```
+
