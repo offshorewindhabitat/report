@@ -14,7 +14,7 @@ Determination of regions for which to assess offshore habitat was based on BOEM 
 
 ```{r eval=do_figs}
 #| label: fig-map-zones
-#| fig-cap: !expr link_caption("Regions (Atlantic, Gulf of Mexico, and Pacific) are subdivied into Zones corresponding to BOEM Planning Areas in federal waters clipped to the U.S. Exclusive Economic Zone (except Alaska and Hawaii). To prevent overcrowding of labels only abbreviations are shown for Central (CGM), Eastern (EGM) and Western (WGM) Gulf of Mexico.")
+#| fig-cap: !expr link_caption("Regions (Atlantic, Gulf of Mexico, and Pacific) are subdivided into Zones corresponding to BOEM Planning Areas in federal waters clipped to the U.S. Exclusive Economic Zone (except Alaska and Hawaii). To prevent overcrowding of labels only abbreviations are shown for Central (CGM), Eastern (EGM) and Western (WGM) Gulf of Mexico.")
 
 f_rgns <- oh_zones |> 
   group_by(region) |> 
