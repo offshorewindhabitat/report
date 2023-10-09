@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Blocks {#sec-blocks}
 
 ```{r setup}
@@ -260,6 +265,7 @@ m <- oh_map_zone_score_dev(zone_key, stk_web_tif = stack_web_tif)
 ```{r}
 m
 ```
+
 <a name='`r glue("tbl-blocks-{zone_key}")`'></a>
 ```{r}
 oh_tbl_zone_score_dev(m)

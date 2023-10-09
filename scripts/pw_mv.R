@@ -10,7 +10,7 @@ dir_pw        <- glue("{dir_html}/44ce7cff6e9a3ce81a45412598fcb96fcd5108bc")
 #       cp dir_pw/*.docx -> dir_html/*.docx
 
 for (file_html in list.files(dir_pw, ".*\\.html$")){ # path_dest = dir_ls(dir_pw, glob="*.html")[1]
-
+  # <script src="site_libs/leaflet-binding-2.2.0/leaflet.js"></script>
   file_pw <- glue("{dir_html}/{file_html}")
 
   # replace {{file_html}} in template into new file for password protection

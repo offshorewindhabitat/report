@@ -1,0 +1,9 @@
+[
+  {
+    "objectID": "appx_blocks.html#zones-with-blocks",
+    "href": "appx_blocks.html#zones-with-blocks",
+    "title": "Appendix C — Blocks",
+    "section": "C.1 Zones with Blocks",
+    "text": "C.1 Zones with Blocks\nWhen zooming into the Blocks in a Zone, we look at deviation from the mean score in the Zone, so 0 is equivalent the Zone average. If the score values were normally distributed (like a bell curve) around the average, then one standard deviation (SD) above/below is about 34.1% higher/lower than the average (so 68.2% of all values), two SDs is 47.7% higher/lower than the average (so 95.4% of all values) and three SDs are the most extreme at 49.9% higher/lower (so 99.9% of all values).\n\nWashington/OregonNorthern CaliforniaCentral CaliforniaSouthern CaliforniaWestern Gulf of MexicoCentral Gulf of MexicoSouth AtlanticMid AtlanticNorth Atlantic\n\n\n\n\n\n\n\nFigure C.1: Interactive map of standard deviations from the average score in the zone. Fullscreen option available."
+  }
+]
