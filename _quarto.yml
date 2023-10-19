@@ -1,5 +1,6 @@
 project:
   type: book
+  output-dir: "_book/44ce7cff6e9a3ce81a45412598fcb96fcd5108bc"
 
 execute:
   echo: false

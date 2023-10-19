@@ -1,3 +1,6 @@
+# NOTE: updated _quarto.yml to simply output to dir_pw
+#   keeping existing _book/*.html to password redirect
+
 # script to impose password protection after Build
 librarian::shelf(
   fs, glue, here)
