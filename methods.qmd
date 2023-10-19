@@ -4,11 +4,11 @@
 source("scripts/setup.R")
 ```
 
-In order to assess species and habitats across the federal waters of the U.S. lower 48 states (excluding Alaska and Hawaii), the spatial reporting units were setup based on BOEM planning areas dubbed "Zones" in this report and overall Regions were first clipped to the United States Exclusive Economic Zone (EEZ) (@fig-map-zones).
+In order to assess species and habitats across the federal waters of the contiguous U.S. (excluding Alaska and Hawaii), the spatial reporting units were setup based on BOEM planning areas dubbed "Zones" in this report and overall regions were first clipped to the United States Exclusive Economic Zone (EEZ) (@fig-map-zones).
 
 ## Spatial Hierarchy: Regions \> Zones \> Blocks
 
-Determination of regions for which to assess offshore habitat was based on BOEM activity and representativeness of habitats across the continental United States (@fig-map-zones). The first (and presently only commercially in production) US wind farm at Block Island, NJ is in the North Atlantic where \$4.4 billion was paid in offshore wind bids earlier this year ([DOE news](https://poweralliance.org/2022/02/25/boem-sets-offshore-energy-records-with-4-37-billion-in-winning-bids-for-wind-sale/)). The Atlantic seaboard slopes gradually making it appropriate for fixed platforms, whereas the Pacific coast drops off quickly into deeper depths making floating platforms more suitable. These technological differences therefore affect the bottom habitats differently. Whereas fixed platforms involve pile driving and addition of hard surfaces for habitats, the floating platforms leave only the benthic footprint of moorings and submarine cables.
+Determination of regions for which to assess offshore habitat was based on BOEM activity and representativeness of habitats across the continental United States (@fig-map-zones). The first (and presently only commercially in production) U.S. wind farm at Block Island, NJ is in the North Atlantic where \$4.4 billion was paid in offshore wind bids earlier this year ([DOE news](https://poweralliance.org/2022/02/25/boem-sets-offshore-energy-records-with-4-37-billion-in-winning-bids-for-wind-sale/)). The Atlantic seaboard slopes gradually making it appropriate for fixed platforms, whereas the Pacific coast drops off quickly into deeper depths making floating platforms more suitable. These technological differences therefore affect the bottom habitats differently. Whereas fixed platforms involve pile driving and addition of hard surfaces for habitats, the floating platforms leave only the benthic footprint of moorings and submarine cables.
 
 ### Regions and Zones
 
@@ -114,9 +114,9 @@ oh_blocks |>
 
 ## Datasets
 
-In order to combine species distribution models (SDMs) from varying sources, they needed to be harmonized according to: 1) a common taxonomy, using the AphiaID from the World Register of Marine Species (WoRMS) at [MarineSpecies.org](MarineSpecies.org); 2) a common geography, using the most refined available global bathymetric raster, the General Bathymetric Chart of the Oceans (GEBCO) availalbe at [GEBCO.net](https://www.gebco.net); and 3) a common response term.
+In order to combine species distribution models (SDMs) from varying sources, they needed to be harmonized according to: 1) a common taxonomy, using the AphiaID from the World Register of Marine Species (WoRMS) at [MarineSpecies.org](https://MarineSpecies.org); 2) a common geography, using the most refined available global bathymetric raster, the General Bathymetric Chart of the Oceans (GEBCO) availalbe at [GEBCO.net](https://www.gebco.net); and 3) a common response term.
 
-The harmonized response term rescales input SDMs 0 to 100 according to a preferred hierarchy of available models for the same species: 1) density surface models, where the original response was # individuals / km^2^ for `r nspp_density` species of marine mammals, seabirds and sea turtles across 4 datasets; 2) habitat probability models, which had a continuous response of 0 to 1 for `r format(nspp_probability, big.mark=",")` species from [AquaMaps.org](https://www.aquamaps.org); and 3) expert range maps  with a binary response of 0 or 1 for `r nspp_range` species from the [IUCN Red List](https://www.iucnredlist.org/resources/spatial-data-download). 
+The harmonized response term rescales input SDMs 0 to 100 according to a preferred hierarchy of available models for the same species: 1) density surface models, where the original response was # individuals / km^2^ for `r nspp_density` species of marine mammals, seabirds and sea turtles across 4 datasets; 2) habitat suitability models, which had a continuous response of 0 to 1 for `r format(nspp_probability, big.mark=",")` species from [AquaMaps.org](https://www.aquamaps.org); and 3) expert range maps  with a binary response of 0 or 1 for `r nspp_range` species from the [IUCN Red List](https://www.iucnredlist.org/resources/spatial-data-download). 
 
 From the combined SDMs, species richness and species abundance were calculated per pixel along with an aggregate extinction risk for those species having an IUCN Red List category assigned. An overall conservation score also incorporated primary productivity, hydrothermal vents and seamounts with equal weighting for each layer. These scores were calculated on a per pixel basis as well as aggregated to zone and region levels. At the block level, the standard deviation from the zone's mean score was calculated to differentiate and rank blocks.
 
@@ -161,7 +161,7 @@ d_ds |>
   arrange(taxa_classes, ds_key) |> 
   select(
     Key      = ds_key,
-    Name     = name_short,
+    `Name*`  = name_short,
     Type     = type,
     Taxa     = taxa_classes,
     `# Taxa` = n_lyr_rgn,
@@ -186,6 +186,20 @@ d_ds |>
     columns  = `# Taxa`,
     decimals = 0)
 ```
+
+\* Dataset citations:
+
+- AquaMaps Global Probabilities [@kaschnerAquaMapsPredictedRange2019]
+- IUCN Global RedList Ranges [@iucninternationalunionforconservationofnatureSpatialData2022]
+- Duke Atlantic Marine Mammal Densities [@robertsHabitatbasedCetaceanDensity2016]
+- SWFSC Pacific Cetacean Densities [@beckerHabitatbasedDensityEstimates2020]
+- NOAA GoMex Cetacean & Sea Turtle Densities [@litzCetaceanSeaTurtle]
+- NCCOS Atlantic & Pacific Seabird Densities [leirnessNCCOSAssessmentModeling2021;@winshipNCCOSAssessmentModeling2018]
+- SOEST Pacific Seamount Occurrences [@kimNewGlobalSeamount2011]
+- InterRidge Pacific Hydrothermal Vent Occurrences [@beaulieuInterRidgeGlobalDatabase2020]
+- OregonState Global Productivity [@behrenfeldPhotosyntheticRatesDerived1997] ([sites.science.oregonstate.edu/ocean.productivity](http://sites.science.oregonstate.edu/ocean.productivity))
+
+
 
 <!--
 Dataset by dataset treatment.
@@ -243,13 +257,13 @@ delphis_val_max <- 286
 
 2.  **Convert dataset layers to common raster format**\
     In order to calculate quickly across a wide range of spatial data based on different formats (vector or raster), spatial units of analysis and projections, a common study area and grid was generated from the **GEBCO** bathymetric grid at 15 arc second spatial resolution and projected to Web Mercator for readily displaying in "slippy" maps online to easily show basemaps of interest (e.g. the Esri Ocean basemap). The area-based distortion of Web Mercator was compensated for by calculating the true area per cell as a separate layer for deriving the area-weighted average in the output cells.
-    All data layers were downscaled to a common grid of approximately 15 arc-seconds (each pixel ranging in area <!-- r paste(format(range(rng_web_areakm2), digits=2), collapse = " to ") --> 0.16 to 0.31 km^2^) aligned with the GEBCO high resolution global bathymetry in order to calculate differences between individual lease blocks (ranging in area `r paste(format(range(offhabr::oh_blocks$area_km2), digits=2), collapse = " to ")` km^2^).
+    All data layers were downscaled to a common grid of approximately 15 arc-seconds (each pixel ranging in area `r paste(format(range(rng_web_areakm2), digits=2), collapse = " to ")` km^2^) aligned with the GEBCO high resolution global bathymetry in order to calculate differences between individual lease blocks (ranging in area `r paste(format(range(offhabr::oh_blocks$area_km2), digits=2), collapse = " to ")` km^2^).
 
 3.  **Average within dataset-species layers**\
     Some datasets include seasonally (e.g., "Duke Atlantic Marine Mammal Densities) or regionally (e.g., "NCCOS Atlantic & Pacific Seabird Densities") distinct density surfaces. These get averaged (for seasonal) and mosaicked (for regional) together to produce a single average per dataset and species.
 
 4.  **Rescale dataset-species layers 0 to 100% for all model types**\
-    While this analysis is detailed spatially, it is coarse in terms of abundance, since the best available spatial distribution information is combined across disparate dataset types (see [@tbl-datasets]), i.e. expert [***range***]{.underline} maps (i.e., "IUCN Global RedList Ranges"), [***probability***]{.underline} of occurrence (i.e., "AquaMaps Global Probabilities") and [***density***]{.underline} surface models (e.g., "Duke Atlantic Marine Mammal Densities", "SWFSC Pacific Cetacean Densities", "NCCOS Atlantic & Pacific Seabird Densities", "NOAA GoMex Cetacean & Sea Turtle Densities"). Model values were rescaled 0 to 100%, i.e. normalized to the existing probability of occurrence range of values, similar to the dataset "AquaMaps Global Probabilities". For instance, the original maximum [***density***]{.underline} surface model value for common dolphins (*Delphinus delphis*) in the Atlantic from "Duke Atlantic Marine Mammal Densities" is `r delphis_val_max` individuals per km^2^, whereas for the minke whale (Balaenoptera acutorostrata) in the Pacific from "SWFSC Pacific Cetacean Densities" is `r acutorostrata_val_max` individuals per km^2^. Both of these maxima are converted to 100, since we are not comparing relative abundance between species but rather within species. Since expert [***range***]{.underline} maps are binary in nature, i.e. in or out of range, a single value of 50% is applied within the range. Converting the stored values to single unsigned integers (`INT1U` for the range \[0, 100\]) enables a significant reduction of individual raster file sizes. Furthermore zeros were converted to `NA` (not available) for the sake of calculating the species range. A similar hierarchy was taken for "Biologically Important Areas to Cetaceans" in the US [@labrecqueBiologicallyImportantAreas2015].
+    While this analysis is detailed spatially, it is coarse in terms of abundance, since the best available spatial distribution information is combined across disparate dataset types (see [@tbl-datasets]), i.e. expert [***range***]{.underline} maps (i.e., "IUCN Global RedList Ranges"), [***suitability***]{.underline} of occurrence (i.e., "AquaMaps Global Probabilities") and [***density***]{.underline} surface models (e.g., "Duke Atlantic Marine Mammal Densities", "SWFSC Pacific Cetacean Densities", "NCCOS Atlantic & Pacific Seabird Densities", "NOAA GoMex Cetacean & Sea Turtle Densities"). Model values were rescaled 0 to 100%, i.e. normalized to the existing suitability of occurrence range of values, similar to the dataset "AquaMaps Global Probabilities". For instance, the original maximum [***density***]{.underline} surface model value for common dolphins (*Delphinus delphis*) in the Atlantic from "Duke Atlantic Marine Mammal Densities" is `r delphis_val_max` individuals per km^2^, whereas for the minke whale (Balaenoptera acutorostrata) in the Pacific from "SWFSC Pacific Cetacean Densities" is `r acutorostrata_val_max` individuals per km^2^. Both of these maxima are converted to 100, since we are not comparing relative abundance between species but rather within species. Since expert [***range***]{.underline} maps are binary in nature, i.e. in or out of range, a single value of 50% is applied within the range. Converting the stored values to single unsigned integers (`INT1U` for the range \[0, 100\]) enables a significant reduction of individual raster file sizes. Furthermore, zeros were converted to `NA` (not available) for the sake of calculating the species range. A similar hierarchy was taken for "Biologically Important Areas to Cetaceans" in the US [@labrecqueBiologicallyImportantAreas2015].
 
 ```{r n_spp}
 d_spp <- tbl(con, "lyrs") |> 
@@ -266,7 +280,7 @@ n_spp_oh <- d_spp |>
 ```
 
 5.  **Mosaic to single taxa across datasets, taxa**\
-Since some datasets were not present in all regions, a mosaic approach was taken whereby different datasets could contribute to different regions, based on which had the most preferred data type (***density*** > ***probability*** > ***range*** > ***occurrence***) and most recently collected (***newer*** > ***older***). Of `r format(n_spp, big.mark=',')` species, only `r n_spp_oh` had multiple datasets contributing to different regions.
+Since some datasets were not present in all regions, a mosaic approach was taken whereby different datasets could contribute to different regions, based on which had the most preferred data type (***density*** > ***suitability*** > ***range*** > ***occurrence***) and most recently collected (***newer*** > ***older***). Of `r format(n_spp, big.mark=',')` species, only `r n_spp_oh` had multiple datasets contributing to different regions.
 
 6.  **Aggregate layers to use as inputs to scoring**\
 **Species Richness** was calculated as the sum of the presence of taxa in a given pixel. **Species Abundance** was the sum of the normalized abundance (ranging 1 to 100) within the pixel across all species. **Extinction Risk** was based on the sum of all species IUCN RedList Categories for the given pixel, based on conversion of the categories to a score:  `0` for Least Concern (LC), `1` for Near Threatened (NT), `2` for Vulnerable (VU), `3` for Endangered (EN) and `4` for Critically endangered (CR) [@juslenApplicationRedList2016a;butchartImprovementsRedList2007].

@@ -2,6 +2,37 @@
 
 This report was funded by the [Resources Legacy Fund](https://resourceslegacyfund.org/).
 
-This report is available also as a Microsoft Word document (.docx):
 
-- [Offshore-Habitat-Assessment-for-US-Wind-Energy.docx](https://raw.githubusercontent.com/offshorewindhabitat/report/main/_book_docx/Offshore-Habitat-Assessment-for-US-Wind-Energy.docx)
+```{r}
+#| output: asis
+
+librarian::shelf(
+  glue, knitr)
+
+if (is_html_output()){
+  glue(
+    "This report is available also as a Microsoft Word document (.docx):
+    
+     - [Offshore-Habitat-Assessment-for-US-Wind-Energy.docx](./Offshore-Habitat-Assessment-for-US-Wind-Energy.docx)")
+} else {
+  glue(
+    "This report is available also as an online interactive report (.html):
+    
+     - [offshorewindhabitat.info/report](https://offshorewindhabitat.info/report)
+    
+    # TODO: MANUAL FIXES FOR DOCX {{.unnumbered}}
+    
+    - [ ] Add table caption, remove placeholder and update all references for:
+        - methods.tbl-zone-blocks
+        - methods.tbl-datasets
+    - [ ] Insert Page Break before Preface
+    - [ ] Insert Page Numbers
+    - [ ] Remove this section from docx, and Update ToC")
+}
+
+```
+
+
+
+
+

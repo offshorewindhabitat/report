@@ -1,6 +1,6 @@
 # Discussion
 
-This report represents a major step forward in collating disperate datasets to inform on the biodiversity of offshore habitats for US wind energy development. Although other efforts have combined AquaMaps and the RedList range maps [@halpernIndexAssessHealth2012; @oharaAligningMarineSpecies2017], this work represents the first attempt to combine these datasets with higher resolution density surface models.
+This report represents a major step forward in collating disperate datasets to inform on the biodiversity of offshore habitats for U.S. wind energy development. Although other efforts have combined AquaMaps and the RedList range maps [@halpernIndexAssessHealth2012; @oharaAligningMarineSpecies2017], this work represents the first attempt to combine these datasets with higher resolution density surface models.
 
 Although the latitudinal gradient in species richness going from high to low in a poleward direction has been well described [@raboskyInverseLatitudinalGradient2018], the order of magnitude difference in species richness between the Atlantic (698.6 species per pixel) and the other regions of Gulf of Mexico (38.9) or Pacific (15.5) is noticably stark. Given that the Pacific is a western-boundary current with upwelling, it is cooler and more productive than the other regions associated with warmer waters like the Gulf of Mexico and Southeast Atlantic.
 
