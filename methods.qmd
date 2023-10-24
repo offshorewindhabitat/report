@@ -125,6 +125,12 @@ From the combined SDMs, species richness and species abundance were calculated p
 #| tbl-cap: Summary of datasets.
 
 d_ds <- tbl(con, "datasets") |> 
+  collect() |> 
+  mutate(
+    name_short = stringr::str_replace(
+      name_short,
+      "AquaMaps Global Probabilities",
+      "AquaMaps Global Suitabilities")) |> 
   filter(
     active,
     ds_key != "oh") |> 
@@ -189,7 +195,7 @@ d_ds |>
 
 \* Dataset citations:
 
-- AquaMaps Global Probabilities [@kaschnerAquaMapsPredictedRange2019]
+- AquaMaps Global Suitabilities [@kaschnerAquaMapsPredictedRange2019]
 - IUCN Global RedList Ranges [@iucninternationalunionforconservationofnatureSpatialData2022]
 - Duke Atlantic Marine Mammal Densities [@robertsHabitatbasedCetaceanDensity2016]
 - SWFSC Pacific Cetacean Densities [@beckerHabitatbasedDensityEstimates2020]
@@ -263,7 +269,7 @@ delphis_val_max <- 286
     Some datasets include seasonally (e.g., "Duke Atlantic Marine Mammal Densities) or regionally (e.g., "NCCOS Atlantic & Pacific Seabird Densities") distinct density surfaces. These get averaged (for seasonal) and mosaicked (for regional) together to produce a single average per dataset and species.
 
 4.  **Rescale dataset-species layers 0 to 100% for all model types**\
-    While this analysis is detailed spatially, it is coarse in terms of abundance, since the best available spatial distribution information is combined across disparate dataset types (see [@tbl-datasets]), i.e. expert [***range***]{.underline} maps (i.e., "IUCN Global RedList Ranges"), [***suitability***]{.underline} of occurrence (i.e., "AquaMaps Global Probabilities") and [***density***]{.underline} surface models (e.g., "Duke Atlantic Marine Mammal Densities", "SWFSC Pacific Cetacean Densities", "NCCOS Atlantic & Pacific Seabird Densities", "NOAA GoMex Cetacean & Sea Turtle Densities"). Model values were rescaled 0 to 100%, i.e. normalized to the existing suitability of occurrence range of values, similar to the dataset "AquaMaps Global Probabilities". For instance, the original maximum [***density***]{.underline} surface model value for common dolphins (*Delphinus delphis*) in the Atlantic from "Duke Atlantic Marine Mammal Densities" is `r delphis_val_max` individuals per km^2^, whereas for the minke whale (Balaenoptera acutorostrata) in the Pacific from "SWFSC Pacific Cetacean Densities" is `r acutorostrata_val_max` individuals per km^2^. Both of these maxima are converted to 100, since we are not comparing relative abundance between species but rather within species. Since expert [***range***]{.underline} maps are binary in nature, i.e. in or out of range, a single value of 50% is applied within the range. Converting the stored values to single unsigned integers (`INT1U` for the range \[0, 100\]) enables a significant reduction of individual raster file sizes. Furthermore, zeros were converted to `NA` (not available) for the sake of calculating the species range. A similar hierarchy was taken for "Biologically Important Areas to Cetaceans" in the US [@labrecqueBiologicallyImportantAreas2015].
+    While this analysis is detailed spatially, it is coarse in terms of abundance, since the best available spatial distribution information is combined across disparate dataset types (see [@tbl-datasets]), i.e. expert [***range***]{.underline} maps (i.e., "IUCN Global RedList Ranges"), [***suitability***]{.underline} of occurrence (i.e., "AquaMaps Global Suitabilities") and [***density***]{.underline} surface models (e.g., "Duke Atlantic Marine Mammal Densities", "SWFSC Pacific Cetacean Densities", "NCCOS Atlantic & Pacific Seabird Densities", "NOAA GoMex Cetacean & Sea Turtle Densities"). Model values were rescaled 0 to 100%, i.e. normalized to the existing suitability of occurrence range of values, similar to the dataset "AquaMaps Global Suitabilities". For instance, the original maximum [***density***]{.underline} surface model value for common dolphins (*Delphinus delphis*) in the Atlantic from "Duke Atlantic Marine Mammal Densities" is `r delphis_val_max` individuals per km^2^, whereas for the minke whale (Balaenoptera acutorostrata) in the Pacific from "SWFSC Pacific Cetacean Densities" is `r acutorostrata_val_max` individuals per km^2^. Both of these maxima are converted to 100, since we are not comparing relative abundance between species but rather within species. Since expert [***range***]{.underline} maps are binary in nature, i.e. in or out of range, a single value of 50% is applied within the range. Converting the stored values to single unsigned integers (`INT1U` for the range \[0, 100\]) enables a significant reduction of individual raster file sizes. Furthermore, zeros were converted to `NA` (not available) for the sake of calculating the species range. A similar hierarchy was taken for "Biologically Important Areas to Cetaceans" in the US [@labrecqueBiologicallyImportantAreas2015].
 
 ```{r n_spp}
 d_spp <- tbl(con, "lyrs") |> 
